@@ -1,0 +1,27 @@
+.dropdown {
+  min-width: fit-content;
+}
+
+.icon {
+  background: none;
+  border: none;
+}
+
+.container {
+  padding: 0 40px;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.background {
+  background-color: #daddfc;
+}
+
+.navColor {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.navColor:hover {
+  color: rgb(26, 27, 30);
+}

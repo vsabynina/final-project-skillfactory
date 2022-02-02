@@ -1,0 +1,4 @@
+.display {
+  display: block;
+  backdrop-filter: blur(2px);
+}

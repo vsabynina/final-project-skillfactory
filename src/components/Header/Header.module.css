@@ -1,0 +1,17 @@
+.dropdown {
+  min-width: fit-content;
+}
+
+.icon {
+  background: none;
+  border: none;
+}
+
+.container {
+  padding: 0 40px;
+  margin: 0;
+}
+
+.background {
+  background-color: #daddfc;
+}

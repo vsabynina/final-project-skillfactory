@@ -1,0 +1,45 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+
+.form {
+  width: 100%;
+}
+
+.thTextAlign {
+  text-align: end;
+}
+
+.cell1 {
+  word-break: break-all;
+  width: 350px;
+}
+
+.cell2 {
+  word-break: break-all;
+}
+
+.cellIcon {
+  width: 90px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.btnEdit {
+  border: none;
+  background-color: transparent;
+}
+
+.btnWrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.btnSave {
+  margin-right: 30px;
+}

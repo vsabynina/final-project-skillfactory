@@ -1,0 +1,57 @@
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.cell1 {
+  word-break: break-all;
+  width: 100px;
+}
+
+.cell2 {
+  word-break: break-all;
+}
+
+.cellIcon {
+  width: 50px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.btnEdit {
+  border: none;
+  background-color: transparent;
+}
+
+.p {
+  margin: 0;
+}
+
+.table {
+  width: 500px;
+}
+
+.img {
+  width: 260px;
+  margin-right: 80px;
+}
+
+.td {
+  word-break: break-all;
+}
+
+.btnWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 35px;
+}
+
+.invalidMessage {
+  color: red;
+}
+
+.validMessage {
+  color: green;
+}

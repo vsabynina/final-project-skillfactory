@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout/Layout";
+import HomePage from "./components/HomePage/HomePage";
+import Authorization from "./components/Authorization/Authorization";
+import Registration from "./components/Registration/Registration";
+import ListOfCases from "./components/ListOfCases/ListOfCases";
+import CaseForm from "./components/CaseForm/CaseForm";
+import CaseFormPublic from "./components/CaseFormPublic/CaseFormPublic";
+import CaseDetailPage from "./components/CaseDetailPage/CaseDetailPage";
+import ListOfOfficers from "./components/ListOfOfficers/ListOfOfficers";
+import OfficerDetailPage from "./components/OfficerDetailPage/OfficerDetailPage";
 
 function App() {
+  window.localStorage.setItem(
+      "token",
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZTkzZGI0NzgzNTJlNDEzMGUzYTMyNyIsImlhdCI6MTY0MzcxMjM0OSwiZXhwIjoxNjQ0MzE3MTQ5fQ.7Lvz_f0JsjCHKFsAfQ0GOSJyPjxorOQ0Kl-_RJxWVQ8"
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="wrapper">
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="auth/sign_in" element={<Authorization />} />
+            <Route path="auth/sign_up" element={<Registration />} />
+            <Route path="cases/" element={<ListOfCases />} />
+            <Route path="public/report" element={<CaseFormPublic />} />
+            <Route path="api/cases/" element={<CaseForm />} />
+            <Route path="cases/:id" element={<CaseDetailPage />} />
+            <Route path="officers" element={<ListOfOfficers />} />
+            <Route path="officers/:id" element={<OfficerDetailPage />} />
+          </Route>
+        </Routes>
+      </div>
   );
 }
 

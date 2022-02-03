@@ -36,13 +36,13 @@ export const fetchCasesSuccess = (cases) => {
 };
 //
 export const createCase = (
-    licenseNumber,
-    ownerFullName,
-    type,
-    color = null,
-    date = null,
-    officer = null,
-    description = null
+  licenseNumber,
+  ownerFullName,
+  type,
+  color = null,
+  date = null,
+  officer = null,
+  description = null
 ) => {
   return {
     type: CREATE_CASE,
@@ -82,10 +82,10 @@ export const deleteCaseSuccess = (id) => {
   };
 };
 
-export const getOneCaseSuccess = (id) => {
+export const getOneCaseSuccess = (someCase) => {
   return {
     type: GET_ONE_CASE_SUCCESS,
-    payload: id,
+    payload: someCase,
   };
 };
 
@@ -110,7 +110,8 @@ export const editOfficerSuccess = (id, values) => {
       id: id,
       firstName: values.firstName,
       lastName: values.lastName,
-      password: values.password,
+      password:
+        values.newPassword === "" ? values.oldPassword : values.newPassword,
       approved: values.approved,
     },
   };

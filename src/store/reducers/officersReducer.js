@@ -44,14 +44,6 @@ export const officersReducer = (state = initialState, action) => {
       return {
         officers: state.officers.filter((item) => item._id !== action.payload),
       };
-      // officers: [
-      //   ...state.officers,
-      //   state.officers.indexOf((item) => item._id !== action.payload.id) !== -1
-      //     ? (state.officers[
-      //         state.officers.indexOf((item) => item._id !== action.payload.id)
-      //       ] = action.payload.newOfficer)
-      //     : null,
-      // ],
     default:
       return state;
   }
@@ -61,16 +53,16 @@ export const getAllOfficers = () => {
   return function (dispatch) {
     dispatch(request());
     axios
-        .get("https://sf-final-project.herokuapp.com/api/officers/", {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        })
-        .then((response) => {
-          dispatch(fetchOfficersSuccess(response.data.officers));
-          dispatch(success());
-        })
-        .catch((error) => dispatch(failure(error)));
+      .get("https://sf-final-project.herokuapp.com/api/officers/", {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        dispatch(fetchOfficersSuccess(response.data.officers));
+        dispatch(success());
+      })
+      .catch((error) => dispatch(failure(error)));
   };
 };
 
@@ -78,40 +70,41 @@ export const deleteOfficer = (id) => {
   return function (dispatch) {
     dispatch(request());
     axios
-        .delete(`https://sf-final-project.herokuapp.com/api/officers/${id}`, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        })
-        .then(() => {
-          dispatch(deleteOfficerSuccess(id));
-          dispatch(success());
-        })
-        .catch((error) => dispatch(failure(error)));
+      .delete(`https://sf-final-project.herokuapp.com/api/officers/${id}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then(() => {
+        dispatch(deleteOfficerSuccess(id));
+        dispatch(success());
+      })
+      .catch((error) => dispatch(failure(error)));
   };
 };
 
 export const editOfficer = (id, values) => {
   return function (dispatch) {
     axios
-        .put(
-            `https://sf-final-project.herokuapp.com/api/officers/${id}`,
-            {
-              firstName: values.firstName,
-              lastName: values.lastName,
-              password: values.password,
-              approved: values.approved,
-            },
-            {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            }
-        )
-        .then(() => {
-          dispatch(editOfficerSuccess(id, values));
-          dispatch(success());
-        })
-        .catch((error) => dispatch(failure(error)));
+      .put(
+        `https://sf-final-project.herokuapp.com/api/officers/${id}`,
+        {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          password:
+            values.newPassword === "" ? values.oldPassword : values.newPassword,
+          approved: values.approved,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then(() => {
+        dispatch(editOfficerSuccess(id, values));
+        dispatch(success());
+      })
+      .catch((error) => dispatch(failure(error)));
   };
 };

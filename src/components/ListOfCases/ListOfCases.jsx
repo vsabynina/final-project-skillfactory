@@ -15,18 +15,17 @@ const ListOfCases = (props) => {
 
   const handleRowClick = (id, e) => {
     navigate(`/cases/${id}`);
-    // e.preventDefault();
+    e.stopPropagation();
   };
 
-  const handleButtonClick = (e, id) => {
-    // e.preventDefault();
-    // e.stopPropagation();
+  const handleButtonClick = (id, e) => {
     deleteCase(id);
+    e.stopPropagation();
   };
   return (
-      <div className={css.wrapper}>
-        <table className="table table-hover">
-          <thead>
+    <div className={css.wrapper}>
+      <table className="table table-hover">
+        <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">License Number</th>
@@ -34,52 +33,53 @@ const ListOfCases = (props) => {
             <th scope="col">Color</th>
             <th scope="col">Description</th>
           </tr>
-          </thead>
+        </thead>
 
-          <tbody>
-          {cases &&
-              cases.map((item, index) => {
-                return (
-                    <tr
-                        className={css.cursor}
-                        key={item._id}
-                        onClick={() => handleRowClick(item._id)}
-                    >
-                      <th scope="row">{index + 1}</th>
+        <tbody>
+          {cases.map((item, index) => {
+            return (
+              <tr
+                className={css.cursor}
+                key={item._id}
+                onClick={(e) => handleRowClick(item._id, e)}
+              >
+                <th scope="row" className={css.cell1}>
+                  {index + 1}
+                </th>
 
-                      <td className={css.td1}>{item.licenseNumber}</td>
+                <td className={css.cell2}>{item.licenseNumber}</td>
 
-                      <td className={css.td2}>{item.type}</td>
+                <td className={css.cell3}>{item.type}</td>
 
-                      <td className={css.td3}>{item.color}</td>
+                <td className={css.cell4}>{item.color}</td>
 
-                      <td className={css.td4}>{item.description}</td>
-                      <th>
-                        <button
-                            type="button"
-                            className="btn btn-outline-primary btn-sm"
-                            id={item._id}
-                            onClick={() => handleButtonClick(item._id)}
-                        >
-                          Delete
-                        </button>
-                      </th>
-                    </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      </div>
+                <td className={css.cell5}>{item.description}</td>
+                <th className={css.cell6}>
+                  <button
+                    type="button"
+                    className="btn btn-outline-primary btn-sm"
+                    id={item._id}
+                    onClick={(e) => handleButtonClick(item._id, e)}
+                  >
+                    Delete
+                  </button>
+                </th>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
 export default connect(
-    (state) => {
-      return { cases: state.casesReducer.cases };
-    },
-    (dispatch) => {
-      return {
-        deleteCase: (id) => dispatch(deleteCase(id)),
-        getAllCases: () => dispatch(getAllCases()),
-      };
-    }
+  (state) => {
+    return { cases: state.casesReducer.cases };
+  },
+  (dispatch) => {
+    return {
+      deleteCase: (id) => dispatch(deleteCase(id)),
+      getAllCases: () => dispatch(getAllCases()),
+    };
+  }
 )(ListOfCases);

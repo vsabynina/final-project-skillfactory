@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import user from "../../assets/icons/user.svg";
+import user from "../../assets/icons/userIcon.svg";
 import css from "./Header.module.css";
 import { USER } from "../../mock.js";
 

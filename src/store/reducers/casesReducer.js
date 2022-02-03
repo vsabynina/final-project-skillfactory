@@ -23,14 +23,14 @@ const initialState = {
   cases: [],
   case: {},
   bicycle: {
-    bicycleType: [
-      { title: "General", value: "general" },
-      { title: "Sport", value: "sport" },
-    ],
     caseStatus: [
       { title: "New", value: "new" },
       { title: "In progress", value: "in_progress" },
       { title: "Done", value: "done" },
+    ],
+    bicycleType: [
+      { title: "General", value: "general" },
+      { title: "Sport", value: "sport" },
     ],
   },
   loading: false,
@@ -63,9 +63,10 @@ export const casesReducer = (state = initialState, action) => {
 
     case FETCH_CASES_SUCCESS:
       return {
+        ...state,
         cases: action.payload,
       };
-      //
+    //
     case CREATE_CASE:
       return {
         cases: [...state.cases, action.payload],
@@ -88,15 +89,17 @@ export const casesReducer = (state = initialState, action) => {
             resolution: action.payload.resolution,
           },
         ],
+        ...state,
+      };
+    case GET_ONE_CASE_SUCCESS:
+      return {
+        ...state,
+        case: action.payload,
       };
     case DELETE_CASE_SUCCESS:
       return {
+        ...state,
         cases: state.cases.filter((item) => item._id !== action.payload),
-      };
-
-    case GET_ONE_CASE_SUCCESS:
-      return {
-        case: state.cases.filter((item) => item._id === action.payload),
       };
 
     default:
@@ -108,16 +111,16 @@ export const getAllCases = () => {
   return function (dispatch) {
     dispatch(request());
     axios
-        .get("https://sf-final-project.herokuapp.com/api/cases/", {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        })
-        .then((response) => {
-          dispatch(fetchCasesSuccess(response.data.data));
-          dispatch(success());
-        })
-        .catch((error) => dispatch(failure(error)));
+      .get("https://sf-final-project.herokuapp.com/api/cases/", {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        dispatch(fetchCasesSuccess(response.data.data));
+        dispatch(success());
+      })
+      .catch((error) => dispatch(failure(error)));
   };
 };
 
@@ -127,17 +130,17 @@ export const createCase = () => {
     const cases = getState().cases;
     dispatch(request());
     axios
-        .post(
-            "https://sf-final-project.herokuapp.com/api/cases/",
-            { body: JSON.stringify(cases) },
-            {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            }
-        )
-        .then((response) => fetchCasesSuccess(response.data))
-        .catch((error) => failure(error));
+      .post(
+        "https://sf-final-project.herokuapp.com/api/cases/",
+        { body: JSON.stringify(cases) },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((response) => fetchCasesSuccess(response.data))
+      .catch((error) => failure(error));
   };
 };
 //
@@ -146,16 +149,33 @@ export const deleteCase = (id) => {
   return function (dispatch) {
     dispatch(request());
     axios
-        .delete(`https://sf-final-project.herokuapp.com/api/cases/${id}`, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        })
-        .then(() => {
-          dispatch(deleteCaseSuccess(id));
-          dispatch(success());
-        })
-        .catch((error) => dispatch(failure(error)));
+      .delete(`https://sf-final-project.herokuapp.com/api/cases/${id}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then(() => {
+        dispatch(deleteCaseSuccess(id));
+        dispatch(success());
+      })
+      .catch((error) => dispatch(failure(error)));
+  };
+};
+
+export const getOneCase = (id) => {
+  return function (dispatch) {
+    dispatch(request());
+    axios
+      .get(`https://sf-final-project.herokuapp.com/api/cases/${id}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((response) => {
+        dispatch(getOneCaseSuccess(response.data.data));
+        dispatch(success());
+      })
+      .catch((error) => dispatch(failure(error)));
   };
 };
 
@@ -163,28 +183,29 @@ export const editCase = (id, values) => {
   return function (dispatch) {
     dispatch(request());
     axios
-        .put(
-            `https://sf-final-project.herokuapp.com/api/cases/${id}`,
-            {
-              status: values.status,
-              licenseNumber: values.licenseNumber,
-              ownerFullName: values.ownerFullName,
-              type: values.type,
-              color: values.color,
-              officer: values.officer,
-              description: values.description,
-              resolution: values.resolution,
-            },
-            {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            }
-        )
-        .then(() => {
-          dispatch(editCaseSuccess(id, values));
-          dispatch(success());
-        })
-        .catch((error) => dispatch(failure(error)));
+      .put(
+        `https://sf-final-project.herokuapp.com/api/cases/${id}`,
+        {
+          status: values.status,
+          licenseNumber: values.licenseNumber,
+          ownerFullName: values.ownerFullName,
+          type: values.type,
+          color: values.color,
+          officer: values.officer,
+          description: values.description,
+          resolution: values.resolution,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((response) => {
+        dispatch(editCaseSuccess(id, values));
+        dispatch(getOneCaseSuccess(response.data.data));
+        dispatch(success());
+      })
+      .catch((error) => dispatch(failure(error)));
   };
 };

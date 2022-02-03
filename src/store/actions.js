@@ -3,14 +3,13 @@ import {
   FAILURE,
   SUCCESS,
   FETCH_CASES_SUCCESS,
-  CREATE_CASE,
   DELETE_CASE_SUCCESS,
-  GET_ONE_CASE,
   EDIT_CASE_SUCCESS,
   GET_ONE_CASE_SUCCESS,
   FETCH_OFFICERS_SUCCESS,
   DELETE_OFFICER_SUCCESS,
   EDIT_OFFICER_SUCCESS,
+  CREATE_CASE_SUCCESS,
 } from "./type";
 
 export const request = () => {
@@ -34,26 +33,18 @@ export const fetchCasesSuccess = (cases) => {
     payload: cases,
   };
 };
-//
-export const createCase = (
-  licenseNumber,
-  ownerFullName,
-  type,
-  color = null,
-  date = null,
-  officer = null,
-  description = null
-) => {
+
+export const createCaseSuccess = (values) => {
   return {
-    type: CREATE_CASE,
+    type: CREATE_CASE_SUCCESS,
     payload: {
-      licenseNumber: licenseNumber,
-      ownerFullName: ownerFullName,
-      type: type,
-      color: color,
-      date: date,
-      officer: officer,
-      description: description,
+      licenseNumber: values.licenseNumber,
+      ownerFullName: values.ownerFullName,
+      type: values.type,
+      color: values.color === "" ? null : values.color,
+      date: values.date === "" ? null : values.date,
+      officer: values.officer === "" ? null : values.officer,
+      description: values.description === "" ? null : values.description,
     },
   };
 };

@@ -10,7 +10,6 @@ import { failure, request, success } from "../../store/actions";
 import axios from "axios";
 import editIcon from "../../assets/icons/editIcon.svg";
 import cancelIcon from "../../assets/icons/cancelIcon.svg";
-import FormSpan from "../../FormSpan";
 import {
   editOfficer,
   getAllOfficers,
@@ -79,7 +78,7 @@ const OfficerDetailPage = (props) => {
             return schema
               .min(3, "Password must be longer than 3 characters")
               .max(12, "Password must be shorter than 12 characters")
-              .required("Required");
+              .required("This field is required");
         }),
         passwordConfirmation: Yup.string()
           .when("password", (isClickedPassword, schema) => {

@@ -13,26 +13,26 @@ import OfficerDetailPage from "./components/OfficerDetailPage/OfficerDetailPage"
 
 function App() {
   window.localStorage.setItem(
-      "token",
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZTkzZGI0NzgzNTJlNDEzMGUzYTMyNyIsImlhdCI6MTY0MzcxMjM0OSwiZXhwIjoxNjQ0MzE3MTQ5fQ.7Lvz_f0JsjCHKFsAfQ0GOSJyPjxorOQ0Kl-_RJxWVQ8"
+    "token",
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZTkzZGI0NzgzNTJlNDEzMGUzYTMyNyIsImlhdCI6MTY0MzcxMjM0OSwiZXhwIjoxNjQ0MzE3MTQ5fQ.7Lvz_f0JsjCHKFsAfQ0GOSJyPjxorOQ0Kl-_RJxWVQ8"
   );
 
   return (
-      <div className="wrapper">
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="auth/sign_in" element={<Authorization />} />
-            <Route path="auth/sign_up" element={<Registration />} />
-            <Route path="cases/" element={<ListOfCases />} />
-            <Route path="public/report" element={<CaseFormPublic />} />
-            <Route path="api/cases/" element={<CaseForm />} />
-            <Route path="cases/:id" element={<CaseDetailPage />} />
-            <Route path="officers" element={<ListOfOfficers />} />
-            <Route path="officers/:id" element={<OfficerDetailPage />} />
-          </Route>
-        </Routes>
-      </div>
+    <div className="wrapper">
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="auth/sign_in" element={<Authorization />} />
+          <Route path="auth/sign_up" element={<Registration />} />
+          <Route path="cases" element={<ListOfCases />} />
+          <Route path="public/report" element={<CaseFormPublic />} />
+          <Route path="cases/create_case" element={<CaseForm />} />
+          <Route path="cases/:id" element={<CaseDetailPage />} />
+          <Route path="officers" element={<ListOfOfficers />} />
+          <Route path="officers/:id" element={<OfficerDetailPage />} />
+        </Route>
+      </Routes>
+    </div>
   );
 }
 

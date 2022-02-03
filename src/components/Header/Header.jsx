@@ -31,7 +31,7 @@ const Header = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/public/report" className="nav-link">
+                <Link to="/cases/create_case" className="nav-link">
                   Сообщить о краже
                 </Link>
               </li>

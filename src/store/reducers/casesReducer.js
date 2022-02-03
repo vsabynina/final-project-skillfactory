@@ -4,10 +4,10 @@ import {
   FAILURE,
   SUCCESS,
   FETCH_CASES_SUCCESS,
-  CREATE_CASE,
   DELETE_CASE_SUCCESS,
   GET_ONE_CASE_SUCCESS,
   EDIT_CASE_SUCCESS,
+  CREATE_CASE_SUCCESS,
 } from "../type";
 import {
   failure,
@@ -17,6 +17,7 @@ import {
   deleteCaseSuccess,
   editCaseSuccess,
   getOneCaseSuccess,
+  createCaseSuccess,
 } from "../actions";
 
 const initialState = {
@@ -67,9 +68,20 @@ export const casesReducer = (state = initialState, action) => {
         cases: action.payload,
       };
     //
-    case CREATE_CASE:
+    case CREATE_CASE_SUCCESS:
       return {
-        cases: [...state.cases, action.payload],
+        cases: [
+          ...state.cases,
+          {
+            licenseNumber: action.payload.licenseNumber,
+            ownerFullName: action.payload.ownerFullName,
+            type: action.payload.type,
+            color: action.payload.color,
+            date: action.payload.date,
+            officer: action.payload.officer,
+            description: action.payload.description,
+          },
+        ],
         ...state,
       };
 
@@ -125,21 +137,28 @@ export const getAllCases = () => {
 };
 
 //
-export const createCase = () => {
-  return function (dispatch, getState) {
-    const cases = getState().cases;
+export const createCase = (values) => {
+  return function (dispatch) {
     dispatch(request());
     axios
       .post(
         "https://sf-final-project.herokuapp.com/api/cases/",
-        { body: JSON.stringify(cases) },
+        {
+          licenseNumber: values.licenseNumber,
+          ownerFullName: values.ownerFullName,
+          type: values.type,
+          color: values.color,
+          date: values.date,
+          officer: values.officer,
+          description: values.description,
+        },
         {
           headers: {
             Authorization: localStorage.getItem("token"),
           },
         }
       )
-      .then((response) => fetchCasesSuccess(response.data))
+      .then((response) => createCaseSuccess(response.data))
       .catch((error) => failure(error));
   };
 };

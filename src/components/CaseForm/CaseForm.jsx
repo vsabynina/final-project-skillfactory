@@ -1,214 +1,231 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useSelector, useDispatch, connect } from "react-redux";
 import css from "./CaseForm.module.css";
 import { OFFICERS, USER } from "../../mock.js";
-import { createCase } from "../../store/reducers/casesReducer";
+import {
+  createCase,
+  editCase,
+  getOneCase,
+} from "../../store/reducers/casesReducer";
+import { getAllOfficers } from "../../store/reducers/officersReducer";
 
-const CaseForm = () => {
-  const [values, setValues] = useState({
-    licenseNumber: "",
-    fullName: "",
-    type: "",
-    color: "",
-    date: "",
-    officer: "",
-    description: "",
-  });
-
+const CaseForm = (props) => {
+  const { officers, bicycleType, getAllOfficers } = props;
   const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(
-      createCase(
-        values.licenseNumber,
-        values.fullName,
-        values.type,
-        values.color,
-        values.date,
-        values.officer,
-        values.description
-      )
-    );
-  };
+  // const [values, setValues] = useState({
+  //   licenseNumber: "",
+  //   fullName: "",
+  //   type: "",
+  //   color: "",
+  //   date: "",
+  //   officer: "",
+  //   description: "",
+  // });
 
-  const handleChange = (e) => {
-    const fieldName = e.target.name;
-    setValues({ ...values, [fieldName]: e.target.value });
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   dispatch(
+  //     createCase(
+  //       values.licenseNumber,
+  //       values.fullName,
+  //       values.type,
+  //       values.color,
+  //       values.date,
+  //       values.officer,
+  //       values.description
+  //     )
+  //   );
+  // };
+
+  // const handleChange = (e) => {
+  //   const fieldName = e.target.name;
+  //   setValues({ ...values, [fieldName]: e.target.value });
+  // };
+
+  useEffect(() => {
+    getAllOfficers();
+  }, []);
 
   return (
-    <div className={css.wrapper}>
-      <form className="row g-3" onSubmit={handleSubmit}>
-        <div className="col-md-6">
-          <label htmlFor="TheftFormLicenseNumber" className="form-label">
-            License Number
-          </label>
-          <input
-            type="text"
-            name={"licenseNumber"}
-            className="form-control "
-            placeholder="License Number"
-            //is-valid
-            id="TheftFormLicenseNumber"
-            required
-            onChange={handleChange}
-            value={values.licenseNumber}
-          />
-          <div className="valid-feedback">Looks good!</div>
-        </div>
+    <Formik
+      enableReinitialize={true}
+      initialValues={{
+        licenseNumber: "",
+        ownerFullName: "",
+        type: "",
+        color: "",
+        date: "",
+        officer: "",
+        description: "",
+        agreement: false,
+      }}
+      validationSchema={Yup.object({
+        licenseNumber: Yup.string().required("This field is required"),
+        ownerFullName: Yup.string().required("This field is required"),
+        type: Yup.string().required("This field is required"),
+        color: Yup.string(),
+        date: Yup.date(),
+        officer: Yup.string(),
+        //id сотрудника
+        description: Yup.string(),
+        agreement: Yup.boolean().required("You must agree before submitting"),
+      })}
+      onSubmit={(values) => {
+        createCase(values);
+      }}
+    >
+      {(formik) => {
+        return (
+          <div className={css.wrapper}>
+            <Form className="row g-3">
+              <div className="col-md-6">
+                <label htmlFor="licenseNumber" className="form-label">
+                  License Number
+                </label>
+                <Field
+                  type="text"
+                  name={"licenseNumber"}
+                  className="form-control "
+                  placeholder="License Number"
+                  id="licenseNumber"
+                />
+                <ErrorMessage name={"licenseNumber"} />
+              </div>
 
-        <div className="col-md-6">
-          <label htmlFor="TheftFormOwnerFullName" className="form-label">
-            Owner full name
-          </label>
-          <input
-            type="text"
-            name={"fullName"}
-            className="form-control "
-            placeholder="Owner full name"
-            //is-valid
-            id="TheftFormOwnerFullName"
-            required
-            onChange={handleChange}
-            value={values.fullName}
-          />
-          <div className="valid-feedback">Looks good!</div>
-        </div>
+              <div className="col-md-6">
+                <label htmlFor="ownerFullName" className="form-label">
+                  Owner full name
+                </label>
+                <Field
+                  type="text"
+                  name={"ownerFullName"}
+                  className="form-control "
+                  placeholder="Owner full name"
+                  id="ownerFullName"
+                />
+                <ErrorMessage name={"ownerFullName"} />
+              </div>
 
-        <div className="col-md-4">
-          <label htmlFor="TheftFormType" className="form-label">
-            Type
-          </label>
-          <select
-            className="form-select"
-            name={"type"}
-            id="TheftFormType"
-            defaultValue={"DEFAULT"}
-            required
-            onChange={handleChange}
-            value={values.type}
-          >
-            <option value="DEFAULT" disabled>
-              Choose...
-            </option>
-            <option>General</option>
-            <option>Sport</option>
-          </select>
-          <div className="invalid-feedback">Please select a valid state.</div>
-        </div>
+              <div className="col-md-4">
+                <label htmlFor="type" className="form-label">
+                  Type
+                </label>
+                <Field
+                  as={"select"}
+                  className="form-select"
+                  name={"type"}
+                  id="type"
+                >
+                  <option value="DEFAULT" disabled>
+                    Choose...
+                  </option>
+                  {bicycleType &&
+                    bicycleType.map((item, index) => {
+                      return (
+                        <option value={item.value} key={index}>
+                          {item.title}
+                        </option>
+                      );
+                    })}
+                </Field>
+                <ErrorMessage name={"type"} />
+              </div>
 
-        <div className="col-md-4">
-          <label htmlFor="TheftFormColor" className="form-label">
-            Color
-          </label>
-          <input
-            type="text"
-            name={"color"}
-            className="form-control "
-            // is-invalid
-            placeholder="Color"
-            id="TheftFormColor"
-            aria-describedby="validationServer03Feedback"
-            onChange={handleChange}
-            value={values.color}
-          />
-          <div id="TheftFormColor" className="invalid-feedback">
-            Please provide a valid city.
+              <div className="col-md-4">
+                <label htmlFor="color" className="form-label">
+                  Color
+                </label>
+                <Field
+                  type="text"
+                  name={"color"}
+                  className="form-control"
+                  placeholder="Color"
+                  id="color"
+                />
+              </div>
+
+              <div className="col-md-4">
+                <label htmlFor="date" className="form-label">
+                  Date
+                </label>
+                <Field
+                  type="date"
+                  name={"date"}
+                  className="form-control"
+                  id="date"
+                />
+              </div>
+
+              <div className="col-md-7">
+                <label htmlFor="officer" className="form-label">
+                  Officer
+                </label>
+                <Field
+                  as={"select"}
+                  className="form-select"
+                  name={"officer"}
+                  id="officer"
+                >
+                  <option value="">Choose...</option>
+
+                  {officers
+                    .filter((officer) => officer.approved)
+                    .map((officer, index) => {
+                      return (
+                        <option key={officer._id} value={officer._id}>
+                          {!officer.firstName || !officer.lastName
+                            ? `Officer ${index + 1}`
+                            : `${officer.firstName} ${officer.lastName}`}
+                        </option>
+                      );
+                    })}
+                </Field>
+              </div>
+
+              <div className="col-12">
+                <label htmlFor="description" className="form-label">
+                  Description
+                </label>
+                <Field
+                  as={"textarea"}
+                  className="form-control"
+                  name={"description"}
+                  id="description"
+                  placeholder="Please describe lost bicycle"
+                />
+              </div>
+
+              <div className="col-12">
+                <div className="form-check">
+                  <Field
+                    className="form-check-input"
+                    type={"checkbox"}
+                    name={"checkbox"}
+                    id="agreement"
+                  />
+                  <label className="form-check-label" htmlFor="agreement">
+                    Agree to terms and conditions
+                  </label>
+                  <ErrorMessage name={"agreement"} />
+                </div>
+              </div>
+              <div className="col-12">
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  disabled={!(formik.isValid && formik.dirty)}
+                >
+                  Submit form
+                </button>
+              </div>
+            </Form>
           </div>
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="TheftFormDate" className="form-label">
-            Date
-          </label>
-          <input
-            type="date"
-            name={"date"}
-            className="form-control"
-            // is-invalid
-            id="TheftFormDate"
-            aria-describedby="validationServer03Feedback"
-            onChange={handleChange}
-            value={values.date}
-          />
-          <div id="TheftFormDate" className="invalid-feedback">
-            Please select a valid state.
-          </div>
-        </div>
-
-        <div className="col-md-7">
-          <label htmlFor="TheftFormOfficer" className="form-label">
-            Officer
-          </label>
-          <select
-            className="form-select"
-            name={"officer"}
-            id="TheftFormType"
-            defaultValue={"DEFAULT"}
-            required
-            onChange={handleChange}
-            value={values.officer}
-          >
-            <option value="DEFAULT" disabled>
-              Choose...
-            </option>
-
-            {OFFICERS.map((officer) => {
-              return (
-                <option>
-                  {officer.firstName} {officer.lastName}
-                </option>
-              );
-            })}
-          </select>
-          <div className="invalid-feedback">Please select a valid state.</div>
-        </div>
-
-        <div className="col-12">
-          <label htmlFor="TheftFormDescription" className="form-label">
-            Description
-          </label>
-          <textarea
-            className="form-control"
-            name={"description"}
-            aria-label="Description"
-            id="TheftFormDescription"
-            placeholder="Please describe lost bicycle"
-            onChange={handleChange}
-            value={values.description}
-          />
-          <div id="validationServer05Feedback" className="invalid-feedback">
-            Please provide a valid zip.
-          </div>
-        </div>
-
-        <div className="col-12">
-          <div className="form-check">
-            <input
-              className="form-check-input "
-              // is-invalid
-              type="checkbox"
-              // value=""
-              id="invalidCheck3"
-              aria-describedby="invalidCheck3Feedback"
-              required
-            />
-            <label className="form-check-label" htmlFor="invalidCheck3">
-              Agree to terms and conditions
-            </label>
-            <div id="invalidCheck3Feedback" className="invalid-feedback">
-              You must agree before submitting.
-            </div>
-          </div>
-        </div>
-        <div className="col-12">
-          <button className="btn btn-primary" type="submit">
-            Submit form
-          </button>
-        </div>
-      </form>
-    </div>
+        );
+      }}
+    </Formik>
   );
   //с авторизацией
   // licenseNumber*
@@ -220,5 +237,19 @@ const CaseForm = () => {
   // description
   //status и createdAt заполняются на бэкенде автоматически
 };
-
-export default CaseForm;
+export default connect(
+  (state) => {
+    return {
+      officers: state.officersReducer.officers,
+      bicycleType: state.casesReducer.bicycle.bicycleType,
+    };
+  },
+  (dispatch) => {
+    return {
+      getAllOfficers: () => dispatch(getAllOfficers()),
+      createCase: () => dispatch(createCase()),
+      // getOneCase: (id) => dispatch(getOneCase(id)),
+      // editCase: (id, values) => dispatch(editCase(id, values)),
+    };
+  }
+)(CaseForm);

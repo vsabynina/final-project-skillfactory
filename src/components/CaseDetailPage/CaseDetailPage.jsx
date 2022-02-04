@@ -90,8 +90,12 @@ const CaseDetailPage = (props) => {
       }}
       validationSchema={Yup.object({
         status: Yup.string(),
-        licenseNumber: Yup.string().required("This field is required"),
-        ownerFullName: Yup.string().required("This field is required"),
+        licenseNumber: Yup.string().required(
+          "Это поле обязательно для заполнения"
+        ),
+        ownerFullName: Yup.string().required(
+          "Это поле обязательно для заполнения"
+        ),
         type: Yup.string().nullable(),
         color: Yup.string().nullable(),
         officer: Yup.string().nullable(),
@@ -100,7 +104,9 @@ const CaseDetailPage = (props) => {
           .nullable()
           .when("status", {
             is: (value) => value === "done",
-            then: Yup.string().nullable().required("This field is required"),
+            then: Yup.string()
+              .nullable()
+              .required("Это поле обязательно для заполнения"),
           }),
       })}
       onSubmit={(values) => {
@@ -129,17 +135,17 @@ const CaseDetailPage = (props) => {
                       </th>
                       <th colSpan="2" className={css.thTextAlign}>
                         <p className={css.p}>
-                          Message was created on{" "}
-                          {new Date(someCase.createdAt).toLocaleDateString()} at{" "}
+                          Сообщение было создано{" "}
+                          {new Date(someCase.createdAt).toLocaleDateString()} в{" "}
                           {new Date(someCase.createdAt).toLocaleTimeString()}
                         </p>
                         {someCase && (
                           <p className={css.p}>
                             {!someCase.updatedAt
-                              ? "Message was not edited"
-                              : `Message was edited on ${new Date(
+                              ? "Сообщение не редактировалось"
+                              : `Сообщение было отредактировано ${new Date(
                                   someCase.updatedAt
-                                ).toLocaleDateString()} at ${new Date(
+                                ).toLocaleDateString()} в ${new Date(
                                   someCase.updatedAt
                                 ).toLocaleTimeString()}`}
                           </p>
@@ -153,9 +159,9 @@ const CaseDetailPage = (props) => {
                       <td className={css.cell1}>Status</td>
                       <td className={css.cell2}>
                         {!isClickedStatus ? (
-                          (values.status === "new" && "New") ||
-                          (values.status === "in_progress" && "In progress") ||
-                          (values.status === "done" && "Done")
+                          (values.status === "new" && "Открыто") ||
+                          (values.status === "in_progress" && "В процессе") ||
+                          (values.status === "done" && "Завершено")
                         ) : (
                           <Field
                             as="select"
@@ -163,7 +169,7 @@ const CaseDetailPage = (props) => {
                             name="status"
                           >
                             <option value="DEFAULT" disabled>
-                              Choose...
+                              Выберите...
                             </option>
                             {caseStatus &&
                               caseStatus.map((item, index) => {
@@ -185,7 +191,7 @@ const CaseDetailPage = (props) => {
 
                     {values.status === "done" ? (
                       <tr>
-                        <td className={css.cell1}>Resolution</td>
+                        <td className={css.cell1}>Решение</td>
                         <td className={css.cell2}>
                           {!isClickedResolution &&
                           someCase &&
@@ -194,7 +200,7 @@ const CaseDetailPage = (props) => {
                               as="textarea"
                               className="form-control"
                               name={"resolution"}
-                              placeholder="Please describe how case was solved"
+                              placeholder="Опишите как был решён случай"
                             />
                           ) : (
                             values.resolution
@@ -218,7 +224,7 @@ const CaseDetailPage = (props) => {
                     ) : null}
 
                     <tr>
-                      <td className={css.cell1}>License number</td>
+                      <td className={css.cell1}>Лицензионный номер</td>
                       <td className={css.cell2}>
                         {!isClickedLicenseNumber ? (
                           values.licenseNumber
@@ -227,7 +233,7 @@ const CaseDetailPage = (props) => {
                             type="text"
                             name={"licenseNumber"}
                             className="form-control"
-                            placeholder={"Please write license number"}
+                            placeholder={"Введите ицензионный номер"}
                             onKeyPress={handleKeyPress}
                           />
                         )}
@@ -248,7 +254,7 @@ const CaseDetailPage = (props) => {
                     </tr>
 
                     <tr>
-                      <td className={css.cell1}>Owner full name</td>
+                      <td className={css.cell1}>ФИО владельца</td>
                       <td className={css.cell2}>
                         {!isClickedOwnerFullName ? (
                           values.ownerFullName
@@ -257,7 +263,7 @@ const CaseDetailPage = (props) => {
                             type="text"
                             name={"ownerFullName"}
                             className="form-control"
-                            placeholder={"Please write owner full name"}
+                            placeholder={"Введите ФИО владельца"}
                           />
                         )}
                         <ErrorMessage
@@ -277,11 +283,11 @@ const CaseDetailPage = (props) => {
                     </tr>
 
                     <tr>
-                      <td className={css.cell1}>Type</td>
+                      <td className={css.cell1}>Тип</td>
                       <td className={css.cell2}>
                         {!isClickedType ? (
-                          (values.type === "general" && "General") ||
-                          (values.type === "sport" && "Sport")
+                          (values.type === "general" && "Обычный") ||
+                          (values.type === "sport" && "Спортивный")
                         ) : (
                           <Field
                             as="select"
@@ -289,7 +295,7 @@ const CaseDetailPage = (props) => {
                             name="type"
                           >
                             <option value="DEFAULT" disabled>
-                              Choose...
+                              Выберите...
                             </option>
                             {bicycleType &&
                               bicycleType.map((item, index) => {
@@ -310,7 +316,7 @@ const CaseDetailPage = (props) => {
                     </tr>
 
                     <tr>
-                      <td className={css.cell1}>Color</td>
+                      <td className={css.cell1}>Цвет</td>
                       <td className={css.cell2}>
                         {!isClickedColor ? (
                           values.color
@@ -319,7 +325,7 @@ const CaseDetailPage = (props) => {
                             type="text"
                             name={"color"}
                             className="form-control"
-                            placeholder={"Please write bicycle color"}
+                            placeholder={"Напишите цвет велосипеда"}
                           />
                         )}
                       </td>
@@ -331,31 +337,32 @@ const CaseDetailPage = (props) => {
                     </tr>
 
                     <tr>
-                      <td className={css.cell1}>Officer</td>
+                      <td className={css.cell1}>Сотрудник</td>
                       <td className={css.cell2}>
                         {!isClickedOfficer ? (
-                          values.officer
+                          `${
+                            officers.find(
+                              (officer) => officer._id === values.officer
+                            ).firstName
+                          } ${
+                            officers.find(
+                              (officer) => officer._id === values.officer
+                            ).lastName
+                          }`
                         ) : (
                           <Field
                             as="select"
                             className="form-select"
                             name="officer"
                           >
-                            <option value="">Choose...</option>
+                            <option value="">Выберите...</option>
                             {officers
                               .filter((officer) => officer.approved)
                               .map((officer, index) => {
                                 return (
-                                  <option
-                                    key={officer._id}
-                                    value={
-                                      !officer.firstName || !officer.lastName
-                                        ? `Officer ${index + 1}`
-                                        : `${officer.firstName} ${officer.lastName}`
-                                    }
-                                  >
+                                  <option key={officer._id} value={officer._id}>
                                     {!officer.firstName || !officer.lastName
-                                      ? `Officer ${index + 1}`
+                                      ? `Сотрудник ${index + 1}`
                                       : `${officer.firstName} ${officer.lastName}`}
                                   </option>
                                 );
@@ -371,7 +378,7 @@ const CaseDetailPage = (props) => {
                     </tr>
 
                     <tr>
-                      <td className={css.cell1}>Description</td>
+                      <td className={css.cell1}>Описание</td>
                       <td className={css.cell2}>
                         {!isClickedDescription ? (
                           values.description
@@ -380,7 +387,7 @@ const CaseDetailPage = (props) => {
                             as="textarea"
                             className="form-control"
                             name={"description"}
-                            placeholder="Please describe the case"
+                            placeholder="Опишите случай"
                           />
                         )}
                       </td>
@@ -401,7 +408,7 @@ const CaseDetailPage = (props) => {
                     className={`btn btn-outline-primary ${css.btnSave}`}
                     disabled={!(formik.isValid && formik.dirty)}
                   >
-                    Save changes
+                    Сохранить изменения
                   </button>
                 </div>
               </Form>

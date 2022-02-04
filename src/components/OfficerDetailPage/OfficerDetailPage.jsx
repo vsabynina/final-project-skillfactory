@@ -70,15 +70,21 @@ const OfficerDetailPage = (props) => {
         approved: someOfficer.approved || "",
       }}
       validationSchema={Yup.object({
-        firstName: Yup.string().max(15, "Must be 15 characters or less"),
-        lastName: Yup.string().max(20, "Must be 20 characters or less"),
+        firstName: Yup.string().max(
+          15,
+          "Это поле может содержать менее 15 символов"
+        ),
+        lastName: Yup.string().max(
+          20,
+          "Это поле может содержать менее 20 символов"
+        ),
         oldPassword: Yup.string(),
         newPassword: Yup.string().when((isClickedPassword, schema) => {
           if (isClickedPassword)
             return schema
-              .min(3, "Password must be longer than 3 characters")
+              .min(3, "Пароль должен содержать больше 3 символов")
               .max(12, "Password must be shorter than 12 characters")
-              .required("This field is required");
+              .required("Это поле обязательно для заполнения");
         }),
         passwordConfirmation: Yup.string()
           .when("password", (isClickedPassword, schema) => {
@@ -106,7 +112,7 @@ const OfficerDetailPage = (props) => {
               <table className={`table table-hover ${css.table}`}>
                 <tbody>
                   <tr className={css.row}>
-                    <td className={css.cell1}>First Name</td>
+                    <td className={css.cell1}>Имя</td>
                     <td className={css.cell2}>
                       {!isClickedFirstName ? (
                         values.firstName
@@ -115,14 +121,14 @@ const OfficerDetailPage = (props) => {
                           type="text"
                           name="firstName"
                           className="form-control"
-                          placeholder={"Please write first name"}
+                          placeholder={"Ваше имя"}
                           onKeyPress={handleKeyPress}
                         />
                       )}
                       <ErrorMessage
+                        className={css.invalidMessage}
                         component="div"
                         name="firstName"
-                        className={css.invalidMessage}
                       />
                     </td>
                     <td className={css.cellIcon}>
@@ -133,7 +139,7 @@ const OfficerDetailPage = (props) => {
                   </tr>
 
                   <tr className={css.row}>
-                    <td className={css.cell1}>Last Name</td>
+                    <td className={css.cell1}>Фамилия</td>
                     <td className={css.cell2}>
                       {!isClickedLastName ? (
                         values.lastName
@@ -142,7 +148,7 @@ const OfficerDetailPage = (props) => {
                           type="text"
                           name="lastName"
                           className="form-control"
-                          placeholder={"Please write last name"}
+                          placeholder={"Ваша фамилия"}
                           onKeyPress={handleKeyPress}
                         />
                       )}
@@ -167,7 +173,7 @@ const OfficerDetailPage = (props) => {
 
                   {!isClickedPassword && (
                     <tr className={css.row}>
-                      <td className={css.cell1}>Old password</td>
+                      <td className={css.cell1}>Старый пароль</td>
                       <td className={css.cell2}>
                         <Field
                           as={"textarea"}
@@ -189,13 +195,13 @@ const OfficerDetailPage = (props) => {
 
                   {isClickedPassword && (
                     <tr className={css.row}>
-                      <td className={css.cell1}>New password</td>
+                      <td className={css.cell1}>Новый пароль</td>
                       <td className={css.cell2}>
                         <Field
                           type="password"
                           name={"newPassword"}
                           className="form-control"
-                          placeholder={"Please write new password"}
+                          placeholder={"Введите новый пароль"}
                           onKeyPress={handleKeyPress}
                         />
                         <ErrorMessage
@@ -214,13 +220,13 @@ const OfficerDetailPage = (props) => {
 
                   {isClickedPassword && (
                     <tr className={css.row}>
-                      <td className={css.cell1}>Confirm new password</td>
+                      <td className={css.cell1}>Подтвердите новый пароль</td>
                       <td className={css.cell2}>
                         <Field
                           type="password"
                           name={"passwordConfirmation"}
                           className="form-control"
-                          placeholder={"Please repeat new password"}
+                          placeholder={"Повторно введите новый пароль"}
                           onKeyPress={handleKeyPress}
                         />
                         <ErrorMessage
@@ -234,13 +240,13 @@ const OfficerDetailPage = (props) => {
                   )}
 
                   <tr className={css.row}>
-                    <td className={css.cell1}>Client ID</td>
+                    <td className={css.cell1}>ID</td>
                     <td className={css.cell2}>{someOfficer.clientId}</td>
                     <td></td>
                   </tr>
 
                   <tr className={css.row}>
-                    <td className={css.cell1}>Approved</td>
+                    <td className={css.cell1}>Одобрен</td>
                     <td className={css.cell2}>
                       <div className="form-check form-switch">
                         <Field
@@ -260,7 +266,7 @@ const OfficerDetailPage = (props) => {
                   className="btn btn-outline-primary"
                   disabled={!(formik.isValid && formik.dirty)}
                 >
-                  Save changes
+                  Сохранить изменения
                 </button>
               </div>
             </Form>

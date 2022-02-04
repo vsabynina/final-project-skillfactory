@@ -28,10 +28,10 @@ const ListOfCases = (props) => {
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">License Number</th>
-            <th scope="col">Type</th>
-            <th scope="col">Color</th>
-            <th scope="col">Description</th>
+            <th scope="col">Лицензионный номер</th>
+            <th scope="col">Тип</th>
+            <th scope="col">Цвет</th>
+            <th scope="col">Описание</th>
           </tr>
         </thead>
 
@@ -49,7 +49,10 @@ const ListOfCases = (props) => {
 
                 <td className={css.cell2}>{item.licenseNumber}</td>
 
-                <td className={css.cell3}>{item.type}</td>
+                <td className={css.cell3}>
+                  {(item.type === "sport" && "Sport") ||
+                    (item.type === "general" && "General")}
+                </td>
 
                 <td className={css.cell4}>{item.color}</td>
 
@@ -61,7 +64,7 @@ const ListOfCases = (props) => {
                     id={item._id}
                     onClick={(e) => handleButtonClick(item._id, e)}
                   >
-                    Delete
+                    Удалить
                   </button>
                 </th>
               </tr>

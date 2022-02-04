@@ -10,6 +10,10 @@ import {
   DELETE_OFFICER_SUCCESS,
   EDIT_OFFICER_SUCCESS,
   CREATE_CASE_SUCCESS,
+  SIGN_UP_SUCCESS,
+  SIGN_IN_SUCCESS,
+  AUTH_SUCCESS,
+  CREATE_OFFICER_SUCCESS,
 } from "./type";
 
 export const request = () => {
@@ -20,10 +24,10 @@ export const success = () => {
   return { type: SUCCESS };
 };
 
-export const failure = (err) => {
+export const failure = (error) => {
   return {
     type: FAILURE,
-    payload: err.message,
+    payload: error,
   };
 };
 
@@ -104,6 +108,47 @@ export const editOfficerSuccess = (id, values) => {
       password:
         values.newPassword === "" ? values.oldPassword : values.newPassword,
       approved: values.approved,
+    },
+  };
+};
+
+export const createOfficerSuccess = (data) => {
+  return {
+    type: CREATE_OFFICER_SUCCESS,
+    payload: data,
+  };
+};
+
+export const signUpSuccess = (values) => {
+  return {
+    type: SIGN_UP_SUCCESS,
+    payload: {
+      email: values.email,
+      password: values.password,
+      clientId: values.clientId,
+      firstName: values.firstName === "" ? null : values.firstName,
+      lastName: values.lastName === "" ? null : values.lastName,
+      approved: values.approved,
+    },
+  };
+};
+
+export const signInSuccess = (data) => {
+  return {
+    type: SIGN_IN_SUCCESS,
+    payload: {
+      user: data.user,
+      token: data.token,
+    },
+  };
+};
+
+export const authSuccess = (data) => {
+  return {
+    type: AUTH_SUCCESS,
+    payload: {
+      user: data.user,
+      token: data.token,
     },
   };
 };

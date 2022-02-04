@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  CREATE_OFFICER_SUCCESS,
   DELETE_OFFICER_SUCCESS,
   EDIT_CASE_SUCCESS,
   EDIT_OFFICER_SUCCESS,
@@ -12,6 +13,7 @@ import {
   fetchOfficersSuccess,
   deleteOfficerSuccess,
   editOfficerSuccess,
+  createOfficerSuccess,
 } from "../actions";
 
 const initialState = {
@@ -44,6 +46,18 @@ export const officersReducer = (state = initialState, action) => {
       return {
         officers: state.officers.filter((item) => item._id !== action.payload),
       };
+    // officers: [
+    //   ...state.officers,
+    //   state.officers.indexOf((item) => item._id !== action.payload.id) !== -1
+    //     ? (state.officers[
+    //         state.officers.indexOf((item) => item._id !== action.payload.id)
+    //       ] = action.payload.newOfficer)
+    //     : null,
+    // ],
+    case CREATE_OFFICER_SUCCESS:
+      return {
+        officers: [...state.officers, action.payload],
+      };
     default:
       return state;
   }
@@ -59,10 +73,10 @@ export const getAllOfficers = () => {
         },
       })
       .then((response) => {
-        dispatch(fetchOfficersSuccess(response.data.officers));
+        dispatch(fetchOfficersSuccess(response.data.data));
         dispatch(success());
       })
-      .catch((error) => dispatch(failure(error)));
+      .catch((response) => dispatch(failure(response)));
   };
 };
 
@@ -79,7 +93,7 @@ export const deleteOfficer = (id) => {
         dispatch(deleteOfficerSuccess(id));
         dispatch(success());
       })
-      .catch((error) => dispatch(failure(error)));
+      .catch((response) => dispatch(failure(response)));
   };
 };
 
@@ -105,6 +119,32 @@ export const editOfficer = (id, values) => {
         dispatch(editOfficerSuccess(id, values));
         dispatch(success());
       })
-      .catch((error) => dispatch(failure(error)));
+      .catch((response) => dispatch(failure(response)));
+  };
+};
+
+export const createOfficer = (values) => {
+  return function (dispatch) {
+    axios
+      .post(
+        "https://sf-final-project.herokuapp.com/api/officers",
+        {
+          email: values.email,
+          password: values.password,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          approved: values.approved,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((response) => {
+        dispatch(createOfficerSuccess(response.data.data.officer));
+        dispatch(success());
+      })
+      .catch((response) => dispatch(failure(response)));
   };
 };

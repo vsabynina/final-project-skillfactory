@@ -35,9 +35,9 @@ const ListOfOfficers = (props) => {
             <th scope="col">
               <img src={employees} />
             </th>
-            <th>Name</th>
-            <th>Email</th>
-            <th className={css.theadCell3}>Approved</th>
+            <th>Имя</th>
+            <th>E-mail</th>
+            <th className={css.theadCell3}>Одобрен</th>
           </tr>
         </thead>
         <tbody>
@@ -60,7 +60,7 @@ const ListOfOfficers = (props) => {
                   <td className={css.cell3}>{item.email}</td>
                   <td className={css.cell4}>
                     <div
-                      className={`form - check form-switch ${css.switchInput}`}
+                      className={`form-check form-switch ${css.switchInput}`}
                     >
                       <input
                         className="form-check-input"

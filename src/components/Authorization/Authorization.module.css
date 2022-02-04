@@ -11,3 +11,6 @@
 .a {
   text-align: center;
 }
+.invalidMessage {
+  color: red;
+}

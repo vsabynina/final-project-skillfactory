@@ -1,49 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import css from "./CaseForm.module.css";
-import { OFFICERS, USER } from "../../mock.js";
-import {
-  createCase,
-  editCase,
-  getOneCase,
-} from "../../store/reducers/casesReducer";
+import { createCase } from "../../store/reducers/casesReducer";
 import { getAllOfficers } from "../../store/reducers/officersReducer";
 
 const CaseForm = (props) => {
-  const { officers, bicycleType, getAllOfficers } = props;
-  const dispatch = useDispatch();
-
-  // const [values, setValues] = useState({
-  //   licenseNumber: "",
-  //   fullName: "",
-  //   type: "",
-  //   color: "",
-  //   date: "",
-  //   officer: "",
-  //   description: "",
-  // });
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   dispatch(
-  //     createCase(
-  //       values.licenseNumber,
-  //       values.fullName,
-  //       values.type,
-  //       values.color,
-  //       values.date,
-  //       values.officer,
-  //       values.description
-  //     )
-  //   );
-  // };
-
-  // const handleChange = (e) => {
-  //   const fieldName = e.target.name;
-  //   setValues({ ...values, [fieldName]: e.target.value });
-  // };
+  const { officers, bicycleType, getAllOfficers, createCase } = props;
 
   useEffect(() => {
     getAllOfficers();
@@ -63,15 +27,21 @@ const CaseForm = (props) => {
         agreement: false,
       }}
       validationSchema={Yup.object({
-        licenseNumber: Yup.string().required("This field is required"),
-        ownerFullName: Yup.string().required("This field is required"),
-        type: Yup.string().required("This field is required"),
+        licenseNumber: Yup.string().required(
+          "Это поле обязательно для заполнения"
+        ),
+        ownerFullName: Yup.string().required(
+          "Это поле обязательно для заполнения"
+        ),
+        type: Yup.string().required("Это поле обязательно для заполнения"),
         color: Yup.string(),
         date: Yup.date(),
         officer: Yup.string(),
-        //id сотрудника
         description: Yup.string(),
-        agreement: Yup.boolean().required("You must agree before submitting"),
+        agreement: Yup.boolean().oneOf(
+          [true],
+          "You must agree before submitting"
+        ),
       })}
       onSubmit={(values) => {
         createCase(values);
@@ -83,35 +53,43 @@ const CaseForm = (props) => {
             <Form className="row g-3">
               <div className="col-md-6">
                 <label htmlFor="licenseNumber" className="form-label">
-                  License Number
+                  Лицензионный номер
                 </label>
                 <Field
                   type="text"
                   name={"licenseNumber"}
                   className="form-control "
-                  placeholder="License Number"
+                  placeholder="Лицензионный номер"
                   id="licenseNumber"
                 />
-                <ErrorMessage name={"licenseNumber"} />
+                <ErrorMessage
+                  name={"licenseNumber"}
+                  className={css.invalidMessage}
+                  component="div"
+                />
               </div>
 
               <div className="col-md-6">
                 <label htmlFor="ownerFullName" className="form-label">
-                  Owner full name
+                  ФИО владельца
                 </label>
                 <Field
                   type="text"
                   name={"ownerFullName"}
                   className="form-control "
-                  placeholder="Owner full name"
+                  placeholder="ФИО владельца"
                   id="ownerFullName"
                 />
-                <ErrorMessage name={"ownerFullName"} />
+                <ErrorMessage
+                  name={"ownerFullName"}
+                  className={css.invalidMessage}
+                  component="div"
+                />
               </div>
 
               <div className="col-md-4">
                 <label htmlFor="type" className="form-label">
-                  Type
+                  Тип
                 </label>
                 <Field
                   as={"select"}
@@ -120,7 +98,7 @@ const CaseForm = (props) => {
                   id="type"
                 >
                   <option value="DEFAULT" disabled>
-                    Choose...
+                    Выберите...
                   </option>
                   {bicycleType &&
                     bicycleType.map((item, index) => {
@@ -131,25 +109,29 @@ const CaseForm = (props) => {
                       );
                     })}
                 </Field>
-                <ErrorMessage name={"type"} />
+                <ErrorMessage
+                  name={"type"}
+                  className={css.invalidMessage}
+                  component="div"
+                />
               </div>
 
               <div className="col-md-4">
                 <label htmlFor="color" className="form-label">
-                  Color
+                  Цвет
                 </label>
                 <Field
                   type="text"
                   name={"color"}
                   className="form-control"
-                  placeholder="Color"
+                  placeholder="Цвет"
                   id="color"
                 />
               </div>
 
               <div className="col-md-4">
                 <label htmlFor="date" className="form-label">
-                  Date
+                  Дата
                 </label>
                 <Field
                   type="date"
@@ -161,7 +143,7 @@ const CaseForm = (props) => {
 
               <div className="col-md-7">
                 <label htmlFor="officer" className="form-label">
-                  Officer
+                  Сотрудник
                 </label>
                 <Field
                   as={"select"}
@@ -169,7 +151,7 @@ const CaseForm = (props) => {
                   name={"officer"}
                   id="officer"
                 >
-                  <option value="">Choose...</option>
+                  <option value="">Выберите...</option>
 
                   {officers
                     .filter((officer) => officer.approved)
@@ -177,7 +159,7 @@ const CaseForm = (props) => {
                       return (
                         <option key={officer._id} value={officer._id}>
                           {!officer.firstName || !officer.lastName
-                            ? `Officer ${index + 1}`
+                            ? `Сотрудник ${index + 1}`
                             : `${officer.firstName} ${officer.lastName}`}
                         </option>
                       );
@@ -187,14 +169,14 @@ const CaseForm = (props) => {
 
               <div className="col-12">
                 <label htmlFor="description" className="form-label">
-                  Description
+                  Описание
                 </label>
                 <Field
                   as={"textarea"}
                   className="form-control"
                   name={"description"}
                   id="description"
-                  placeholder="Please describe lost bicycle"
+                  placeholder="Опишите велосипед"
                 />
               </div>
 
@@ -203,14 +185,18 @@ const CaseForm = (props) => {
                   <Field
                     className="form-check-input"
                     type={"checkbox"}
-                    name={"checkbox"}
+                    name={"agreement"}
                     id="agreement"
                   />
                   <label className="form-check-label" htmlFor="agreement">
-                    Agree to terms and conditions
+                    Согласиться с условиями и правилами
                   </label>
-                  <ErrorMessage name={"agreement"} />
                 </div>
+                <ErrorMessage
+                  name={"agreement"}
+                  className={css.invalidMessage}
+                  component="div"
+                />
               </div>
               <div className="col-12">
                 <button
@@ -218,7 +204,7 @@ const CaseForm = (props) => {
                   type="submit"
                   disabled={!(formik.isValid && formik.dirty)}
                 >
-                  Submit form
+                  Сообщить о краже
                 </button>
               </div>
             </Form>
@@ -227,15 +213,6 @@ const CaseForm = (props) => {
       }}
     </Formik>
   );
-  //с авторизацией
-  // licenseNumber*
-  // ownerFullName*
-  // type*
-  // color
-  // date
-  // officer
-  // description
-  //status и createdAt заполняются на бэкенде автоматически
 };
 export default connect(
   (state) => {
@@ -247,9 +224,7 @@ export default connect(
   (dispatch) => {
     return {
       getAllOfficers: () => dispatch(getAllOfficers()),
-      createCase: () => dispatch(createCase()),
-      // getOneCase: (id) => dispatch(getOneCase(id)),
-      // editCase: (id, values) => dispatch(editCase(id, values)),
+      createCase: (values) => dispatch(createCase(values)),
     };
   }
 )(CaseForm);

@@ -25,17 +25,17 @@ const initialState = {
   case: {},
   bicycle: {
     caseStatus: [
-      { title: "New", value: "new" },
-      { title: "In progress", value: "in_progress" },
-      { title: "Done", value: "done" },
+      { title: "Открыто", value: "new" },
+      { title: "В процессе", value: "in_progress" },
+      { title: "Завершено", value: "done" },
     ],
     bicycleType: [
-      { title: "General", value: "general" },
-      { title: "Sport", value: "sport" },
+      { title: "Обычный", value: "general" },
+      { title: "Спортивный", value: "sport" },
     ],
   },
   loading: false,
-  err: "",
+  error: "",
 };
 
 // axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
@@ -59,7 +59,7 @@ export const casesReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: action.payload.response.data.message,
       };
 
     case FETCH_CASES_SUCCESS:
@@ -132,7 +132,7 @@ export const getAllCases = () => {
         dispatch(fetchCasesSuccess(response.data.data));
         dispatch(success());
       })
-      .catch((error) => dispatch(failure(error)));
+      .catch((response) => dispatch(failure(response)));
   };
 };
 
@@ -159,7 +159,7 @@ export const createCase = (values) => {
         }
       )
       .then((response) => createCaseSuccess(response.data))
-      .catch((error) => failure(error));
+      .catch((response) => failure(response));
   };
 };
 //
@@ -177,7 +177,7 @@ export const deleteCase = (id) => {
         dispatch(deleteCaseSuccess(id));
         dispatch(success());
       })
-      .catch((error) => dispatch(failure(error)));
+      .catch((response) => dispatch(failure(response)));
   };
 };
 
@@ -194,7 +194,7 @@ export const getOneCase = (id) => {
         dispatch(getOneCaseSuccess(response.data.data));
         dispatch(success());
       })
-      .catch((error) => dispatch(failure(error)));
+      .catch((response) => dispatch(failure(response)));
   };
 };
 
@@ -225,6 +225,6 @@ export const editCase = (id, values) => {
         dispatch(getOneCaseSuccess(response.data.data));
         dispatch(success());
       })
-      .catch((error) => dispatch(failure(error)));
+      .catch((response) => dispatch(failure(response)));
   };
 };

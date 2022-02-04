@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import user from "../../assets/icons/userIcon.svg";
 import css from "./Header.module.css";
 import { USER } from "../../mock.js";
+import { connect } from "react-redux";
+import { auth, signIn } from "../../store/reducers/authorizationReducer";
 
-const Header = () => {
+const Header = (props) => {
+  // const { authorized, token, setToken } = props;
   return (
     <header>
       <nav className={`navbar navbar-expand-lg navbar-light ${css.background}`}>
@@ -56,18 +59,28 @@ const Header = () => {
                 className={`dropdown-menu ${css.dropdown}`}
                 aria-labelledby="dropdownMenuButton1"
               >
-                {USER.authorization !== "completed" ? (
-                  <li>
-                    <Link to="/auth/sign_in" className="dropdown-item">
-                      Войти
-                    </Link>
-                  </li>
-                ) : (
-                  ""
-                )}
+                {/*{authorized && token ? (*/}
+                {/*  <li onClick={setToken("")}>*/}
+                {/*    <Link to="/" className="dropdown-item">*/}
+                {/*      Выйти*/}
+                {/*    </Link>*/}
+                {/*  </li>*/}
+                {/*) : (*/}
+                {/*  <li>*/}
+                {/*    <Link to="/auth/sign_in" className="dropdown-item">*/}
+                {/*      Войти*/}
+                {/*    </Link>*/}
+                {/*  </li>*/}
+                {/*)}*/}
+
                 <li>
                   <Link to="/" className="dropdown-item">
                     Выйти
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/auth/sign_in" className="dropdown-item">
+                    Войти
                   </Link>
                 </li>
               </ul>
@@ -79,4 +92,14 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default connect(
+  (state) => {
+    return {
+      authorized: state.authorizationReducer.authorized,
+      token: state.authorizationReducer.token,
+    };
+  },
+  (dispatch) => {
+    return {};
+  }
+)(Header);

@@ -1,59 +1,116 @@
 import axios from "axios";
-import { AUTH_SUCCESS, SIGN_IN_SUCCESS, SIGN_UP_SUCCESS } from "../type";
 import {
-  authSuccess,
-  failure,
-  request,
+  LOG_OUT_SUCCESS,
+  ON_CLICK_MESSAGE_BUTTON,
+  SIGN_IN_FAILURE,
+  SIGN_IN_REQUEST,
+  SIGN_IN_SUCCESS,
+  SIGN_UP_FAILURE,
+  SIGN_UP_REQUEST,
+  SIGN_UP_SUCCESS,
+} from "../type";
+import {
+  logOutSuccess,
+  onClickMessageButton,
+  signInFailure,
+  signInRequest,
   signInSuccess,
+  signUpFailure,
+  signUpRequest,
   signUpSuccess,
-  success,
 } from "../actions";
 
-const initialState = {
-  authorized: false,
-  token: "",
-  user: {},
-};
+const user = JSON.parse(localStorage.getItem("user"));
+
+const initialState = user
+  ? {
+      isAuthorized: true,
+      isRegistered: true,
+      user,
+      isLoading: false,
+      message: "",
+    }
+  : {
+      isAuthorized: false,
+      isRegistered: false,
+      user: null,
+      isLoading: false,
+      message: "",
+    };
 
 axios.defaults.headers.common["Content-Type"] = "application/json";
 
 export const authorizationReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SIGN_UP_SUCCESS:
+    case SIGN_UP_REQUEST:
       return {
-        authorized: false,
-        token: "",
-        user: {},
-      };
-    case SIGN_IN_SUCCESS:
-      return {
-        authorized: false,
-        token: action.payload.token,
-        user: action.payload.user,
-      };
-    case AUTH_SUCCESS:
-      return {
-        authorized: true,
-        token: action.payload.token,
-        user: action.payload.user,
+        ...state,
+        isLoading: true,
+        isAuthorized: false,
+        isRegistered: false,
+        user: null,
+        message: "",
       };
 
-    // case SIGN_IN_SUCCESS:
-    //   return {
-    //     cases: [
-    //       ...state.cases,
-    //       {
-    //         licenseNumber: action.payload.licenseNumber,
-    //         ownerFullName: action.payload.ownerFullName,
-    //         type: action.payload.type,
-    //         color: action.payload.color,
-    //         date: action.payload.date,
-    //         officer: action.payload.officer,
-    //         description: action.payload.description,
-    //       },
-    //     ],
-    //     ...state,
-    //   };
+    case SIGN_UP_SUCCESS:
+      return {
+        ...state,
+        isAuthorized: false,
+        isRegistered: true,
+        isLoading: false,
+        message: "",
+      };
+
+    case SIGN_UP_FAILURE:
+      return {
+        ...state,
+        isAuthorized: false,
+        isRegistered: false,
+        isLoading: false,
+        message: action.payload.response.data.message,
+      };
+
+    case SIGN_IN_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        isAuthorized: false,
+        user: null,
+        message: "",
+      };
+
+    case SIGN_IN_SUCCESS:
+      return {
+        ...state,
+        isAuthorized: true,
+        user: action.payload,
+        isLoading: false,
+        message: "",
+      };
+
+    case SIGN_IN_FAILURE:
+      return {
+        ...state,
+        isAuthorized: false,
+        isLoading: false,
+        message: action.payload.response.data.message,
+      };
+
+    case LOG_OUT_SUCCESS:
+      return {
+        ...state,
+        isAuthorized: false,
+        user: null,
+        isLoading: false,
+        message: "",
+      };
+
+    case ON_CLICK_MESSAGE_BUTTON:
+      return {
+        ...state,
+        message: "",
+      };
+
     default:
       return state;
   }
@@ -61,7 +118,7 @@ export const authorizationReducer = (state = initialState, action) => {
 
 export const signUp = (values) => {
   return function (dispatch) {
-    dispatch(request());
+    dispatch(signUpRequest());
     axios
       .post("https://sf-final-project.herokuapp.com/api/auth/sign_up", {
         email: values.email,
@@ -71,42 +128,42 @@ export const signUp = (values) => {
         lastName: values.lastName,
         approved: values.approved,
       })
-      .then((response) => {
-        dispatch(signUpSuccess(response.data.data));
-        dispatch(success());
+      .then(() => {
+        dispatch(signUpSuccess());
       })
-      .catch((response) => dispatch(failure(response)));
+      .catch((response) => {
+        dispatch(signUpFailure(response));
+      });
   };
 };
 
 export const signIn = (values) => {
   return function (dispatch) {
-    dispatch(request());
+    dispatch(signInRequest());
     axios
       .post("https://sf-final-project.herokuapp.com/api/auth/sign_in", {
         email: values.email,
         password: values.password,
       })
       .then((response) => {
-        dispatch(signInSuccess(response.data.data));
-        dispatch(success());
+        if (response.data.data.token) {
+          localStorage.setItem("user", JSON.stringify(response.data.data));
+        }
+        dispatch(signInSuccess(response.data.data.user));
       })
-      .catch((response) => dispatch(failure(response)));
+      .catch((response) => dispatch(signInFailure(response)));
   };
 };
-export const auth = () => {
+
+export const logOut = () => {
   return function (dispatch) {
-    dispatch(request());
-    axios
-      .get("https://sf-final-project.herokuapp.com/api/auth/", {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      })
-      .then((response) => {
-        dispatch(authSuccess(response.data.data));
-        dispatch(success());
-      })
-      .catch((response) => dispatch(failure(response)));
+    localStorage.removeItem("user");
+    dispatch(logOutSuccess());
+  };
+};
+
+export const handleClickMessageButton = () => {
+  return function (dispatch) {
+    dispatch(onClickMessageButton());
   };
 };

@@ -1,28 +1,54 @@
 import axios from "axios";
 import {
-  REQUEST,
-  FAILURE,
-  SUCCESS,
   FETCH_CASES_SUCCESS,
   DELETE_CASE_SUCCESS,
   GET_ONE_CASE_SUCCESS,
   EDIT_CASE_SUCCESS,
   CREATE_CASE_SUCCESS,
+  FETCH_CASES_FAILURE,
+  CREATE_CASE_FAILURE,
+  GET_ONE_CASE_FAILURE,
+  DELETE_CASE_FAILURE,
+  EDIT_CASE_FAILURE,
+  FETCH_CASES_REQUEST,
+  CREATE_CASE_REQUEST,
+  EDIT_CASE_REQUEST,
+  GET_ONE_CASE_REQUEST,
+  DELETE_CASE_REQUEST,
+  ON_CLICK_MESSAGE_BUTTON,
+  ON_CLICK_MODAL_BUTTON,
+  CREATE_CASE_PUBLIC_REQUEST,
+  CREATE_CASE_PUBLIC_SUCCESS,
+  CREATE_CASE_PUBLIC_FAILURE,
 } from "../type";
 import {
-  failure,
-  success,
-  request,
   fetchCasesSuccess,
   deleteCaseSuccess,
   editCaseSuccess,
   getOneCaseSuccess,
   createCaseSuccess,
+  fetchCasesFailure,
+  createCaseFailure,
+  deleteCaseFailure,
+  getOneCaseFailure,
+  editCaseFailure,
+  fetchCasesRequest,
+  createCaseRequest,
+  deleteCaseRequest,
+  getOneCaseRequest,
+  editCaseRequest,
+  onClickMessageButton,
+  onClickModalButton,
+  createCasePublicSuccess,
+  createCasePublicFailure,
+  createCasePublicRequest,
 } from "../actions";
+import authHeader from "../../helper";
 
 const initialState = {
   cases: [],
   case: {},
+  caseIsCreated: false,
   bicycle: {
     caseStatus: [
       { title: "Открыто", value: "new" },
@@ -34,59 +60,96 @@ const initialState = {
       { title: "Спортивный", value: "sport" },
     ],
   },
-  loading: false,
-  error: "",
+  isLoading: false,
+  message: "",
 };
 
-// axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 axios.defaults.headers.common["Content-Type"] = "application/json";
 
 export const casesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case REQUEST:
+    case FETCH_CASES_REQUEST:
       return {
         ...state,
-        loading: true,
-      };
-
-    case SUCCESS:
-      return {
-        ...state,
-        loading: false,
-      };
-
-    case FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.response.data.message,
+        isLoading: true,
+        message: "",
       };
 
     case FETCH_CASES_SUCCESS:
       return {
         ...state,
         cases: action.payload,
+        isLoading: false,
+        message: "",
       };
-    //
+
+    case FETCH_CASES_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        message: action.payload.response.data.message,
+      };
+
+    case CREATE_CASE_REQUEST:
+      return {
+        ...state,
+        caseIsCreated: false,
+        isLoading: true,
+        message: "",
+      };
+
     case CREATE_CASE_SUCCESS:
       return {
-        cases: [
-          ...state.cases,
-          {
-            licenseNumber: action.payload.licenseNumber,
-            ownerFullName: action.payload.ownerFullName,
-            type: action.payload.type,
-            color: action.payload.color,
-            date: action.payload.date,
-            officer: action.payload.officer,
-            description: action.payload.description,
-          },
-        ],
         ...state,
+        cases: [...state.cases, action.payload],
+        caseIsCreated: true,
+        isLoading: false,
+        message: "",
+      };
+
+    case CREATE_CASE_FAILURE:
+      return {
+        ...state,
+        caseIsCreated: false,
+        isLoading: false,
+        message: action.payload.response.data.message,
+      };
+
+    case CREATE_CASE_PUBLIC_REQUEST:
+      return {
+        ...state,
+        caseIsCreated: false,
+        isLoading: true,
+        message: "",
+      };
+
+    case CREATE_CASE_PUBLIC_SUCCESS:
+      return {
+        ...state,
+        cases: [...state.cases, action.payload],
+        caseIsCreated: true,
+        isLoading: false,
+        message: "",
+      };
+
+    case CREATE_CASE_PUBLIC_FAILURE:
+      return {
+        ...state,
+        caseIsCreated: false,
+        isLoading: false,
+        message: action.payload.response.data.message,
+      };
+
+    case EDIT_CASE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        message: "",
       };
 
     case EDIT_CASE_SUCCESS:
       return {
+        ...state,
         cases: [
           ...state.cases,
           {
@@ -101,17 +164,71 @@ export const casesReducer = (state = initialState, action) => {
             resolution: action.payload.resolution,
           },
         ],
-        ...state,
+        isLoading: false,
+        message: "",
       };
+
+    case EDIT_CASE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        message: action.payload.response.data.message,
+      };
+
+    case GET_ONE_CASE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        message: "",
+      };
+
     case GET_ONE_CASE_SUCCESS:
       return {
         ...state,
         case: action.payload,
+        isLoading: false,
+        message: "",
       };
+
+    case GET_ONE_CASE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        message: action.payload.response.data.message,
+      };
+
+    case DELETE_CASE_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        message: "",
+      };
+
     case DELETE_CASE_SUCCESS:
       return {
         ...state,
         cases: state.cases.filter((item) => item._id !== action.payload),
+        isLoading: false,
+        message: "",
+      };
+
+    case DELETE_CASE_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        message: action.payload.response.data.message,
+      };
+
+    case ON_CLICK_MESSAGE_BUTTON:
+      return {
+        ...state,
+        message: "",
+      };
+
+    case ON_CLICK_MODAL_BUTTON:
+      return {
+        ...state,
+        caseIsCreated: false,
       };
 
     default:
@@ -121,25 +238,21 @@ export const casesReducer = (state = initialState, action) => {
 
 export const getAllCases = () => {
   return function (dispatch) {
-    dispatch(request());
+    dispatch(fetchCasesRequest());
     axios
       .get("https://sf-final-project.herokuapp.com/api/cases/", {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+        headers: authHeader(),
       })
       .then((response) => {
         dispatch(fetchCasesSuccess(response.data.data));
-        dispatch(success());
       })
-      .catch((response) => dispatch(failure(response)));
+      .catch((response) => dispatch(fetchCasesFailure(response)));
   };
 };
 
-//
 export const createCase = (values) => {
   return function (dispatch) {
-    dispatch(request());
+    dispatch(createCaseRequest());
     axios
       .post(
         "https://sf-final-project.herokuapp.com/api/cases/",
@@ -153,54 +266,67 @@ export const createCase = (values) => {
           description: values.description,
         },
         {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
+          headers: authHeader(),
         }
       )
-      .then((response) => createCaseSuccess(response.data))
-      .catch((response) => failure(response));
+      .then((response) => {
+        dispatch(createCaseSuccess(response.data.data));
+      })
+      .catch((response) => dispatch(createCaseFailure(response)));
   };
 };
-//
+
+export const createCasePublic = (values) => {
+  return function (dispatch) {
+    dispatch(createCasePublicRequest());
+    axios
+      .post("https://sf-final-project.herokuapp.com/api/public/report", {
+        licenseNumber: values.licenseNumber,
+        ownerFullName: values.ownerFullName,
+        type: values.type,
+        clientId: values.clientId,
+        color: values.color,
+        date: values.date,
+        description: values.description,
+      })
+      .then((response) => {
+        dispatch(createCasePublicSuccess(response.data.data));
+      })
+      .catch((response) => dispatch(createCasePublicFailure(response)));
+  };
+};
 
 export const deleteCase = (id) => {
   return function (dispatch) {
-    dispatch(request());
+    dispatch(deleteCaseRequest());
     axios
       .delete(`https://sf-final-project.herokuapp.com/api/cases/${id}`, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+        headers: authHeader(),
       })
       .then(() => {
         dispatch(deleteCaseSuccess(id));
-        dispatch(success());
       })
-      .catch((response) => dispatch(failure(response)));
+      .catch((response) => dispatch(deleteCaseFailure(response)));
   };
 };
 
 export const getOneCase = (id) => {
   return function (dispatch) {
-    dispatch(request());
+    dispatch(getOneCaseRequest());
     axios
       .get(`https://sf-final-project.herokuapp.com/api/cases/${id}`, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+        headers: authHeader(),
       })
       .then((response) => {
         dispatch(getOneCaseSuccess(response.data.data));
-        dispatch(success());
       })
-      .catch((response) => dispatch(failure(response)));
+      .catch((response) => dispatch(getOneCaseFailure(response)));
   };
 };
 
 export const editCase = (id, values) => {
   return function (dispatch) {
-    dispatch(request());
+    dispatch(editCaseRequest());
     axios
       .put(
         `https://sf-final-project.herokuapp.com/api/cases/${id}`,
@@ -215,16 +341,28 @@ export const editCase = (id, values) => {
           resolution: values.resolution,
         },
         {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
+          headers: authHeader(),
         }
       )
       .then((response) => {
         dispatch(editCaseSuccess(id, values));
         dispatch(getOneCaseSuccess(response.data.data));
-        dispatch(success());
       })
-      .catch((response) => dispatch(failure(response)));
+      .catch((response) => {
+        dispatch(editCaseFailure(response));
+        dispatch(getOneCaseFailure(response));
+      });
+  };
+};
+
+export const handleClickMessageButton = () => {
+  return function (dispatch) {
+    dispatch(onClickMessageButton());
+  };
+};
+
+export const handleClickModalButton = () => {
+  return function (dispatch) {
+    dispatch(onClickModalButton());
   };
 };

@@ -1,8 +1,0 @@
-.wrapper {
-  width: 600px;
-  display: flex;
-  align-items: center;
-}
-.invalidMessage {
-  color: red;
-}

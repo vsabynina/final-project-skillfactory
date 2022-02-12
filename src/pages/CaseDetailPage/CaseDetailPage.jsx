@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, { useEffect, useState } from "react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { useDispatch, connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import css from "./CaseDetailPage.module.css";
 import bicycle from "../../assets/icons/bicycleIcon.svg";
 import { getAllOfficers } from "../../store/reducers/officersReducer";
-import { editCase, getOneCase } from "../../store/reducers/casesReducer";
+import {
+  editCase,
+  getOneCase,
+  handleClickMessageButton,
+} from "../../store/reducers/casesReducer";
 import SecondaryButton from "../../components/SecondaryButton";
-import EditButton from "../../components/EditButton/EditButton";
-import editIcon from "../../assets/icons/editIcon.svg";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Message from "../../components/Message/Message";
-import { handleClickMessageButton } from "../../store/reducers/casesReducer";
 
 const CaseDetailPage = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const {
     officers,
     getAllOfficers,
@@ -153,6 +155,7 @@ const CaseDetailPage = (props) => {
                           <th scope="col">
                             <img src={bicycle} alt={"Bicycle"} />
                           </th>
+
                           <th colSpan="2" className={css.thTextAlign}>
                             <p className={css.p}>
                               Сообщение было создано{" "}
@@ -164,6 +167,7 @@ const CaseDetailPage = (props) => {
                                 someCase.createdAt
                               ).toLocaleTimeString()}
                             </p>
+
                             {someCase && (
                               <p className={css.p}>
                                 {!someCase.updatedAt
@@ -182,6 +186,7 @@ const CaseDetailPage = (props) => {
                       <tbody>
                         <tr onClick={handleClickStatus}>
                           <td className={css.cell1}>Status</td>
+
                           <td className={css.cell2}>
                             {!isClickedStatus ? (
                               (values.status === "new" && "Открыто") ||
@@ -211,9 +216,10 @@ const CaseDetailPage = (props) => {
                           </td>
                         </tr>
 
-                        {values.status === "done" ? (
+                        {values.status === "done" && (
                           <tr onClick={handleClickResolution}>
                             <td className={css.cell1}>Решение</td>
+
                             <td className={css.cell2}>
                               {!isClickedResolution &&
                               someCase &&
@@ -235,10 +241,11 @@ const CaseDetailPage = (props) => {
                               />
                             </td>
                           </tr>
-                        ) : null}
+                        )}
 
                         <tr onClick={handleClickLicenseNumber}>
                           <td className={css.cell1}>Лицензионный номер</td>
+
                           <td className={css.cell2}>
                             {!isClickedLicenseNumber ? (
                               values.licenseNumber
@@ -262,6 +269,7 @@ const CaseDetailPage = (props) => {
 
                         <tr onClick={handleClickOwnerFullName}>
                           <td className={css.cell1}>ФИО владельца</td>
+
                           <td className={css.cell2}>
                             {!isClickedOwnerFullName ? (
                               values.ownerFullName
@@ -284,6 +292,7 @@ const CaseDetailPage = (props) => {
 
                         <tr onClick={handleClickType}>
                           <td className={css.cell1}>Тип</td>
+
                           <td className={css.cell2}>
                             {!isClickedType ? (
                               (values.type === "general" && "Обычный") ||
@@ -313,6 +322,7 @@ const CaseDetailPage = (props) => {
 
                         <tr onClick={handleClickColor}>
                           <td className={css.cell1}>Цвет</td>
+
                           <td className={css.cell2}>
                             {!isClickedColor ? (
                               values.color
@@ -330,6 +340,7 @@ const CaseDetailPage = (props) => {
 
                         <tr onClick={handleClickOfficer}>
                           <td className={css.cell1}>Сотрудник</td>
+
                           <td className={css.cell2}>
                             {!isClickedOfficer ? (
                               officers.find(
@@ -386,6 +397,7 @@ const CaseDetailPage = (props) => {
 
                         <tr onClick={handleClickDescription}>
                           <td className={css.cell1}>Описание</td>
+
                           <td className={css.cell2}>
                             {!isClickedDescription ? (
                               values.description
@@ -402,6 +414,7 @@ const CaseDetailPage = (props) => {
                         </tr>
                       </tbody>
                     </table>
+
                     <div className={css.btnWrapper}>
                       <SecondaryButton
                         title={"Сохранить изменения"}

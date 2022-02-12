@@ -47,8 +47,6 @@ const initialState = {
   message: "",
 };
 
-axios.defaults.headers.common["Content-Type"] = "application/json";
-
 export const officersReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_OFFICERS_REQUEST:
@@ -195,7 +193,7 @@ export const getAllOfficers = () => {
   return function (dispatch) {
     dispatch(fetchOfficersRequest());
     axios
-      .get("https://sf-final-project.herokuapp.com/api/officers/", {
+      .get("officers/", {
         headers: authHeader(),
       })
       .then((response) => {
@@ -209,7 +207,7 @@ export const deleteOfficer = (id) => {
   return function (dispatch) {
     dispatch(deleteOfficerRequest());
     axios
-      .delete(`https://sf-final-project.herokuapp.com/api/officers/${id}`, {
+      .delete(`officers/${id}`, {
         headers: authHeader(),
       })
       .then(() => {
@@ -223,7 +221,7 @@ export const getOneOfficer = (id) => {
   return function (dispatch) {
     dispatch(getOneOfficerRequest());
     axios
-      .get(`https://sf-final-project.herokuapp.com/api/officers/${id}`, {
+      .get(`officers/${id}`, {
         headers: authHeader(),
       })
       .then((response) => {
@@ -238,7 +236,7 @@ export const editOfficer = (id, values) => {
     dispatch(editOfficerRequest());
     axios
       .put(
-        `https://sf-final-project.herokuapp.com/api/officers/${id}`,
+        `officers/${id}`,
         {
           firstName: values.firstName,
           lastName: values.lastName,
@@ -268,7 +266,7 @@ export const createOfficer = (values) => {
     dispatch(createOfficerRequest());
     axios
       .post(
-        "https://sf-final-project.herokuapp.com/api/officers",
+        "officers",
         {
           email: values.email,
           password: values.password,

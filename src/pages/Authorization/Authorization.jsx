@@ -1,5 +1,5 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import css from "./Authorization.module.css";
@@ -16,6 +16,7 @@ import Modal from "../../components/Modal/Modal";
 const Authorization = (props) => {
   const { signIn, message, isLoading, handleClickMessageButton, isAuthorized } =
     props;
+
   const navigate = useNavigate();
 
   const handleClickMessage = () => {
@@ -109,7 +110,8 @@ const Authorization = (props) => {
                 )}
               </>
             )}
-            {isAuthorized && (
+
+            {isAuthorized ? (
               <Modal
                 title={"Выполнен вход в аккаунт"}
                 paragraph={"Авторизация успешно пройдена"}
@@ -117,7 +119,14 @@ const Authorization = (props) => {
                 onClickMainButton={handleCLickModalMainButton}
                 isSecondaryButtonShown={false}
               />
-            )}
+            ) : // <Modal
+            //   title={"Выполнен вход в аккаунт"}
+            //   paragraph={"Авторизация успешно пройдена"}
+            //   titleMainButton={"Главная страница"}
+            //   onClickMainButton={handleCLickModalMainButton}
+            //   isSecondaryButtonShown={false}
+            // />
+            null}
           </div>
         );
       }}

@@ -26,12 +26,6 @@
   word-break: break-word;
 }
 
-.cellIcon {
-  width: 90px;
-  vertical-align: middle;
-  text-align: center;
-}
-
 .btnWrapper {
   display: flex;
   justify-content: flex-end;

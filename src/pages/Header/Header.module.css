@@ -1,5 +1,6 @@
-.dropdown {
-  min-width: fit-content;
+div .icon + .ul {
+  left: -60px;
+  min-width: 125px;
 }
 
 .icon {
@@ -7,11 +8,16 @@
   border: none;
 }
 
-.container {
+nav > .container {
   padding: 0 40px;
   margin: 0;
 }
 
 .background {
   background-color: #daddfc;
+}
+
+.ul .linkItem {
+  white-space: normal;
+  word-break: break-word;
 }

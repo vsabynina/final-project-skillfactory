@@ -1,47 +1,47 @@
 import axios from "axios";
 import {
-  FETCH_CASES_SUCCESS,
-  DELETE_CASE_SUCCESS,
-  GET_ONE_CASE_SUCCESS,
-  EDIT_CASE_SUCCESS,
-  CREATE_CASE_SUCCESS,
-  FETCH_CASES_FAILURE,
   CREATE_CASE_FAILURE,
-  GET_ONE_CASE_FAILURE,
-  DELETE_CASE_FAILURE,
-  EDIT_CASE_FAILURE,
-  FETCH_CASES_REQUEST,
-  CREATE_CASE_REQUEST,
-  EDIT_CASE_REQUEST,
-  GET_ONE_CASE_REQUEST,
-  DELETE_CASE_REQUEST,
-  ON_CLICK_MESSAGE_BUTTON,
-  ON_CLICK_MODAL_BUTTON,
+  CREATE_CASE_PUBLIC_FAILURE,
   CREATE_CASE_PUBLIC_REQUEST,
   CREATE_CASE_PUBLIC_SUCCESS,
-  CREATE_CASE_PUBLIC_FAILURE,
+  CREATE_CASE_REQUEST,
+  CREATE_CASE_SUCCESS,
+  DELETE_CASE_FAILURE,
+  DELETE_CASE_REQUEST,
+  DELETE_CASE_SUCCESS,
+  EDIT_CASE_FAILURE,
+  EDIT_CASE_REQUEST,
+  EDIT_CASE_SUCCESS,
+  FETCH_CASES_FAILURE,
+  FETCH_CASES_REQUEST,
+  FETCH_CASES_SUCCESS,
+  GET_ONE_CASE_FAILURE,
+  GET_ONE_CASE_REQUEST,
+  GET_ONE_CASE_SUCCESS,
+  ON_CLICK_MESSAGE_BUTTON,
+  ON_CLICK_MODAL_BUTTON,
 } from "../type";
 import {
-  fetchCasesSuccess,
-  deleteCaseSuccess,
-  editCaseSuccess,
-  getOneCaseSuccess,
-  createCaseSuccess,
-  fetchCasesFailure,
   createCaseFailure,
-  deleteCaseFailure,
-  getOneCaseFailure,
-  editCaseFailure,
-  fetchCasesRequest,
-  createCaseRequest,
-  deleteCaseRequest,
-  getOneCaseRequest,
-  editCaseRequest,
-  onClickMessageButton,
-  onClickModalButton,
-  createCasePublicSuccess,
   createCasePublicFailure,
   createCasePublicRequest,
+  createCasePublicSuccess,
+  createCaseRequest,
+  createCaseSuccess,
+  deleteCaseFailure,
+  deleteCaseRequest,
+  deleteCaseSuccess,
+  editCaseFailure,
+  editCaseRequest,
+  editCaseSuccess,
+  fetchCasesFailure,
+  fetchCasesRequest,
+  fetchCasesSuccess,
+  getOneCaseFailure,
+  getOneCaseRequest,
+  getOneCaseSuccess,
+  onClickMessageButton,
+  onClickModalButton,
 } from "../actions";
 import authHeader from "../../helper";
 
@@ -63,8 +63,6 @@ const initialState = {
   isLoading: false,
   message: "",
 };
-
-axios.defaults.headers.common["Content-Type"] = "application/json";
 
 export const casesReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -240,7 +238,7 @@ export const getAllCases = () => {
   return function (dispatch) {
     dispatch(fetchCasesRequest());
     axios
-      .get("https://sf-final-project.herokuapp.com/api/cases/", {
+      .get("cases/", {
         headers: authHeader(),
       })
       .then((response) => {
@@ -255,7 +253,7 @@ export const createCase = (values) => {
     dispatch(createCaseRequest());
     axios
       .post(
-        "https://sf-final-project.herokuapp.com/api/cases/",
+        "cases/",
         {
           licenseNumber: values.licenseNumber,
           ownerFullName: values.ownerFullName,
@@ -280,7 +278,7 @@ export const createCasePublic = (values) => {
   return function (dispatch) {
     dispatch(createCasePublicRequest());
     axios
-      .post("https://sf-final-project.herokuapp.com/api/public/report", {
+      .post("public/report", {
         licenseNumber: values.licenseNumber,
         ownerFullName: values.ownerFullName,
         type: values.type,
@@ -300,7 +298,7 @@ export const deleteCase = (id) => {
   return function (dispatch) {
     dispatch(deleteCaseRequest());
     axios
-      .delete(`https://sf-final-project.herokuapp.com/api/cases/${id}`, {
+      .delete(`cases/${id}`, {
         headers: authHeader(),
       })
       .then(() => {
@@ -314,7 +312,7 @@ export const getOneCase = (id) => {
   return function (dispatch) {
     dispatch(getOneCaseRequest());
     axios
-      .get(`https://sf-final-project.herokuapp.com/api/cases/${id}`, {
+      .get(`cases/${id}`, {
         headers: authHeader(),
       })
       .then((response) => {
@@ -329,7 +327,7 @@ export const editCase = (id, values) => {
     dispatch(editCaseRequest());
     axios
       .put(
-        `https://sf-final-project.herokuapp.com/api/cases/${id}`,
+        `cases/${id}`,
         {
           status: values.status,
           licenseNumber: values.licenseNumber,

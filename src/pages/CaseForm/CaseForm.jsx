@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
 import css from "./CaseForm.module.css";
@@ -32,7 +32,7 @@ const CaseForm = (props) => {
 
   useEffect(() => {
     getAllOfficers();
-  }, []);
+  });
 
   const handleClickMessage = () => {
     navigate(`/`);
@@ -143,6 +143,7 @@ const CaseForm = (props) => {
                         <option value="DEFAULT" disabled>
                           Выберите...
                         </option>
+
                         {bicycleType &&
                           bicycleType.map((item, index) => {
                             return (

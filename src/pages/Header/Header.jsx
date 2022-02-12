@@ -7,6 +7,7 @@ import { logOut } from "../../store/reducers/authorizationReducer";
 
 const Header = (props) => {
   const { logOut, isAuthorized } = props;
+
   return (
     <header>
       <nav className={`navbar navbar-expand-lg navbar-light ${css.background}`}>
@@ -26,7 +27,7 @@ const Header = (props) => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarText">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className={"navbar-nav me-auto mb-2 mb-lg-0"}>
               {isAuthorized && (
                 <li className="nav-item">
                   <Link to="/cases" className="nav-link">
@@ -64,21 +65,28 @@ const Header = (props) => {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img src={user} icon={"User"} />
+                <img src={user} alt={"User"} />
               </button>
               <ul
-                className={`dropdown-menu ${css.dropdown}`}
+                className={`dropdown-menu ${css.ul}`}
                 aria-labelledby="dropdownMenuButton1"
               >
                 {isAuthorized ? (
                   <li>
-                    <Link to="/" className="dropdown-item" onClick={logOut}>
+                    <Link
+                      to="/"
+                      className={`dropdown-item ${css.linkItem}`}
+                      onClick={logOut}
+                    >
                       Выйти
                     </Link>
                   </li>
                 ) : (
                   <li>
-                    <Link to="/auth/sign_in" className="dropdown-item">
+                    <Link
+                      to="/auth/sign_in"
+                      className={`dropdown-item ${css.linkItem}`}
+                    >
                       Войти
                     </Link>
                   </li>

@@ -38,8 +38,6 @@ const initialState = user
       message: "",
     };
 
-axios.defaults.headers.common["Content-Type"] = "application/json";
-
 export const authorizationReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGN_UP_REQUEST:
@@ -120,7 +118,7 @@ export const signUp = (values) => {
   return function (dispatch) {
     dispatch(signUpRequest());
     axios
-      .post("https://sf-final-project.herokuapp.com/api/auth/sign_up", {
+      .post("auth/sign_up", {
         email: values.email,
         password: values.password,
         clientId: values.clientId,
@@ -141,7 +139,7 @@ export const signIn = (values) => {
   return function (dispatch) {
     dispatch(signInRequest());
     axios
-      .post("https://sf-final-project.herokuapp.com/api/auth/sign_in", {
+      .post("auth/sign_in", {
         email: values.email,
         password: values.password,
       })

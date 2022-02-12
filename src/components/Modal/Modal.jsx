@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import css from "./Modal.module.css";
 import MainButton from "../../components/MainButton";
 import SecondaryButton from "../../components/SecondaryButton";

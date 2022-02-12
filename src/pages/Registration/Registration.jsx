@@ -8,7 +8,6 @@ import {
 } from "../../store/reducers/authorizationReducer";
 import { connect } from "react-redux";
 import {
-  createOfficer,
   getAllOfficers,
   handleClickModalButton,
 } from "../../store/reducers/officersReducer";

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React from "react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import css from "./Registration.module.css";
 import {
@@ -86,7 +86,7 @@ const Registration = (props) => {
     >
       {(formik) => {
         return (
-          <div className={css.wrapper}>
+          <>
             {isLoading ? (
               <LoadingSpinner />
             ) : (
@@ -97,129 +97,134 @@ const Registration = (props) => {
                     onClick={handleClickMessage}
                   />
                 ) : (
-                  <Form className={`row g-3 needs-validation ${css.form}`}>
-                    <div className="col-md-4">
-                      <label className="form-label" htmlFor="email">
-                        E-mail
-                      </label>
-                      <Field
-                        type="email"
-                        className="form-control"
-                        id="email"
-                        name={"email"}
-                        placeholder="name@example.com"
-                      />
-                      <ErrorMessage
-                        name={"email"}
-                        className={css.invalidMessage}
-                        component="div"
-                      />
-                    </div>
-
-                    <div className="col-md-4">
-                      <label htmlFor="password" className="form-label">
-                        Пароль
-                      </label>
-                      <Field
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        name={"password"}
-                        placeholder="Пароль"
-                        autoComplete="on"
-                      />
-                      <ErrorMessage
-                        name={"password"}
-                        className={css.invalidMessage}
-                        component="div"
-                      />
-                    </div>
-
-                    <div className="col-md-4">
-                      <label htmlFor="clientId" className="form-label">
-                        ID
-                      </label>
-                      <Field
-                        type="text"
-                        className="form-control"
-                        id="clientId"
-                        name={"clientId"}
-                        placeholder="ID клиента"
-                      />
-                      <ErrorMessage
-                        name={"clientId"}
-                        className={css.invalidMessage}
-                        component="div"
-                      />
-                    </div>
-
-                    <div className="col-md-4">
-                      <label htmlFor="firstName" className="form-label">
-                        Ваше имя
-                      </label>
-                      <Field
-                        type="text"
-                        className="form-control"
-                        id="firstName"
-                        name={"firstName"}
-                        placeholder="Имя"
-                      />
-                    </div>
-
-                    <div className="col-md-5">
-                      <label htmlFor="lastName" className="form-label">
-                        Ваша фамилия
-                      </label>
-                      <Field
-                        type="text"
-                        className="form-control"
-                        id="lastName"
-                        name={"lastName"}
-                        placeholder="Фамилия"
-                      />
-                    </div>
-
-                    <div className="col-md-3">
-                      <label htmlFor="approved" className="form-label">
-                        Одобрен
-                      </label>
-                      <Field
-                        as={"select"}
-                        className="form-select"
-                        id="approved"
-                        name={"approved"}
-                        disabled
-                      >
-                        <option value={"false"}>Не одобрен</option>
-                      </Field>
-                    </div>
-
-                    <div className="col-12">
-                      <div className="form-check">
-                        <Field
-                          className="form-check-input"
-                          type={"checkbox"}
-                          name={"agreement"}
-                          id="agreement"
-                        />
-                        <label className="form-check-label" htmlFor="agreement">
-                          Согласиться с условиями и правилами
+                  <div className="wrapper">
+                    <Form className={`row g-3 needs-validation ${css.form}`}>
+                      <div className="col-md-4">
+                        <label className="form-label" htmlFor="email">
+                          E-mail
                         </label>
+                        <Field
+                          type="email"
+                          className="form-control"
+                          id="email"
+                          name={"email"}
+                          placeholder="name@example.com"
+                        />
+                        <ErrorMessage
+                          name={"email"}
+                          className="invalidMessage"
+                          component="div"
+                        />
                       </div>
-                      <ErrorMessage
-                        name={"agreement"}
-                        className={css.invalidMessage}
-                        component="div"
-                      />
-                    </div>
-                    <div className="col-12">
-                      <MainButton
-                        title={"Зарегистрироваться"}
-                        type={"submit"}
-                        disabled={!(formik.isValid && formik.dirty)}
-                      />
-                    </div>
-                  </Form>
+
+                      <div className="col-md-4">
+                        <label htmlFor="password" className="form-label">
+                          Пароль
+                        </label>
+                        <Field
+                          type="password"
+                          className="form-control"
+                          id="password"
+                          name={"password"}
+                          placeholder="Пароль"
+                          autoComplete="on"
+                        />
+                        <ErrorMessage
+                          name={"password"}
+                          className="invalidMessage"
+                          component="div"
+                        />
+                      </div>
+
+                      <div className="col-md-4">
+                        <label htmlFor="clientId" className="form-label">
+                          ID
+                        </label>
+                        <Field
+                          type="text"
+                          className="form-control"
+                          id="clientId"
+                          name={"clientId"}
+                          placeholder="ID клиента"
+                        />
+                        <ErrorMessage
+                          name={"clientId"}
+                          className="invalidMessage"
+                          component="div"
+                        />
+                      </div>
+
+                      <div className="col-md-4">
+                        <label htmlFor="firstName" className="form-label">
+                          Ваше имя
+                        </label>
+                        <Field
+                          type="text"
+                          className="form-control"
+                          id="firstName"
+                          name={"firstName"}
+                          placeholder="Имя"
+                        />
+                      </div>
+
+                      <div className="col-md-5">
+                        <label htmlFor="lastName" className="form-label">
+                          Ваша фамилия
+                        </label>
+                        <Field
+                          type="text"
+                          className="form-control"
+                          id="lastName"
+                          name={"lastName"}
+                          placeholder="Фамилия"
+                        />
+                      </div>
+
+                      <div className="col-md-3">
+                        <label htmlFor="approved" className="form-label">
+                          Одобрен
+                        </label>
+                        <Field
+                          as={"select"}
+                          className="form-select"
+                          id="approved"
+                          name={"approved"}
+                          disabled
+                        >
+                          <option value={"false"}>Не одобрен</option>
+                        </Field>
+                      </div>
+
+                      <div className="col-12">
+                        <div className="form-check">
+                          <Field
+                            className="form-check-input"
+                            type={"checkbox"}
+                            name={"agreement"}
+                            id="agreement"
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="agreement"
+                          >
+                            Согласиться с условиями и правилами
+                          </label>
+                        </div>
+                        <ErrorMessage
+                          name={"agreement"}
+                          className="invalidMessage"
+                          component="div"
+                        />
+                      </div>
+                      <div className="col-12">
+                        <MainButton
+                          title={"Зарегистрироваться"}
+                          type={"submit"}
+                          disabled={!(formik.isValid && formik.dirty)}
+                        />
+                      </div>
+                    </Form>
+                  </div>
                 )}
               </>
             )}
@@ -235,7 +240,7 @@ const Registration = (props) => {
                 isSecondaryButtonShown={true}
               />
             )}
-          </div>
+          </>
         );
       }}
     </Formik>

@@ -49,7 +49,7 @@ const Authorization = (props) => {
     >
       {(formik) => {
         return (
-          <div className={css.wrapper}>
+          <>
             {isLoading ? (
               <LoadingSpinner />
             ) : (
@@ -57,56 +57,58 @@ const Authorization = (props) => {
                 {message ? (
                   <Message message={message} onClick={handleClickMessage} />
                 ) : (
-                  <Form className={css.form}>
-                    <div className="mb-3">
-                      <label className="form-label" htmlFor="email">
-                        E-mail
-                      </label>
-                      <Field
-                        type="email"
-                        className="form-control"
-                        id="email"
-                        name={"email"}
-                        autoComplete="e-mail"
-                        placeholder="name@example.com"
-                      />
-                      <ErrorMessage
-                        name={"email"}
-                        className={css.invalidMessage}
-                        component="div"
-                      />
-                    </div>
+                  <div className={"wrapper"}>
+                    <Form className={css.form}>
+                      <div className="mb-3">
+                        <label className="form-label" htmlFor="email">
+                          E-mail
+                        </label>
+                        <Field
+                          type="email"
+                          className="form-control"
+                          id="email"
+                          name={"email"}
+                          autoComplete="e-mail"
+                          placeholder="name@example.com"
+                        />
+                        <ErrorMessage
+                          name={"email"}
+                          className="invalidMessage"
+                          component="div"
+                        />
+                      </div>
 
-                    <div className="mb-3">
-                      <label className="form-label" htmlFor="password">
-                        Пароль
-                      </label>
-                      <Field
-                        type="password"
-                        className="form-control"
-                        id="password"
-                        name={"password"}
-                        autoComplete="on"
-                        placeholder="Пароль"
-                      />
-                      <ErrorMessage
-                        name={"password"}
-                        className={css.invalidMessage}
-                        component="div"
-                      />
-                      <div className={css.invalidMessage}>{message}</div>
-                    </div>
+                      <div className="mb-3">
+                        <label className="form-label" htmlFor="password">
+                          Пароль
+                        </label>
+                        <Field
+                          type="password"
+                          className="form-control"
+                          id="password"
+                          name={"password"}
+                          autoComplete="on"
+                          placeholder="Пароль"
+                        />
+                        <ErrorMessage
+                          name={"password"}
+                          className="invalidMessage"
+                          component="div"
+                        />
+                        <div className="invalidMessage">{message}</div>
+                      </div>
 
-                    <MainButton
-                      title={"Войти"}
-                      className={css.button}
-                      type={"submit"}
-                      disabled={!(formik.isValid && formik.dirty)}
-                    />
-                    <Link to="/auth/sign_up" className={`nav-link ${css.a}`}>
-                      У вас нет аккаунта?
-                    </Link>
-                  </Form>
+                      <MainButton
+                        title={"Войти"}
+                        className={css.button}
+                        type={"submit"}
+                        disabled={!(formik.isValid && formik.dirty)}
+                      />
+                      <Link to="/auth/sign_up" className={`nav-link ${css.a}`}>
+                        У вас нет аккаунта?
+                      </Link>
+                    </Form>
+                  </div>
                 )}
               </>
             )}
@@ -119,15 +121,8 @@ const Authorization = (props) => {
                 onClickMainButton={handleCLickModalMainButton}
                 isSecondaryButtonShown={false}
               />
-            ) : // <Modal
-            //   title={"Выполнен вход в аккаунт"}
-            //   paragraph={"Авторизация успешно пройдена"}
-            //   titleMainButton={"Главная страница"}
-            //   onClickMainButton={handleCLickModalMainButton}
-            //   isSecondaryButtonShown={false}
-            // />
-            null}
-          </div>
+            ) : null}
+          </>
         );
       }}
     </Formik>

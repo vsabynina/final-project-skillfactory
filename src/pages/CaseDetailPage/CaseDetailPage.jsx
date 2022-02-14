@@ -140,7 +140,7 @@ const CaseDetailPage = (props) => {
       {(formik) => {
         const { values } = formik;
         return (
-          <div className={css.wrapper}>
+          <>
             {isLoading ? (
               <LoadingSpinner />
             ) : (
@@ -148,286 +148,289 @@ const CaseDetailPage = (props) => {
                 {message ? (
                   <Message message={message} onClick={handleClickMessage} />
                 ) : (
-                  <Form className={css.form}>
-                    <table className="table table-hover">
-                      <thead>
-                        <tr>
-                          <th scope="col">
-                            <img src={bicycle} alt={"Bicycle"} />
-                          </th>
+                  <div className={css.wrapper}>
+                    <Form className={css.form}>
+                      <table className="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">
+                              <img src={bicycle} alt={"Bicycle"} />
+                            </th>
 
-                          <th colSpan="2" className={css.thTextAlign}>
-                            <p className={css.p}>
-                              Сообщение было создано{" "}
-                              {new Date(
-                                someCase.createdAt
-                              ).toLocaleDateString()}{" "}
-                              в{" "}
-                              {new Date(
-                                someCase.createdAt
-                              ).toLocaleTimeString()}
-                            </p>
-
-                            {someCase && (
+                            <th colSpan="2" className={css.thTextAlign}>
                               <p className={css.p}>
-                                {!someCase.updatedAt
-                                  ? "Сообщение не редактировалось"
-                                  : `Сообщение было отредактировано ${new Date(
-                                      someCase.updatedAt
-                                    ).toLocaleDateString()} в ${new Date(
-                                      someCase.updatedAt
-                                    ).toLocaleTimeString()}`}
+                                Сообщение было создано{" "}
+                                {new Date(
+                                  someCase.createdAt
+                                ).toLocaleDateString()}{" "}
+                                в{" "}
+                                {new Date(
+                                  someCase.createdAt
+                                ).toLocaleTimeString()}
                               </p>
-                            )}
-                          </th>
-                        </tr>
-                      </thead>
 
-                      <tbody>
-                        <tr onClick={handleClickStatus}>
-                          <td className={css.cell1}>Status</td>
+                              {someCase && (
+                                <p className={css.p}>
+                                  {!someCase.updatedAt
+                                    ? "Сообщение не редактировалось"
+                                    : `Сообщение было отредактировано ${new Date(
+                                        someCase.updatedAt
+                                      ).toLocaleDateString()} в ${new Date(
+                                        someCase.updatedAt
+                                      ).toLocaleTimeString()}`}
+                                </p>
+                              )}
+                            </th>
+                          </tr>
+                        </thead>
 
-                          <td className={css.cell2}>
-                            {!isClickedStatus ? (
-                              (values.status === "new" && "Открыто") ||
-                              (values.status === "in_progress" &&
-                                "В процессе") ||
-                              (values.status === "done" && "Завершено")
-                            ) : (
-                              <Field
-                                as="select"
-                                className="form-select"
-                                name="status"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <option value="DEFAULT" disabled>
-                                  Выберите...
-                                </option>
-                                {caseStatus &&
-                                  caseStatus.map((item, index) => {
-                                    return (
-                                      <option value={item.value} key={index}>
-                                        {item.title}
-                                      </option>
-                                    );
-                                  })}
-                              </Field>
-                            )}
-                          </td>
-                        </tr>
-
-                        {values.status === "done" && (
-                          <tr onClick={handleClickResolution}>
-                            <td className={css.cell1}>Решение</td>
+                        <tbody>
+                          <tr onClick={handleClickStatus}>
+                            <td className={css.cell1}>Статус</td>
 
                             <td className={css.cell2}>
-                              {!isClickedResolution &&
-                              someCase &&
-                              !someCase.resolution ? (
+                              {!isClickedStatus ? (
+                                (values.status === "new" && "Открыто") ||
+                                (values.status === "in_progress" &&
+                                  "В процессе") ||
+                                (values.status === "done" && "Завершено")
+                              ) : (
                                 <Field
-                                  as="textarea"
-                                  className="form-control"
+                                  as="select"
+                                  className="form-select"
+                                  name="status"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <option value="DEFAULT" disabled>
+                                    Выберите...
+                                  </option>
+                                  {caseStatus &&
+                                    caseStatus.map((item, index) => {
+                                      return (
+                                        <option value={item.value} key={index}>
+                                          {item.title}
+                                        </option>
+                                      );
+                                    })}
+                                </Field>
+                              )}
+                            </td>
+                          </tr>
+
+                          {values.status === "done" && (
+                            <tr onClick={handleClickResolution}>
+                              <td className={css.cell1}>Решение</td>
+
+                              <td className={css.cell2}>
+                                {!isClickedResolution &&
+                                someCase &&
+                                !someCase.resolution ? (
+                                  <Field
+                                    as="textarea"
+                                    className="form-control"
+                                    name={"resolution"}
+                                    placeholder="Опишите как был решён случай"
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                ) : (
+                                  values.resolution
+                                )}
+                                <ErrorMessage
                                   name={"resolution"}
-                                  placeholder="Опишите как был решён случай"
+                                  component="div"
+                                  className="invalidMessage"
+                                />
+                              </td>
+                            </tr>
+                          )}
+
+                          <tr onClick={handleClickLicenseNumber}>
+                            <td className={css.cell1}>Лицензионный номер</td>
+
+                            <td className={css.cell2}>
+                              {!isClickedLicenseNumber ? (
+                                values.licenseNumber
+                              ) : (
+                                <Field
+                                  type="text"
+                                  name={"licenseNumber"}
+                                  className="form-control"
+                                  placeholder={"Введите ицензионный номер"}
+                                  onKeyPress={handleKeyPress}
                                   onClick={(e) => e.stopPropagation()}
                                 />
-                              ) : (
-                                values.resolution
                               )}
                               <ErrorMessage
-                                name={"resolution"}
+                                name={"licenseNumber"}
                                 component="div"
-                                className={css.invalidMessage}
+                                className="invalidMessage"
                               />
                             </td>
                           </tr>
-                        )}
 
-                        <tr onClick={handleClickLicenseNumber}>
-                          <td className={css.cell1}>Лицензионный номер</td>
+                          <tr onClick={handleClickOwnerFullName}>
+                            <td className={css.cell1}>ФИО владельца</td>
 
-                          <td className={css.cell2}>
-                            {!isClickedLicenseNumber ? (
-                              values.licenseNumber
-                            ) : (
-                              <Field
-                                type="text"
-                                name={"licenseNumber"}
-                                className="form-control"
-                                placeholder={"Введите ицензионный номер"}
-                                onKeyPress={handleKeyPress}
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                            )}
-                            <ErrorMessage
-                              name={"licenseNumber"}
-                              component="div"
-                              className={css.invalidMessage}
-                            />
-                          </td>
-                        </tr>
-
-                        <tr onClick={handleClickOwnerFullName}>
-                          <td className={css.cell1}>ФИО владельца</td>
-
-                          <td className={css.cell2}>
-                            {!isClickedOwnerFullName ? (
-                              values.ownerFullName
-                            ) : (
-                              <Field
-                                type="text"
+                            <td className={css.cell2}>
+                              {!isClickedOwnerFullName ? (
+                                values.ownerFullName
+                              ) : (
+                                <Field
+                                  type="text"
+                                  name={"ownerFullName"}
+                                  className="form-control"
+                                  placeholder={"Введите ФИО владельца"}
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              )}
+                              <ErrorMessage
                                 name={"ownerFullName"}
-                                className="form-control"
-                                placeholder={"Введите ФИО владельца"}
-                                onClick={(e) => e.stopPropagation()}
+                                component="div"
+                                className="invalidMessage"
                               />
-                            )}
-                            <ErrorMessage
-                              name={"ownerFullName"}
-                              component="div"
-                              className={css.invalidMessage}
-                            />
-                          </td>
-                        </tr>
+                            </td>
+                          </tr>
 
-                        <tr onClick={handleClickType}>
-                          <td className={css.cell1}>Тип</td>
+                          <tr onClick={handleClickType}>
+                            <td className={css.cell1}>Тип</td>
 
-                          <td className={css.cell2}>
-                            {!isClickedType ? (
-                              (values.type === "general" && "Обычный") ||
-                              (values.type === "sport" && "Спортивный")
-                            ) : (
-                              <Field
-                                as="select"
-                                className="form-select"
-                                name="type"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <option value="DEFAULT" disabled>
-                                  Выберите...
-                                </option>
-                                {bicycleType &&
-                                  bicycleType.map((item, index) => {
-                                    return (
-                                      <option value={item.value} key={index}>
-                                        {item.title}
-                                      </option>
-                                    );
-                                  })}
-                              </Field>
-                            )}
-                          </td>
-                        </tr>
+                            <td className={css.cell2}>
+                              {!isClickedType ? (
+                                (values.type === "general" && "Обычный") ||
+                                (values.type === "sport" && "Спортивный")
+                              ) : (
+                                <Field
+                                  as="select"
+                                  className="form-select"
+                                  name="type"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <option value="DEFAULT" disabled>
+                                    Выберите...
+                                  </option>
+                                  {bicycleType &&
+                                    bicycleType.map((item, index) => {
+                                      return (
+                                        <option value={item.value} key={index}>
+                                          {item.title}
+                                        </option>
+                                      );
+                                    })}
+                                </Field>
+                              )}
+                            </td>
+                          </tr>
 
-                        <tr onClick={handleClickColor}>
-                          <td className={css.cell1}>Цвет</td>
+                          <tr onClick={handleClickColor}>
+                            <td className={css.cell1}>Цвет</td>
 
-                          <td className={css.cell2}>
-                            {!isClickedColor ? (
-                              values.color
-                            ) : (
-                              <Field
-                                type="text"
-                                name={"color"}
-                                className="form-control"
-                                placeholder={"Напишите цвет велосипеда"}
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                            )}
-                          </td>
-                        </tr>
+                            <td className={css.cell2}>
+                              {!isClickedColor ? (
+                                values.color
+                              ) : (
+                                <Field
+                                  type="text"
+                                  name={"color"}
+                                  className="form-control"
+                                  placeholder={"Напишите цвет велосипеда"}
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              )}
+                            </td>
+                          </tr>
 
-                        <tr onClick={handleClickOfficer}>
-                          <td className={css.cell1}>Сотрудник</td>
+                          <tr onClick={handleClickOfficer}>
+                            <td className={css.cell1}>Сотрудник</td>
 
-                          <td className={css.cell2}>
-                            {!isClickedOfficer ? (
-                              officers.find(
-                                (officer) => officer._id === values.officer
-                              ) &&
-                              `${
-                                !officers.find(
+                            <td className={css.cell2}>
+                              {!isClickedOfficer ? (
+                                officers.find(
                                   (officer) => officer._id === values.officer
-                                ).firstName
-                                  ? "Сотрудник"
-                                  : officers.find(
-                                      (officer) =>
-                                        officer._id === values.officer
-                                    ).firstName
-                              } ${
-                                !officers.find(
-                                  (officer) => officer._id === values.officer
-                                ).lastName
-                                  ? officers.find(
-                                      (officer) =>
-                                        officer._id === values.officer
-                                    )._id
-                                  : officers.find(
-                                      (officer) =>
-                                        officer._id === values.officer
-                                    ).lastName
-                              }`
-                            ) : (
-                              <Field
-                                as="select"
-                                className="form-select"
-                                name="officer"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <option value="">Выберите...</option>
-                                {officers
-                                  .filter((officer) => officer.approved)
-                                  .map((officer) => {
-                                    return (
-                                      <option
-                                        key={officer._id}
-                                        value={officer._id}
-                                      >
-                                        {!officer.firstName || !officer.lastName
-                                          ? `Сотрудник ${officer._id}`
-                                          : `${officer.firstName} ${officer.lastName}`}
-                                      </option>
-                                    );
-                                  })}
-                              </Field>
-                            )}
-                          </td>
-                        </tr>
+                                ) &&
+                                `${
+                                  !officers.find(
+                                    (officer) => officer._id === values.officer
+                                  ).firstName
+                                    ? "Сотрудник"
+                                    : officers.find(
+                                        (officer) =>
+                                          officer._id === values.officer
+                                      ).firstName
+                                } ${
+                                  !officers.find(
+                                    (officer) => officer._id === values.officer
+                                  ).lastName
+                                    ? officers.find(
+                                        (officer) =>
+                                          officer._id === values.officer
+                                      )._id
+                                    : officers.find(
+                                        (officer) =>
+                                          officer._id === values.officer
+                                      ).lastName
+                                }`
+                              ) : (
+                                <Field
+                                  as="select"
+                                  className="form-select"
+                                  name="officer"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <option value="">Выберите...</option>
+                                  {officers
+                                    .filter((officer) => officer.approved)
+                                    .map((officer) => {
+                                      return (
+                                        <option
+                                          key={officer._id}
+                                          value={officer._id}
+                                        >
+                                          {!officer.firstName ||
+                                          !officer.lastName
+                                            ? `Сотрудник ${officer._id}`
+                                            : `${officer.firstName} ${officer.lastName}`}
+                                        </option>
+                                      );
+                                    })}
+                                </Field>
+                              )}
+                            </td>
+                          </tr>
 
-                        <tr onClick={handleClickDescription}>
-                          <td className={css.cell1}>Описание</td>
+                          <tr onClick={handleClickDescription}>
+                            <td className={css.cell1}>Описание</td>
 
-                          <td className={css.cell2}>
-                            {!isClickedDescription ? (
-                              values.description
-                            ) : (
-                              <Field
-                                as="textarea"
-                                className="form-control"
-                                name={"description"}
-                                placeholder="Опишите случай"
-                                onClick={(e) => e.stopPropagation()}
-                              />
-                            )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                            <td className={css.cell2}>
+                              {!isClickedDescription ? (
+                                values.description
+                              ) : (
+                                <Field
+                                  as="textarea"
+                                  className="form-control"
+                                  name={"description"}
+                                  placeholder="Опишите случай"
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              )}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
 
-                    <div className={css.btnWrapper}>
-                      <SecondaryButton
-                        title={"Сохранить изменения"}
-                        type="submit"
-                        className={css.btnSave}
-                        disabled={!(formik.isValid && formik.dirty)}
-                      />
-                    </div>
-                  </Form>
+                      <div className={css.btnWrapper}>
+                        <SecondaryButton
+                          title={"Сохранить изменения"}
+                          type="submit"
+                          className={css.btnSave}
+                          disabled={!(formik.isValid && formik.dirty)}
+                        />
+                      </div>
+                    </Form>
+                  </div>
                 )}
               </>
             )}
-          </div>
+          </>
         );
       }}
     </Formik>

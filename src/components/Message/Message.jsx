@@ -7,7 +7,12 @@ const Message = (props) => {
   return (
     <div className={css.message}>
       <h4 className={css.h4}>{message}</h4>
-      <SecondaryButton title={"Назад"} type={"button"} onClick={onClick} />
+      <SecondaryButton
+        title={"Назад"}
+        type={"button"}
+        onClick={onClick}
+        className={css.button}
+      />
     </div>
   );
 };

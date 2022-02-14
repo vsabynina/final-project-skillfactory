@@ -16,7 +16,7 @@ function App(props) {
   const { isAuthorized } = props;
 
   return (
-    <div className="wrapper">
+    <div className="wrapperApp">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />

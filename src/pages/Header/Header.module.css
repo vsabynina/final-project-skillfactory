@@ -1,23 +1,10 @@
-div .icon + .ul {
-  left: -60px;
-  min-width: 125px;
+.a:hover {
+  color: #0d6efd;
+  transition: color 0.15s ease-in-out;
+  text-decoration: none;
 }
 
-.icon {
-  background: none;
-  border: none;
-}
-
-nav > .container {
-  padding: 0 40px;
-  margin: 0;
-}
-
-.background {
-  background-color: #daddfc;
-}
-
-.ul .linkItem {
-  white-space: normal;
-  word-break: break-word;
+.a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.9);
 }

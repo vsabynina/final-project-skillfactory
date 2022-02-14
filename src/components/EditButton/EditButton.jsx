@@ -1,11 +1,10 @@
 import React from "react";
-import css from "../EditButton/EditButton.module.css";
 
 const EditButton = (props) => {
   const { onClick, type, src, className, disabled } = props;
   return (
     <button
-      className={`${css.btnEdit} ${className}`}
+      className={`btnBackground ${className}`}
       type={type}
       disabled={disabled}
     >

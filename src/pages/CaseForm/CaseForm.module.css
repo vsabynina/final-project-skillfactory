@@ -1,14 +1,9 @@
-.wrapper {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-.invalidMessage {
-  color: red;
-}
-
 .form {
-  max-width: 600px;
+  width: 600px;
+}
+
+@media screen and (min-width: 1400px) {
+  .form {
+    width: 900px;
+  }
 }

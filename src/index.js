@@ -5,9 +5,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import "./index.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/js/bootstrap.js";
+import "./customStyle.css";
 import reportWebVitals from "./reportWebVitals";
 
 axios.defaults.baseURL = "https://sf-final-project.herokuapp.com/api";

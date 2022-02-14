@@ -1,5 +1,4 @@
 import React from "react";
-import css from "./Modal.module.css";
 import MainButton from "../../components/MainButton";
 import SecondaryButton from "../../components/SecondaryButton";
 
@@ -14,7 +13,7 @@ const Modal = (props) => {
     isSecondaryButtonShown,
   } = props;
   return (
-    <div className={`modal ${css.display}`} tabIndex="-1">
+    <div className="modal modalShown" tabIndex="-1">
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">

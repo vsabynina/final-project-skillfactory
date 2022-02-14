@@ -1,17 +1,26 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import user from "../../assets/icons/userIcon.svg";
-import css from "./Header.module.css";
+import { Link, useNavigate } from "react-router-dom";
 import { connect } from "react-redux";
 import { logOut } from "../../store/reducers/authorizationReducer";
+import css from "./Header.module.css";
 
 const Header = (props) => {
   const { logOut, isAuthorized } = props;
+  const navigate = useNavigate();
+
+  const handleClickButtonLogOut = () => {
+    logOut();
+    navigate("/");
+  };
+
+  const handleClickButtonLogIn = () => {
+    navigate("/auth/sign_in");
+  };
 
   return (
     <header>
-      <nav className={`navbar navbar-expand-lg navbar-light ${css.background}`}>
-        <div className={`container-fluid ${css.container}`}>
+      <nav className={`navbar navbar-expand-lg navbar-light background`}>
+        <div className={`container-fluid navContainer`}>
           <Link to="/" className="navbar-brand">
             Find bicycle
           </Link>
@@ -57,41 +66,18 @@ const Header = (props) => {
               )}
             </ul>
 
-            <div className="dropdown">
-              <button
-                className={`dropdown-toggle ${css.icon}`}
+            <div>
+              <a
+                className={`btnBackground ${css.a}`}
                 type="button"
-                id="dropdownMenuButton1"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
+                onClick={
+                  isAuthorized
+                    ? handleClickButtonLogOut
+                    : handleClickButtonLogIn
+                }
               >
-                <img src={user} alt={"User"} />
-              </button>
-              <ul
-                className={`dropdown-menu ${css.ul}`}
-                aria-labelledby="dropdownMenuButton1"
-              >
-                {isAuthorized ? (
-                  <li>
-                    <Link
-                      to="/"
-                      className={`dropdown-item ${css.linkItem}`}
-                      onClick={logOut}
-                    >
-                      Выйти
-                    </Link>
-                  </li>
-                ) : (
-                  <li>
-                    <Link
-                      to="/auth/sign_in"
-                      className={`dropdown-item ${css.linkItem}`}
-                    >
-                      Войти
-                    </Link>
-                  </li>
-                )}
-              </ul>
+                {isAuthorized ? "Выйти" : "Войти"}
+              </a>
             </div>
           </div>
         </div>

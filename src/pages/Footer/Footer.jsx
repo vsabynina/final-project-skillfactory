@@ -1,12 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import css from "./Footer.module.css";
 
 const Footer = () => {
   return (
     <footer>
-      <nav className={`navbar navbar-expand-lg navbar-light ${css.background}`}>
-        <div className={`container-fluid ${css.container}`}>
+      <nav className={`navbar navbar-expand-lg navbar-light background`}>
+        <div className={`container-fluid navContainer`}>
           <Link to="/" className="navbar-brand">
             Find bicycle
           </Link>

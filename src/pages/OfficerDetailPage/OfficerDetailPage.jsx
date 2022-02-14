@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import css from "./OfficerDetailPage.module.css";
 import officerImage from "../../assets/images/officerImage.jpeg";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import {
   editOfficer,
   getOneOfficer,
+  handleClickMessageButton,
 } from "../../store/reducers/officersReducer";
 import SecondaryButton from "../../components/SecondaryButton";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Message from "../../components/Message/Message";
-import { handleClickMessageButton } from "../../store/reducers/officersReducer";
 
 const OfficerDetailPage = (props) => {
   const { id } = useParams();
@@ -105,7 +104,7 @@ const OfficerDetailPage = (props) => {
       {(formik) => {
         const { values } = formik;
         return (
-          <div className={css.wrapper}>
+          <>
             {isLoading ? (
               <LoadingSpinner />
             ) : (
@@ -113,7 +112,7 @@ const OfficerDetailPage = (props) => {
                 {message ? (
                   <Message message={message} onClick={handleClickMessage} />
                 ) : (
-                  <>
+                  <div className={css.wrapper}>
                     <img
                       src={officerImage}
                       className={css.img}
@@ -123,7 +122,7 @@ const OfficerDetailPage = (props) => {
                       <table className={`table table-hover ${css.table}`}>
                         <tbody>
                           <tr
-                            className={`${css.row} ${css.cursor}`}
+                            className={`${css.row} cursor`}
                             onClick={handleClickFirstName}
                           >
                             <td className={css.cell1}>Имя</td>
@@ -141,7 +140,7 @@ const OfficerDetailPage = (props) => {
                                 />
                               )}
                               <ErrorMessage
-                                className={css.invalidMessage}
+                                className="invalidMessage"
                                 component="div"
                                 name="firstName"
                               />
@@ -149,7 +148,7 @@ const OfficerDetailPage = (props) => {
                           </tr>
 
                           <tr
-                            className={`${css.row} ${css.cursor}`}
+                            className={`${css.row} cursor`}
                             onClick={handleClickLastName}
                           >
                             <td className={css.cell1}>Фамилия</td>
@@ -169,7 +168,7 @@ const OfficerDetailPage = (props) => {
                               <ErrorMessage
                                 component="div"
                                 name="lastName"
-                                className={css.invalidMessage}
+                                className="invalidMessage"
                               />
                             </td>
                           </tr>
@@ -181,7 +180,7 @@ const OfficerDetailPage = (props) => {
 
                           {!isClickedPassword && (
                             <tr
-                              className={`${css.row} ${css.cursor}`}
+                              className={`${css.row} cursor`}
                               onClick={handleClickPassword}
                             >
                               <td className={css.cell1}>Пароль</td>
@@ -195,7 +194,7 @@ const OfficerDetailPage = (props) => {
 
                           {isClickedPassword && (
                             <tr
-                              className={`${css.row} ${css.cursor}`}
+                              className={`${css.row} cursor`}
                               onClick={handleClickPassword}
                             >
                               <td className={css.cell1}>Новый пароль</td>
@@ -212,7 +211,7 @@ const OfficerDetailPage = (props) => {
                                 <ErrorMessage
                                   component="div"
                                   name="newPassword"
-                                  className={css.invalidMessage}
+                                  className="invalidMessage"
                                 />
                               </td>
                             </tr>
@@ -220,7 +219,7 @@ const OfficerDetailPage = (props) => {
 
                           {isClickedPassword && (
                             <tr
-                              className={`${css.row} ${css.cursor}`}
+                              className={`${css.row} cursor`}
                               onClick={handleClickPassword}
                             >
                               <td className={css.cell1}>
@@ -239,7 +238,7 @@ const OfficerDetailPage = (props) => {
                                 <ErrorMessage
                                   component="div"
                                   name="passwordConfirmation"
-                                  className={css.invalidMessage}
+                                  className="invalidMessage"
                                 />
                               </td>
                             </tr>
@@ -250,12 +249,12 @@ const OfficerDetailPage = (props) => {
                             <td className={css.cell2}>{officer.clientId}</td>
                           </tr>
 
-                          <tr className={`${css.row} ${css.cursor}`}>
+                          <tr className={`${css.row} cursor`}>
                             <td className={css.cell1}>Одобрен</td>
                             <td className={css.cell2}>
                               <div className="form-check form-switch">
                                 <Field
-                                  className={`form-check-input ${css.cursor}`}
+                                  className={`form-check-input checkboxInput cursor`}
                                   type="checkbox"
                                   name={"approved"}
                                 />
@@ -272,11 +271,11 @@ const OfficerDetailPage = (props) => {
                         />
                       </div>
                     </Form>
-                  </>
+                  </div>
                 )}
               </>
             )}
-          </div>
+          </>
         );
       }}
     </Formik>

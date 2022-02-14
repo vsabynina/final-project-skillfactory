@@ -4,7 +4,7 @@ import background from "../../assets/images/backgroundImage.jpg";
 
 const HomePage = () => {
   return (
-    <div className={css.wrapper}>
+    <div className={`wrapper ${css.wrapper}`}>
       <div className={css.text}>
         <h1 className="h1">
           Потеряли

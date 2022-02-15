@@ -37,6 +37,18 @@
   margin-right: 30px;
 }
 
+@media screen and (max-width: 575px) {
+  .cell1 {
+    width: 150px;
+  }
+
+  .p {
+    margin: 0;
+    font-weight: 450;
+    line-height: 1.2;
+  }
+}
+
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .cell1 {
     width: 165px;

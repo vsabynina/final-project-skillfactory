@@ -43,28 +43,28 @@ const CaseDetailPage = (props) => {
   const [isClickedResolution, setIsClickedResolution] = useState(false);
 
   const handleClickStatus = () => {
-    setIsClickedStatus(!isClickedStatus);
+    setIsClickedStatus((prevState) => !prevState);
   };
   const handleClickLicenseNumber = () => {
-    setIsClickedLicenseNumber(!isClickedLicenseNumber);
+    setIsClickedLicenseNumber((prevState) => !prevState);
   };
   const handleClickOwnerFullName = () => {
-    setIsClickedOwnerFullName(!isClickedOwnerFullName);
+    setIsClickedOwnerFullName((prevState) => !prevState);
   };
   const handleClickType = () => {
-    setIsClickedType(!isClickedType);
+    setIsClickedType((prevState) => !prevState);
   };
   const handleClickColor = () => {
-    setIsClickedColor(!isClickedColor);
+    setIsClickedColor((prevState) => !prevState);
   };
   const handleClickOfficer = () => {
-    setIsClickedOfficer(!isClickedOfficer);
+    setIsClickedOfficer((prevState) => !prevState);
   };
   const handleClickDescription = () => {
-    setIsClickedDescription(!isClickedDescription);
+    setIsClickedDescription((prevState) => !prevState);
   };
   const handleClickResolution = () => {
-    setIsClickedResolution(!isClickedResolution);
+    setIsClickedResolution((prevState) => !prevState);
   };
 
   const handleKeyPress = (e) => {
@@ -185,7 +185,7 @@ const CaseDetailPage = (props) => {
                         </thead>
 
                         <tbody>
-                          <tr onClick={handleClickStatus}>
+                          <tr onClick={handleClickStatus} className={"cursor"}>
                             <td className={css.cell1}>Статус</td>
 
                             <td className={css.cell2}>
@@ -218,7 +218,10 @@ const CaseDetailPage = (props) => {
                           </tr>
 
                           {values.status === "done" && (
-                            <tr onClick={handleClickResolution}>
+                            <tr
+                              onClick={handleClickResolution}
+                              className={"cursor"}
+                            >
                               <td className={css.cell1}>Решение</td>
 
                               <td className={css.cell2}>
@@ -244,7 +247,10 @@ const CaseDetailPage = (props) => {
                             </tr>
                           )}
 
-                          <tr onClick={handleClickLicenseNumber}>
+                          <tr
+                            onClick={handleClickLicenseNumber}
+                            className={"cursor"}
+                          >
                             <td className={css.cell1}>Лицензионный номер</td>
 
                             <td className={css.cell2}>
@@ -268,7 +274,10 @@ const CaseDetailPage = (props) => {
                             </td>
                           </tr>
 
-                          <tr onClick={handleClickOwnerFullName}>
+                          <tr
+                            onClick={handleClickOwnerFullName}
+                            className={"cursor"}
+                          >
                             <td className={css.cell1}>ФИО владельца</td>
 
                             <td className={css.cell2}>
@@ -291,7 +300,7 @@ const CaseDetailPage = (props) => {
                             </td>
                           </tr>
 
-                          <tr onClick={handleClickType}>
+                          <tr onClick={handleClickType} className={"cursor"}>
                             <td className={css.cell1}>Тип</td>
 
                             <td className={css.cell2}>
@@ -321,7 +330,7 @@ const CaseDetailPage = (props) => {
                             </td>
                           </tr>
 
-                          <tr onClick={handleClickColor}>
+                          <tr onClick={handleClickColor} className={"cursor"}>
                             <td className={css.cell1}>Цвет</td>
 
                             <td className={css.cell2}>
@@ -339,7 +348,7 @@ const CaseDetailPage = (props) => {
                             </td>
                           </tr>
 
-                          <tr onClick={handleClickOfficer}>
+                          <tr onClick={handleClickOfficer} className={"cursor"}>
                             <td className={css.cell1}>Сотрудник</td>
 
                             <td className={css.cell2}>
@@ -397,7 +406,10 @@ const CaseDetailPage = (props) => {
                             </td>
                           </tr>
 
-                          <tr onClick={handleClickDescription}>
+                          <tr
+                            onClick={handleClickDescription}
+                            className={"cursor"}
+                          >
                             <td className={css.cell1}>Описание</td>
 
                             <td className={css.cell2}>

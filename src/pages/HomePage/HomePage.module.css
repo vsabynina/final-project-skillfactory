@@ -13,6 +13,30 @@
   margin-top: 16px;
 }
 
+@media screen and (max-width: 575px) {
+  .img {
+    width: 600px;
+    height: 300px;
+    margin: 0;
+  }
+
+  .text {
+    margin: 0;
+  }
+
+  .text > h1 {
+    text-align: center;
+  }
+
+  .paragraph {
+    margin: 0;
+  }
+
+  .wrapper {
+    flex-direction: column;
+  }
+}
+
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .img {
     width: 600px;

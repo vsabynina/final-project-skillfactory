@@ -37,6 +37,20 @@
   color: #0d6efd;
 }
 
+@media screen and (max-width: 575px) {
+  .th3,
+  .th4,
+  .th5,
+  .cell5,
+  .cell4,
+  .cell3 {
+    display: none;
+  }
+  .cell1 {
+    width: 50px;
+  }
+}
+
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .th3,
   .th4,

@@ -31,6 +31,18 @@
   margin-right: 50px;
 }
 
+.formSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@media screen and (max-width: 575px) {
+  .img {
+    display: none;
+  }
+}
+
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .img {
     display: none;

@@ -5,6 +5,12 @@
   justify-content: center;
 }
 
+@media screen and (max-width: 575px) {
+  .wrapper {
+    padding: 45px 35px;
+  }
+}
+
 @media screen and (min-width: 576px) and (max-width: 767px) {
   .wrapper {
     padding: 30px 35px;

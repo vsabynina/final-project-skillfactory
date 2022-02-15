@@ -32,13 +32,13 @@ const OfficerDetailPage = (props) => {
   const [isClickedPassword, setIsClickedPassword] = useState(false);
 
   const handleClickFirstName = () => {
-    setIsClickedFirstName(!isClickedFirstName);
+    setIsClickedFirstName((prevState) => !prevState);
   };
   const handleClickLastName = () => {
-    setIsClickedLastName(!isClickedLastName);
+    setIsClickedLastName((prevState) => !prevState);
   };
   const handleClickPassword = () => {
-    setIsClickedPassword(!isClickedPassword);
+    setIsClickedPassword((prevState) => !prevState);
   };
 
   const handleKeyPress = (e) => {
@@ -252,7 +252,9 @@ const OfficerDetailPage = (props) => {
                           <tr className={`${css.row} cursor`}>
                             <td className={css.cell1}>Одобрен</td>
                             <td className={css.cell2}>
-                              <div className="form-check form-switch">
+                              <div
+                                className={`form - check form-switch ${css.formSwitch}`}
+                              >
                                 <Field
                                   className={`form-check-input checkboxInput cursor`}
                                   type="checkbox"

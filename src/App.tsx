@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Layout from "./pages/Layout/Layout";
+import Layout from "./pages/Layout";
 import HomePage from "./pages/HomePage/HomePage";
 import Authorization from "./pages/Authorization/Authorization";
 import Registration from "./pages/Registration/Registration";
@@ -10,10 +10,12 @@ import CaseFormPublic from "./pages/CaseFormPublic/CaseFormPublic";
 import CaseDetailPage from "./pages/CaseDetailPage/CaseDetailPage";
 import ListOfOfficers from "./pages/ListOfOfficers/ListOfOfficers";
 import OfficerDetailPage from "./pages/OfficerDetailPage/OfficerDetailPage";
-import { connect } from "react-redux";
+import { useTypedSelector } from "./hooks/useTypedSelector";
 
-function App(props) {
-  const { isAuthorized } = props;
+function App() {
+  const { isAuthorized } = useTypedSelector(
+    (state) => state.authorizationReducer
+  );
 
   return (
     <div className="wrapperApp">
@@ -47,8 +49,4 @@ function App(props) {
   );
 }
 
-export default connect((state) => {
-  return {
-    isAuthorized: state.authorizationReducer.isAuthorized,
-  };
-})(App);
+export default App;

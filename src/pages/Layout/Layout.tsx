@@ -4,7 +4,7 @@ import css from "./Layout.module.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
-const Layout = () => {
+const Layout: React.FC = () => {
   return (
     <>
       <Header />

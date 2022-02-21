@@ -1,6 +1,14 @@
 import React from "react";
 
-const SecondaryButton = (props) => {
+interface PropsType {
+  title?: string;
+  type?: "submit" | "reset" | "button";
+  className?: string;
+  disabled?: boolean;
+  onClick?(e: React.MouseEvent<HTMLButtonElement>): void;
+}
+
+const SecondaryButton: React.FC<PropsType> = (props) => {
   const { title, type, className, onClick, disabled } = props;
   return (
     <button

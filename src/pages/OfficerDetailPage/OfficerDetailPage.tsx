@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { connect, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import css from "./OfficerDetailPage.module.css";
 import officerImage from "../../assets/images/officerImage.jpeg";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  editOfficer,
-  getOneOfficer,
-  handleClickMessageButton,
-} from "../../store/reducers/officersReducer";
 import SecondaryButton from "../../components/SecondaryButton";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Message from "../../components/Message/Message";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActionsOfficer } from "../../hooks/useActions";
+import { OfficerEdit } from "../../store/types/officers";
 
-const OfficerDetailPage = (props) => {
-  const { id } = useParams();
+const OfficerDetailPage: React.FC = () => {
+  const { id } = useParams() as { id: string };
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {
-    editOfficer,
-    isLoading,
-    message,
-    getOneOfficer,
-    officer,
-    handleClickMessageButton,
-  } = props;
+
+  const { officer, isLoading, messageOfficer } = useTypedSelector(
+    (state) => state.officersReducer
+  );
+  const { editOfficer, getOneOfficer, handleClickMessageButton } =
+    useActionsOfficer();
 
   const [isClickedFirstName, setIsClickedFirstName] = useState(false);
   const [isClickedLastName, setIsClickedLastName] = useState(false);
@@ -41,9 +37,12 @@ const OfficerDetailPage = (props) => {
     setIsClickedPassword((prevState) => !prevState);
   };
 
-  const handleKeyPress = (e) => {
-    e = e || window.event;
-    if (e.which === 13 || e.keyCode === 13) {
+  const handleKeyPress = (
+    e: React.KeyboardEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    if (e.code === "Enter" || e.code === "NumpadEnter") {
       setIsClickedFirstName(false);
       setIsClickedLastName(false);
     }
@@ -59,15 +58,15 @@ const OfficerDetailPage = (props) => {
   };
 
   return (
-    <Formik
+    <Formik<OfficerEdit>
       enableReinitialize={true}
       initialValues={{
-        firstName: officer.firstName || "",
-        lastName: officer.lastName || "",
-        oldPassword: officer.password || "",
+        firstName: officer ? officer.firstName : "",
+        lastName: officer ? officer.lastName : "",
+        oldPassword: officer ? officer.password : "",
         newPassword: "",
         passwordConfirmation: "",
-        approved: officer.approved || "",
+        approved: officer ? officer.approved : false,
       }}
       validationSchema={Yup.object({
         firstName: Yup.string().max(
@@ -95,7 +94,7 @@ const OfficerDetailPage = (props) => {
         approved: Yup.boolean(),
       })}
       onSubmit={(values) => {
-        editOfficer(officer._id, values);
+        editOfficer(officer!._id, values);
         setIsClickedFirstName(false);
         setIsClickedLastName(false);
         setIsClickedPassword(false);
@@ -109,8 +108,11 @@ const OfficerDetailPage = (props) => {
               <LoadingSpinner />
             ) : (
               <>
-                {message ? (
-                  <Message message={message} onClick={handleClickMessage} />
+                {messageOfficer ? (
+                  <Message
+                    message={messageOfficer}
+                    onClick={handleClickMessage}
+                  />
                 ) : (
                   <div className={css.wrapper}>
                     <img
@@ -136,7 +138,9 @@ const OfficerDetailPage = (props) => {
                                   className="form-control"
                                   placeholder={"Ваше имя"}
                                   onKeyPress={handleKeyPress}
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLInputElement>
+                                  ) => e.stopPropagation()}
                                 />
                               )}
                               <ErrorMessage
@@ -162,7 +166,9 @@ const OfficerDetailPage = (props) => {
                                   className="form-control"
                                   placeholder={"Ваша фамилия"}
                                   onKeyPress={handleKeyPress}
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLInputElement>
+                                  ) => e.stopPropagation()}
                                 />
                               )}
                               <ErrorMessage
@@ -175,7 +181,9 @@ const OfficerDetailPage = (props) => {
 
                           <tr className={css.row}>
                             <td className={css.cell1}>E-mail</td>
-                            <td className={css.cell2}>{officer.email}</td>
+                            <td className={css.cell2}>
+                              {officer ? officer.email : ""}
+                            </td>
                           </tr>
 
                           {!isClickedPassword && (
@@ -206,7 +214,9 @@ const OfficerDetailPage = (props) => {
                                   placeholder={"Введите новый пароль"}
                                   onKeyPress={handleKeyPress}
                                   autoComplete="on"
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLInputElement>
+                                  ) => e.stopPropagation()}
                                 />
                                 <ErrorMessage
                                   component="div"
@@ -233,7 +243,9 @@ const OfficerDetailPage = (props) => {
                                   placeholder={"Повторно введите новый пароль"}
                                   onKeyPress={handleKeyPress}
                                   autoComplete="on"
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLInputElement>
+                                  ) => e.stopPropagation()}
                                 />
                                 <ErrorMessage
                                   component="div"
@@ -246,7 +258,9 @@ const OfficerDetailPage = (props) => {
 
                           <tr className={css.row}>
                             <td className={css.cell1}>ID</td>
-                            <td className={css.cell2}>{officer.clientId}</td>
+                            <td className={css.cell2}>
+                              {officer ? officer.clientId : ""}
+                            </td>
                           </tr>
 
                           <tr className={`${css.row} cursor`}>
@@ -283,19 +297,4 @@ const OfficerDetailPage = (props) => {
     </Formik>
   );
 };
-export default connect(
-  (state) => {
-    return {
-      officer: state.officersReducer.officer,
-      isLoading: state.officersReducer.isLoading,
-      message: state.officersReducer.message,
-    };
-  },
-  (dispatch) => {
-    return {
-      editOfficer: (id, values) => dispatch(editOfficer(id, values)),
-      getOneOfficer: (id) => dispatch(getOneOfficer(id)),
-      handleClickMessageButton: () => dispatch(handleClickMessageButton()),
-    };
-  }
-)(OfficerDetailPage);
+export default OfficerDetailPage;

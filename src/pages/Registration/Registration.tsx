@@ -1,36 +1,30 @@
 import React from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import css from "./Registration.module.css";
-import {
-  handleClickMessageButton,
-  signUp,
-} from "../../store/reducers/authorizationReducer";
-import { connect } from "react-redux";
-import {
-  getAllOfficers,
-  handleClickModalButton,
-} from "../../store/reducers/officersReducer";
 import MainButton from "../../components/MainButton";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Message from "../../components/Message/Message";
 import { useNavigate } from "react-router-dom";
-import Modal from "../../components/Modal/Modal";
+import Modal from "../../components/Modal";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActionsAuth, useActionsOfficer } from "../../hooks/useActions";
+import css from "./Registration.module.css";
+import { SignUp } from "../../store/types/authorization";
+import { OfficerCreate } from "../../store/types/officers";
 
-const Registration = (props) => {
+const Registration: React.FC = () => {
+  const { isRegistered, isLoading, messageAuth } = useTypedSelector(
+    (state) => state.authorizationReducer
+  );
+
+  const { messageOfficer, officerIsCreated } = useTypedSelector(
+    (state) => state.officersReducer
+  );
+
+  const { signUp, handleClickMessageButton } = useActionsAuth();
+  const { createOfficer, handleClickModalButton } = useActionsOfficer();
+
   const navigate = useNavigate();
-
-  const {
-    signUp,
-    createOfficer,
-    isLoading,
-    isRegistered,
-    messageAuthorization,
-    messageOfficers,
-    handleClickMessageButton,
-    handleClickModalButton,
-    officerIsCreated,
-  } = props;
 
   const handleClickMessage = () => {
     navigate(`/auth/sign_in`);
@@ -47,7 +41,7 @@ const Registration = (props) => {
   };
 
   return (
-    <Formik
+    <Formik<SignUp>
       initialValues={{
         email: "",
         password: "",
@@ -91,9 +85,9 @@ const Registration = (props) => {
               <LoadingSpinner />
             ) : (
               <>
-                {messageAuthorization || messageOfficers ? (
+                {messageAuth || messageOfficer ? (
                   <Message
-                    message={messageAuthorization || messageOfficers}
+                    message={messageOfficer || messageOfficer}
                     onClick={handleClickMessage}
                   />
                 ) : (
@@ -247,22 +241,4 @@ const Registration = (props) => {
   );
 };
 
-export default connect(
-  (state) => {
-    return {
-      messageAuthorization: state.authorizationReducer.message,
-      messageOfficers: state.officersReducer.message,
-      isLoading: state.authorizationReducer.isLoading,
-      isRegistered: state.authorizationReducer.isRegistered,
-      officerIsCreated: state.officersReducer.officerIsCreated,
-    };
-  },
-  (dispatch) => {
-    return {
-      signUp: (values) => dispatch(signUp(values)),
-      getAllOfficers: () => dispatch(getAllOfficers()),
-      handleClickMessageButton: () => dispatch(handleClickMessageButton()),
-      handleClickModalButton: () => dispatch(handleClickModalButton()),
-    };
-  }
-)(Registration);
+export default Registration;

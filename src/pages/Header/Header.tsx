@@ -1,11 +1,15 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { logOut } from "../../store/reducers/authorizationReducer";
 import css from "./Header.module.css";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActionsAuth } from "../../hooks/useActions";
 
-const Header = (props) => {
-  const { logOut, isAuthorized } = props;
+const Header: React.FC = () => {
+  const { isAuthorized } = useTypedSelector(
+    (state) => state.authorizationReducer
+  );
+  const { logOut } = useActionsAuth();
+
   const navigate = useNavigate();
 
   const handleClickButtonLogOut = () => {
@@ -86,15 +90,4 @@ const Header = (props) => {
   );
 };
 
-export default connect(
-  (state) => {
-    return {
-      isAuthorized: state.authorizationReducer.isAuthorized,
-    };
-  },
-  (dispatch) => {
-    return {
-      logOut: () => dispatch(logOut()),
-    };
-  }
-)(Header);
+export default Header;

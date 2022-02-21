@@ -1,37 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { connect, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import css from "./CaseDetailPage.module.css";
 import bicycle from "../../assets/icons/bicycleIcon.svg";
-import { getAllOfficers } from "../../store/reducers/officersReducer";
-import {
-  editCase,
-  getOneCase,
-  handleClickMessageButton,
-} from "../../store/reducers/casesReducer";
 import SecondaryButton from "../../components/SecondaryButton";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Message from "../../components/Message/Message";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActionsCases, useActionsOfficer } from "../../hooks/useActions";
+import { CaseEdit } from "../../store/types/cases";
 
-const CaseDetailPage = (props) => {
-  const { id } = useParams();
+const CaseDetailPage: React.FC = () => {
+  const { id } = useParams() as { id: string };
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {
-    officers,
-    getAllOfficers,
-    editCase,
-    bicycleType,
-    caseStatus,
-    getOneCase,
-    someCase,
-    isLoading,
-    message,
-    handleClickMessageButton,
-  } = props;
+  const { officers } = useTypedSelector((state) => state.officersReducer);
+  const { someCase, isLoading, messageCase } = useTypedSelector(
+    (state) => state.casesReducer
+  );
+  const { caseStatus, bicycleType } = useTypedSelector(
+    (state) => state.casesReducer.bicycle
+  );
+
+  const { getAllOfficers } = useActionsOfficer();
+  const { editCase, getOneCase, handleClickMessageButton } = useActionsCases();
 
   const [isClickedStatus, setIsClickedStatus] = useState(false);
   const [isClickedLicenseNumber, setIsClickedLicenseNumber] = useState(false);
@@ -67,9 +62,12 @@ const CaseDetailPage = (props) => {
     setIsClickedResolution((prevState) => !prevState);
   };
 
-  const handleKeyPress = (e) => {
-    e = e || window.event;
-    if (e.which === 13 || e.keyCode === 13) {
+  const handleKeyPress = (
+    e: React.KeyboardEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    if (e.code === "Enter" || e.code === "NumpadEnter") {
       setIsClickedLicenseNumber(false);
       setIsClickedOwnerFullName(false);
       setIsClickedColor(false);
@@ -91,18 +89,22 @@ const CaseDetailPage = (props) => {
     handleClickMessageButton();
   };
 
+  const getCurrentOfficer = (values: CaseEdit) => {
+    return officers.find((officer) => officer._id === values.officer);
+  };
+
   return (
-    <Formik
+    <Formik<CaseEdit>
       enableReinitialize={true}
       initialValues={{
-        status: someCase.status || "",
-        licenseNumber: someCase.licenseNumber || "",
-        ownerFullName: someCase.ownerFullName || "",
-        type: someCase.type || "",
-        color: someCase.color || "",
-        officer: someCase.officer || "",
-        description: someCase.description || "",
-        resolution: someCase.resolution || "",
+        status: someCase?.status || "",
+        licenseNumber: someCase?.licenseNumber || "",
+        ownerFullName: someCase?.ownerFullName || "",
+        type: someCase?.type || "",
+        color: someCase?.color || "",
+        officer: someCase?.officer || "",
+        description: someCase?.description || "",
+        resolution: someCase?.resolution || "",
       }}
       validationSchema={Yup.object({
         status: Yup.string(),
@@ -119,14 +121,14 @@ const CaseDetailPage = (props) => {
         resolution: Yup.string()
           .nullable()
           .when("status", {
-            is: (value) => value === "done",
+            is: (value: string) => value === "done",
             then: Yup.string()
               .nullable()
               .required("Это поле обязательно для заполнения"),
           }),
       })}
       onSubmit={(values) => {
-        editCase(someCase._id, values);
+        editCase(someCase!._id, values);
         setIsClickedStatus(false);
         setIsClickedLicenseNumber(false);
         setIsClickedOwnerFullName(false);
@@ -141,12 +143,12 @@ const CaseDetailPage = (props) => {
         const { values } = formik;
         return (
           <>
-            {isLoading ? (
+            {isLoading || !someCase ? (
               <LoadingSpinner />
             ) : (
               <>
-                {message ? (
-                  <Message message={message} onClick={handleClickMessage} />
+                {messageCase ? (
+                  <Message message={messageCase} onClick={handleClickMessage} />
                 ) : (
                   <div className={css.wrapper}>
                     <Form className={css.form}>
@@ -157,7 +159,7 @@ const CaseDetailPage = (props) => {
                               <img src={bicycle} alt={"Bicycle"} />
                             </th>
 
-                            <th colSpan="2" className={css.thTextAlign}>
+                            <th colSpan={2} className={css.thTextAlign}>
                               <p className={css.p}>
                                 Сообщение было создано{" "}
                                 {new Date(
@@ -199,7 +201,9 @@ const CaseDetailPage = (props) => {
                                   as="select"
                                   className="form-select"
                                   name="status"
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLSelectElement>
+                                  ) => e.stopPropagation()}
                                 >
                                   <option value="DEFAULT" disabled>
                                     Выберите...
@@ -233,7 +237,9 @@ const CaseDetailPage = (props) => {
                                     className="form-control"
                                     name={"resolution"}
                                     placeholder="Опишите как был решён случай"
-                                    onClick={(e) => e.stopPropagation()}
+                                    onClick={(
+                                      e: React.MouseEvent<HTMLTextAreaElement>
+                                    ) => e.stopPropagation()}
                                   />
                                 ) : (
                                   values.resolution
@@ -263,7 +269,9 @@ const CaseDetailPage = (props) => {
                                   className="form-control"
                                   placeholder={"Введите ицензионный номер"}
                                   onKeyPress={handleKeyPress}
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLInputElement>
+                                  ) => e.stopPropagation()}
                                 />
                               )}
                               <ErrorMessage
@@ -289,7 +297,9 @@ const CaseDetailPage = (props) => {
                                   name={"ownerFullName"}
                                   className="form-control"
                                   placeholder={"Введите ФИО владельца"}
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLInputElement>
+                                  ) => e.stopPropagation()}
                                 />
                               )}
                               <ErrorMessage
@@ -312,7 +322,9 @@ const CaseDetailPage = (props) => {
                                   as="select"
                                   className="form-select"
                                   name="type"
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLSelectElement>
+                                  ) => e.stopPropagation()}
                                 >
                                   <option value="DEFAULT" disabled>
                                     Выберите...
@@ -342,7 +354,9 @@ const CaseDetailPage = (props) => {
                                   name={"color"}
                                   className="form-control"
                                   placeholder={"Напишите цвет велосипеда"}
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLInputElement>
+                                  ) => e.stopPropagation()}
                                 />
                               )}
                             </td>
@@ -353,37 +367,24 @@ const CaseDetailPage = (props) => {
 
                             <td className={css.cell2}>
                               {!isClickedOfficer ? (
-                                officers.find(
-                                  (officer) => officer._id === values.officer
-                                ) &&
+                                getCurrentOfficer(values) &&
                                 `${
-                                  !officers.find(
-                                    (officer) => officer._id === values.officer
-                                  ).firstName
-                                    ? "Сотрудник"
-                                    : officers.find(
-                                        (officer) =>
-                                          officer._id === values.officer
-                                      ).firstName
+                                  getCurrentOfficer(values)?.firstName
+                                    ? getCurrentOfficer(values)?.firstName
+                                    : "Сотрудник"
                                 } ${
-                                  !officers.find(
-                                    (officer) => officer._id === values.officer
-                                  ).lastName
-                                    ? officers.find(
-                                        (officer) =>
-                                          officer._id === values.officer
-                                      )._id
-                                    : officers.find(
-                                        (officer) =>
-                                          officer._id === values.officer
-                                      ).lastName
+                                  getCurrentOfficer(values)?.lastName
+                                    ? getCurrentOfficer(values)?.lastName
+                                    : getCurrentOfficer(values)?._id
                                 }`
                               ) : (
                                 <Field
                                   as="select"
                                   className="form-select"
                                   name="officer"
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLSelectElement>
+                                  ) => e.stopPropagation()}
                                 >
                                   <option value="">Выберите...</option>
                                   {officers
@@ -421,7 +422,9 @@ const CaseDetailPage = (props) => {
                                   className="form-control"
                                   name={"description"}
                                   placeholder="Опишите случай"
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={(
+                                    e: React.MouseEvent<HTMLTextAreaElement>
+                                  ) => e.stopPropagation()}
                                 />
                               )}
                             </td>
@@ -448,23 +451,4 @@ const CaseDetailPage = (props) => {
     </Formik>
   );
 };
-export default connect(
-  (state) => {
-    return {
-      officers: state.officersReducer.officers,
-      someCase: state.casesReducer.case,
-      caseStatus: state.casesReducer.bicycle.caseStatus,
-      bicycleType: state.casesReducer.bicycle.bicycleType,
-      isLoading: state.casesReducer.isLoading,
-      message: state.casesReducer.message,
-    };
-  },
-  (dispatch) => {
-    return {
-      getAllOfficers: () => dispatch(getAllOfficers()),
-      getOneCase: (id) => dispatch(getOneCase(id)),
-      editCase: (id, values) => dispatch(editCase(id, values)),
-      handleClickMessageButton: () => dispatch(handleClickMessageButton()),
-    };
-  }
-)(CaseDetailPage);
+export default CaseDetailPage;

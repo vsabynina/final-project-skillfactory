@@ -1,26 +1,19 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import css from "./ListOfOfficers.module.css";
 import employees from "../../assets/icons/employeesIcon.svg";
-import {
-  deleteOfficer,
-  getAllOfficers,
-  handleClickMessageButton,
-} from "../../store/reducers/officersReducer";
 import SecondaryButton from "../../components/SecondaryButton";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Message from "../../components/Message/Message";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActionsOfficer } from "../../hooks/useActions";
 
-const ListOfOfficers = (props) => {
-  const {
-    officers,
-    getAllOfficers,
-    deleteOfficer,
-    isLoading,
-    message,
-    handleClickMessageButton,
-  } = props;
+const ListOfOfficers: React.VFC = () => {
+  const { officers, isLoading, messageOfficer } = useTypedSelector(
+    (state) => state.officersReducer
+  );
+  const { getAllOfficers, deleteOfficer, handleClickMessageButton } =
+    useActionsOfficer();
 
   const navigate = useNavigate();
 
@@ -28,12 +21,18 @@ const ListOfOfficers = (props) => {
     getAllOfficers();
   }, []);
 
-  const handleRowClick = (id, e) => {
+  const handleRowClick = (
+    id: string | number,
+    e: React.MouseEvent<HTMLTableRowElement>
+  ) => {
     navigate(`/officers/${id}`);
     e.preventDefault();
   };
 
-  const handleButtonClick = (id, e) => {
+  const handleButtonClick = (
+    id: string | number,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     deleteOfficer(id);
     e.stopPropagation();
   };
@@ -49,15 +48,15 @@ const ListOfOfficers = (props) => {
         <LoadingSpinner />
       ) : (
         <>
-          {message ? (
-            <Message message={message} onClick={handleClickMessage} />
+          {messageOfficer ? (
+            <Message message={messageOfficer} onClick={handleClickMessage} />
           ) : (
             <div className="wrapper">
               <table className="table table-hover" id={"listOfOfficersTable"}>
                 <thead>
                   <tr>
                     <th scope="col">
-                      <img src={employees} icon={"Employee"} />
+                      <img src={employees} alt={"Employee"} />
                     </th>
                     <th>ФИО</th>
                     <th className={css.th3}>E-mail</th>
@@ -118,19 +117,4 @@ const ListOfOfficers = (props) => {
     </>
   );
 };
-export default connect(
-  (state) => {
-    return {
-      officers: state.officersReducer.officers,
-      isLoading: state.officersReducer.isLoading,
-      message: state.officersReducer.message,
-    };
-  },
-  (dispatch) => {
-    return {
-      getAllOfficers: () => dispatch(getAllOfficers()),
-      deleteOfficer: (id) => dispatch(deleteOfficer(id)),
-      handleClickMessageButton: () => dispatch(handleClickMessageButton()),
-    };
-  }
-)(ListOfOfficers);
+export default ListOfOfficers;

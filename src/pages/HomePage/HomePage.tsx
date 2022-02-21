@@ -2,7 +2,7 @@ import React from "react";
 import css from "./HomePage.module.css";
 import background from "../../assets/images/backgroundImage.jpg";
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   return (
     <div className={`wrapper ${css.wrapper}`}>
       <div className={css.text}>

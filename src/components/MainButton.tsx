@@ -1,6 +1,14 @@
 import React from "react";
 
-const MainButton = (props) => {
+interface PropsType {
+  title?: string;
+  type?: "submit" | "reset" | "button";
+  className?: string;
+  disabled?: boolean;
+  onClick?(): void;
+}
+
+const MainButton: React.FC<PropsType> = (props) => {
   const { title, type, className, disabled, onClick } = props;
   return (
     <button

@@ -1,25 +1,18 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { connect } from "react-redux";
 import css from "./ListOfCases.module.css";
-import {
-  deleteCase,
-  getAllCases,
-  handleClickMessageButton,
-} from "../../store/reducers/casesReducer";
 import SecondaryButton from "../../components/SecondaryButton";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Message from "../../components/Message/Message";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActionsCases } from "../../hooks/useActions";
 
-const ListOfCases = (props) => {
-  const {
-    cases,
-    getAllCases,
-    deleteCase,
-    isLoading,
-    message,
-    handleClickMessageButton,
-  } = props;
+const ListOfCases: React.FC = () => {
+  const { cases, isLoading, messageCase } = useTypedSelector(
+    (state) => state.casesReducer
+  );
+  const { getAllCases, deleteCase, handleClickMessageButton } =
+    useActionsCases();
 
   const navigate = useNavigate();
 
@@ -27,12 +20,18 @@ const ListOfCases = (props) => {
     getAllCases();
   }, []);
 
-  const handleRowClick = (id, e) => {
+  const handleRowClick = (
+    id: string | number,
+    e: React.MouseEvent<HTMLTableRowElement>
+  ) => {
     navigate(`/cases/${id}`);
     e.stopPropagation();
   };
 
-  const handleButtonClick = (id, e) => {
+  const handleButtonClick = (
+    id: string | number,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     deleteCase(id);
     e.stopPropagation();
   };
@@ -48,8 +47,8 @@ const ListOfCases = (props) => {
         <LoadingSpinner />
       ) : (
         <>
-          {message ? (
-            <Message message={message} onClick={handleClickMessage} />
+          {messageCase ? (
+            <Message message={messageCase} onClick={handleClickMessage} />
           ) : (
             <div className={"wrapper"}>
               <table className="table table-hover">
@@ -96,7 +95,6 @@ const ListOfCases = (props) => {
                             title={"Удалить"}
                             type={"button"}
                             className={"btn-sm"}
-                            id={item._id}
                             onClick={(e) => handleButtonClick(item._id, e)}
                           />
                         </th>
@@ -112,19 +110,4 @@ const ListOfCases = (props) => {
     </>
   );
 };
-export default connect(
-  (state) => {
-    return {
-      cases: state.casesReducer.cases,
-      isLoading: state.casesReducer.isLoading,
-      message: state.casesReducer.message,
-    };
-  },
-  (dispatch) => {
-    return {
-      deleteCase: (id) => dispatch(deleteCase(id)),
-      getAllCases: () => dispatch(getAllCases()),
-      handleClickMessageButton: () => dispatch(handleClickMessageButton()),
-    };
-  }
-)(ListOfCases);
+export default ListOfCases;

@@ -2,7 +2,12 @@ import React from "react";
 import css from "./Message.module.css";
 import SecondaryButton from "../SecondaryButton";
 
-const Message = (props) => {
+interface PropsType {
+  message?: string | null;
+  onClick?(): void;
+}
+
+const Message: React.FC<PropsType> = (props) => {
   const { message, onClick } = props;
   return (
     <div className={css.message}>

@@ -1,64 +1,49 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { connect } from "react-redux";
-import css from "./CaseForm.module.css";
-import {
-  createCase,
-  handleClickMessageButton,
-  handleClickModalButton,
-} from "../../store/reducers/casesReducer";
-import { getAllOfficers } from "../../store/reducers/officersReducer";
+import css from "./CaseFormPublic.module.css";
 import MainButton from "../../components/MainButton";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import Message from "../../components/Message/Message";
 import { useNavigate } from "react-router-dom";
-import Modal from "../../components/Modal/Modal";
+import LoadingSpinner from "../../components/LoadingSpinner";
+import Message from "../../components/Message/Message";
+import Modal from "../../components/Modal";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActionsCases } from "../../hooks/useActions";
+import { CaseCreatePublic } from "../../store/types/cases";
 
-const CaseForm = (props) => {
+const CaseFormPublic: React.FC = () => {
+  const { bicycleType } = useTypedSelector(
+    (state) => state.casesReducer.bicycle
+  );
+  const { isLoading, messageCase, caseIsCreated } = useTypedSelector(
+    (state) => state.casesReducer
+  );
+
+  const { createCasePublic, handleClickModalButton, handleClickMessageButton } =
+    useActionsCases();
+
   const navigate = useNavigate();
-
-  const {
-    officers,
-    bicycleType,
-    getAllOfficers,
-    createCase,
-    isLoadingCases,
-    message,
-    handleClickMessageButton,
-    caseIsCreated,
-    handleClickModalButton,
-  } = props;
-
-  useEffect(() => {
-    getAllOfficers();
-  }, []);
 
   const handleClickMessage = () => {
     navigate(`/`);
     handleClickMessageButton();
   };
 
-  const handleCLickModalSecondaryButton = () => {
+  const handleCLickModalMainButton = () => {
     navigate(`/`);
     handleClickModalButton();
   };
 
-  const handleCLickModalMainButton = () => {
-    navigate(`/cases`);
-    handleClickModalButton();
-  };
-
   return (
-    <Formik
+    <Formik<CaseCreatePublic>
       enableReinitialize={true}
       initialValues={{
         licenseNumber: "",
         ownerFullName: "",
         type: "",
+        clientId: "",
         color: "",
         date: "",
-        officer: "",
         description: "",
         agreement: false,
       }}
@@ -70,9 +55,9 @@ const CaseForm = (props) => {
           "Это поле обязательно для заполнения"
         ),
         type: Yup.string().required("Это поле обязательно для заполнения"),
+        clientId: Yup.string().required("Это поле обязательно для заполнения"),
         color: Yup.string(),
         date: Yup.date(),
-        officer: Yup.string(),
         description: Yup.string(),
         agreement: Yup.boolean().oneOf(
           [true],
@@ -80,20 +65,20 @@ const CaseForm = (props) => {
         ),
       })}
       onSubmit={(values) => {
-        createCase(values);
+        createCasePublic(values);
       }}
     >
       {(formik) => {
         return (
           <>
-            {isLoadingCases ? (
+            {isLoading ? (
               <LoadingSpinner />
             ) : (
               <>
-                {message ? (
-                  <Message message={message} onClick={handleClickMessage} />
+                {messageCase ? (
+                  <Message message={messageCase} onClick={handleClickMessage} />
                 ) : (
-                  <div className={"wrapper"}>
+                  <div className={`row g-3 ${css.form}`}>
                     <Form className={`row g-3 ${css.form}`}>
                       <div className="col-md-6">
                         <label htmlFor="licenseNumber" className="form-label">
@@ -144,7 +129,6 @@ const CaseForm = (props) => {
                           <option value="DEFAULT" disabled>
                             Выберите...
                           </option>
-
                           {bicycleType &&
                             bicycleType.map((item, index) => {
                               return (
@@ -161,7 +145,25 @@ const CaseForm = (props) => {
                         />
                       </div>
 
-                      <div className="col-md-4">
+                      <div className="col-md-8">
+                        <label htmlFor="clientId" className="form-label">
+                          ID клиента
+                        </label>
+                        <Field
+                          type="text"
+                          name={"clientId"}
+                          className="form-control "
+                          placeholder="ID клиента"
+                          id="clientId"
+                        />
+                        <ErrorMessage
+                          name={"clientId"}
+                          className="invalidMessage"
+                          component="div"
+                        />
+                      </div>
+
+                      <div className="col-md-6">
                         <label htmlFor="color" className="form-label">
                           Цвет
                         </label>
@@ -174,7 +176,7 @@ const CaseForm = (props) => {
                         />
                       </div>
 
-                      <div className="col-md-4">
+                      <div className="col-md-6">
                         <label htmlFor="date" className="form-label">
                           Дата
                         </label>
@@ -184,37 +186,6 @@ const CaseForm = (props) => {
                           className="form-control"
                           id="date"
                         />
-                      </div>
-
-                      <div className="col-md-7">
-                        <label htmlFor="officer" className="form-label">
-                          Сотрудник
-                        </label>
-                        <Field
-                          as={"select"}
-                          className="form-select"
-                          name={"officer"}
-                          id="officer"
-                        >
-                          <option value="">Выберите...</option>
-
-                          {officers
-                            .filter((officer) => officer.approved)
-                            .map((officer) => {
-                              return (
-                                <option key={officer._id} value={officer._id}>
-                                  {!officer.firstName || !officer.lastName
-                                    ? `Сотрудник ${
-                                        !officer.firstName && !officer.lastName
-                                          ? officer._id
-                                          : officer.firstName ||
-                                            officer.lastName
-                                      }`
-                                    : `${officer.firstName} ${officer.lastName}`}
-                                </option>
-                              );
-                            })}
-                        </Field>
                       </div>
 
                       <div className="col-12">
@@ -268,11 +239,9 @@ const CaseForm = (props) => {
               <Modal
                 title={"Сообщение о краже создано"}
                 paragraph={"Данные успешно отправлены"}
-                titleSecondaryButton={"Главная страница"}
-                titleMainButton={"Кражи"}
-                onClickSecondaryButton={handleCLickModalSecondaryButton}
+                titleMainButton={"Главная страница"}
                 onClickMainButton={handleCLickModalMainButton}
-                isSecondaryButtonShown={true}
+                isSecondaryButtonShown={false}
               />
             )}
           </>
@@ -282,22 +251,4 @@ const CaseForm = (props) => {
   );
 };
 
-export default connect(
-  (state) => {
-    return {
-      officers: state.officersReducer.officers,
-      bicycleType: state.casesReducer.bicycle.bicycleType,
-      isLoadingCases: state.casesReducer.isLoading,
-      message: state.casesReducer.message,
-      caseIsCreated: state.casesReducer.caseIsCreated,
-    };
-  },
-  (dispatch) => {
-    return {
-      getAllOfficers: () => dispatch(getAllOfficers()),
-      createCase: (values) => dispatch(createCase(values)),
-      handleClickMessageButton: () => dispatch(handleClickMessageButton()),
-      handleClickModalButton: () => dispatch(handleClickModalButton()),
-    };
-  }
-)(CaseForm);
+export default CaseFormPublic;

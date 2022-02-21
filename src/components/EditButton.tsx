@@ -1,6 +1,14 @@
 import React from "react";
 
-const EditButton = (props) => {
+type PropsType = {
+  type?: "submit" | "reset" | "button";
+  src?: string;
+  className?: string;
+  disabled?: boolean;
+  onClick?(): void;
+};
+
+const EditButton: React.FC<PropsType> = (props) => {
   const { onClick, type, src, className, disabled } = props;
   return (
     <button

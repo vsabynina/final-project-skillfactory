@@ -1,8 +1,18 @@
 import React from "react";
-import MainButton from "../../components/MainButton";
-import SecondaryButton from "../../components/SecondaryButton";
+import MainButton from "./MainButton";
+import SecondaryButton from "./SecondaryButton";
 
-const Modal = (props) => {
+interface PropsType {
+  title?: string;
+  paragraph?: string;
+  titleSecondaryButton?: string;
+  titleMainButton?: string;
+  isSecondaryButtonShown?: boolean;
+  onClickSecondaryButton?(): void;
+  onClickMainButton?(): void;
+}
+
+const Modal: React.FC<PropsType> = (props) => {
   const {
     title,
     paragraph,
@@ -13,7 +23,7 @@ const Modal = (props) => {
     isSecondaryButtonShown,
   } = props;
   return (
-    <div className="modal modalShown" tabIndex="-1">
+    <div className="modal modalShown" tabIndex={-1}>
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">

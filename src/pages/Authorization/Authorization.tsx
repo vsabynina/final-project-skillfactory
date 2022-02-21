@@ -3,19 +3,20 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import css from "./Authorization.module.css";
-import { connect } from "react-redux";
-import {
-  handleClickMessageButton,
-  signIn,
-} from "../../store/reducers/authorizationReducer";
 import MainButton from "../../components/MainButton";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 import Message from "../../components/Message/Message";
-import Modal from "../../components/Modal/Modal";
+import Modal from "../../components/Modal";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActionsAuth } from "../../hooks/useActions";
+import { SignIn } from "../../store/types/authorization";
 
-const Authorization = (props) => {
-  const { signIn, message, isLoading, handleClickMessageButton, isAuthorized } =
-    props;
+const Authorization: React.FC = () => {
+  const { messageAuth, isLoading, isAuthorized } = useTypedSelector(
+    (state) => state.authorizationReducer
+  );
+
+  const { signIn, handleClickMessageButton } = useActionsAuth();
 
   const navigate = useNavigate();
 
@@ -29,7 +30,7 @@ const Authorization = (props) => {
   };
 
   return (
-    <Formik
+    <Formik<SignIn>
       initialValues={{
         email: "",
         password: "",
@@ -54,8 +55,8 @@ const Authorization = (props) => {
               <LoadingSpinner />
             ) : (
               <>
-                {message ? (
-                  <Message message={message} onClick={handleClickMessage} />
+                {messageAuth ? (
+                  <Message message={messageAuth} onClick={handleClickMessage} />
                 ) : (
                   <div className={"wrapper"}>
                     <Form className={css.form}>
@@ -95,7 +96,7 @@ const Authorization = (props) => {
                           className="invalidMessage"
                           component="div"
                         />
-                        <div className="invalidMessage">{message}</div>
+                        <div className="invalidMessage">{messageAuth}</div>
                       </div>
 
                       <MainButton
@@ -129,18 +130,4 @@ const Authorization = (props) => {
   );
 };
 
-export default connect(
-  (state) => {
-    return {
-      message: state.authorizationReducer.message,
-      isLoading: state.authorizationReducer.isLoading,
-      isAuthorized: state.authorizationReducer.isAuthorized,
-    };
-  },
-  (dispatch) => {
-    return {
-      signIn: (values) => dispatch(signIn(values)),
-      handleClickMessageButton: () => dispatch(handleClickMessageButton()),
-    };
-  }
-)(Authorization);
+export default Authorization;

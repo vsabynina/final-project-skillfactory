@@ -7,8 +7,8 @@ const Footer: React.VFC = () => {
 
   return (
     <footer>
-      <nav className={`navbar navbar-expand-lg navbar-light background`}>
-        <div className={`container-fluid navContainer`}>
+      <nav className={"navbar navbar-expand-lg navbar-light background"}>
+        <div className={"container-fluid navContainer"}>
           <Link to="/" className="navbar-brand">
             {t("footer.title")}
           </Link>

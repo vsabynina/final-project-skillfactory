@@ -11,6 +11,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import Modal from "src/components/Modal";
 import MainButton from "src/components/MainButton";
 import { useTranslation } from "react-i18next";
+import classNames from "classnames";
 
 const CaseForm: React.VFC = () => {
   const { t } = useTranslation();
@@ -28,6 +29,8 @@ const CaseForm: React.VFC = () => {
   const { getAllOfficers } = useActionsOfficer();
   const { createCase, handleClickMessageButton, handleClickModalButton } =
     useActionsCases();
+
+  const classes = classNames("row", "g-3", css.form);
 
   useEffect(() => {
     getAllOfficers();
@@ -85,21 +88,21 @@ const CaseForm: React.VFC = () => {
                 {messageCase ? (
                   <Message message={messageCase} onClick={handleClickMessage} />
                 ) : (
-                  <div className={"wrapper"}>
-                    <Form className={`row g-3 ${css.form}`}>
+                  <div className="wrapper">
+                    <Form className={classes}>
                       <div className="col-md-6">
                         <label htmlFor="licenseNumber" className="form-label">
                           {t("case.licenseNumber")}
                         </label>
                         <Field
                           type="text"
-                          name={"licenseNumber"}
-                          className="form-control "
+                          name="licenseNumber"
+                          className="form-control"
                           placeholder={t("placeholder.licenseNumber")}
                           id="licenseNumber"
                         />
                         <ErrorMessage
-                          name={"licenseNumber"}
+                          name="licenseNumber"
                           className="invalidMessage"
                           component="div"
                         />
@@ -111,13 +114,13 @@ const CaseForm: React.VFC = () => {
                         </label>
                         <Field
                           type="text"
-                          name={"ownerFullName"}
-                          className="form-control "
+                          name="ownerFullName"
+                          className="form-control"
                           placeholder={t("placeholder.ownerFullName")}
                           id="ownerFullName"
                         />
                         <ErrorMessage
-                          name={"ownerFullName"}
+                          name="ownerFullName"
                           className="invalidMessage"
                           component="div"
                         />
@@ -128,9 +131,9 @@ const CaseForm: React.VFC = () => {
                           {t("case.type")}
                         </label>
                         <Field
-                          as={"select"}
+                          as="select"
                           className="form-select"
-                          name={"type"}
+                          name="type"
                           id="type"
                         >
                           <option value="DEFAULT" disabled>
@@ -141,13 +144,16 @@ const CaseForm: React.VFC = () => {
                             bicycleType.map((item, index) => {
                               return (
                                 <option value={item.value} key={index}>
-                                  {item.title}
+                                  {(item.value === "general" &&
+                                    t("case.typeList.general")) ||
+                                    (item.value === "sport" &&
+                                      t("case.typeList.sport"))}
                                 </option>
                               );
                             })}
                         </Field>
                         <ErrorMessage
-                          name={"type"}
+                          name="type"
                           className="invalidMessage"
                           component="div"
                         />
@@ -159,7 +165,7 @@ const CaseForm: React.VFC = () => {
                         </label>
                         <Field
                           type="text"
-                          name={"color"}
+                          name="color"
                           className="form-control"
                           placeholder={t("placeholder.color")}
                           id="color"
@@ -172,7 +178,7 @@ const CaseForm: React.VFC = () => {
                         </label>
                         <Field
                           type="date"
-                          name={"date"}
+                          name="date"
                           className="form-control"
                           id="date"
                         />
@@ -183,9 +189,9 @@ const CaseForm: React.VFC = () => {
                           {t("case.officer")}
                         </label>
                         <Field
-                          as={"select"}
+                          as="select"
                           className="form-select"
-                          name={"officer"}
+                          name="officer"
                           id="officer"
                         >
                           <option value="">{t("case.choose")}</option>
@@ -214,9 +220,9 @@ const CaseForm: React.VFC = () => {
                           {t("case.description")}
                         </label>
                         <Field
-                          as={"textarea"}
+                          as="textarea"
                           className="form-control"
-                          name={"description"}
+                          name="description"
                           id="description"
                           placeholder={t("placeholder.description")}
                         />
@@ -226,8 +232,8 @@ const CaseForm: React.VFC = () => {
                         <div className="form-check">
                           <Field
                             className="form-check-input"
-                            type={"checkbox"}
-                            name={"agreement"}
+                            type="checkbox"
+                            name="agreement"
                             id="agreement"
                           />
                           <label
@@ -238,7 +244,7 @@ const CaseForm: React.VFC = () => {
                           </label>
                         </div>
                         <ErrorMessage
-                          name={"agreement"}
+                          name="agreement"
                           className="invalidMessage"
                           component="div"
                         />
@@ -247,7 +253,7 @@ const CaseForm: React.VFC = () => {
                       <div className="col-12">
                         <MainButton
                           title={t("caseForm.mainButton.title")}
-                          type={"submit"}
+                          type="submit"
                           disabled={!(formik.isValid && formik.dirty)}
                         />
                       </div>

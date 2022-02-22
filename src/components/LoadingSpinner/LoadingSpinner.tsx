@@ -1,7 +1,10 @@
 import React from "react";
+import classNames from "classnames";
 
 const LoadingSpinner = () => {
-  return <div className="spinner-border text-primary" role="status"></div>;
+  const classes = classNames("spinner-border", "text-primary");
+
+  return <div className={classes} role="status"></div>;
 };
 
 export default LoadingSpinner;

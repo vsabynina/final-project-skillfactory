@@ -90,7 +90,7 @@
   "registration": {
     "notApproved": "Не одобрен",
     "mainButton": {
-      "title":"Зарегистрироваться"
+      "title": "Зарегистрироваться"
     },
     "modal": {
       "title": "Пользователь создан",

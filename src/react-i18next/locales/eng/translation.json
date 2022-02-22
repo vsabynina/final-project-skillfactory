@@ -32,7 +32,7 @@
     "statusList": {
       "new": "New",
       "inProgress": "In progress",
-      "done" : "Done"
+      "done": "Done"
     },
     "resolution": "Resolution",
     "licenseNumber": "License Number",
@@ -51,14 +51,14 @@
   "form": {
     "agreement": "Agree to terms and conditions"
   },
-  "caseDetailPage" : {
+  "caseDetailPage": {
     "time": {
       "timeCreate": "The post was created on {{date}} at {{time}}",
       "timeEdit": "The post was edited on {{date}} at {{time}}",
       "noEdit": "Post has not been edited"
     },
     "secondaryButton": {
-      "title":"Save changes"
+      "title": "Save changes"
     }
   },
   "caseForm": {
@@ -90,7 +90,7 @@
   "registration": {
     "notApproved": "Not approved",
     "mainButton": {
-      "title":"Sign Up"
+      "title": "Sign Up"
     },
     "modal": {
       "title": "User was created",

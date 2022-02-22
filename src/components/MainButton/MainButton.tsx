@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 
 interface PropsType {
   title?: string;
@@ -10,9 +11,12 @@ interface PropsType {
 
 const MainButton: React.FC<PropsType> = (props) => {
   const { title, type, className, disabled, onClick } = props;
+
+  const classes = classNames("btn", "btn-primary", className);
+
   return (
     <button
-      className={`btn btn-primary ${className}`}
+      className={classes}
       type={type}
       disabled={disabled}
       onClick={onClick}

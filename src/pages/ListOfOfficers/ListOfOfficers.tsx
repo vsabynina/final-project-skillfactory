@@ -55,17 +55,18 @@ const ListOfOfficers: React.VFC = () => {
             <Message message={messageOfficer} onClick={handleClickMessage} />
           ) : (
             <div className="wrapper">
-              <table className="table table-hover" id={"listOfOfficersTable"}>
+              <table className="table table-hover" id="listOfOfficersTable">
                 <thead>
                   <tr>
                     <th scope="col">
-                      <img src={employees} alt={"Employee"} />
+                      <img src={employees} alt="Employee" />
                     </th>
                     <th>{t("case.ownerFullName")}</th>
                     <th className={css.th3}>{t("user.email")}</th>
                     <th className={css.th4}>{t("user.approved")}</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {officers &&
                     officers.map((item, index) => {
@@ -78,6 +79,7 @@ const ListOfOfficers: React.VFC = () => {
                           <th scope="row" className={css.cell1}>
                             {index + 1}
                           </th>
+
                           <td className={css.cell2}>
                             {!item.firstName && !item.lastName
                               ? t("listOfOfficers.noNameSurname")
@@ -87,7 +89,9 @@ const ListOfOfficers: React.VFC = () => {
                                     : `${item.firstName || item.lastName}`
                                 }`}
                           </td>
+
                           <td className={css.cell3}>{item.email}</td>
+
                           <td className={css.cell4}>
                             <div
                               className={`form-check form-switch ${css.switchInput}`}
@@ -100,10 +104,11 @@ const ListOfOfficers: React.VFC = () => {
                               />
                             </div>
                           </td>
+
                           <th className={css.cell5}>
                             <SecondaryButton
                               title={t("secondaryButton.title")}
-                              type={"button"}
+                              type="button"
                               className="btn-sm"
                               onClick={(e) => handleButtonClick(item._id, e)}
                             />

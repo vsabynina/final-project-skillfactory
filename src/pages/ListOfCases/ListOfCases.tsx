@@ -53,7 +53,7 @@ const ListOfCases: React.VFC = () => {
           {messageCase ? (
             <Message message={messageCase} onClick={handleClickMessage} />
           ) : (
-            <div className={"wrapper"}>
+            <div className="wrapper">
               <table className="table table-hover">
                 <thead>
                   <tr>
@@ -98,8 +98,8 @@ const ListOfCases: React.VFC = () => {
                         <th className={css.cell6}>
                           <SecondaryButton
                             title={t("secondaryButton.title")}
-                            type={"button"}
-                            className={"btn-sm"}
+                            type="button"
+                            className="btn-sm"
                             onClick={(e) => handleButtonClick(item._id, e)}
                           />
                         </th>

@@ -156,7 +156,7 @@ const CaseDetailPage: React.VFC = () => {
                         <thead>
                           <tr>
                             <th scope="col">
-                              <img src={bicycle} alt={"Bicycle"} />
+                              <img src={bicycle} alt="Bicycle" />
                             </th>
 
                             <th colSpan={2} className={css.thTextAlign}>
@@ -183,7 +183,7 @@ const CaseDetailPage: React.VFC = () => {
                         </thead>
 
                         <tbody>
-                          <tr onClick={handleClickStatus} className={"cursor"}>
+                          <tr onClick={handleClickStatus} className="cursor">
                             <td className={css.cell1}>{t("case.status")}</td>
 
                             <td className={css.cell2}>
@@ -222,7 +222,7 @@ const CaseDetailPage: React.VFC = () => {
                           {values.status === "done" && (
                             <tr
                               onClick={handleClickResolution}
-                              className={"cursor"}
+                              className="cursor"
                             >
                               <td className={css.cell1}>
                                 {t("case.resolution")}
@@ -235,7 +235,7 @@ const CaseDetailPage: React.VFC = () => {
                                   <Field
                                     as="textarea"
                                     className="form-control"
-                                    name={"resolution"}
+                                    name="resolution"
                                     placeholder={t("placeholder.resolution")}
                                     onClick={(
                                       e: React.MouseEvent<HTMLTextAreaElement>
@@ -245,7 +245,7 @@ const CaseDetailPage: React.VFC = () => {
                                   values.resolution
                                 )}
                                 <ErrorMessage
-                                  name={"resolution"}
+                                  name="resolution"
                                   component="div"
                                   className="invalidMessage"
                                 />
@@ -255,7 +255,7 @@ const CaseDetailPage: React.VFC = () => {
 
                           <tr
                             onClick={handleClickLicenseNumber}
-                            className={"cursor"}
+                            className="cursor"
                           >
                             <td className={css.cell1}>
                               {t("case.licenseNumber")}
@@ -267,7 +267,7 @@ const CaseDetailPage: React.VFC = () => {
                               ) : (
                                 <Field
                                   type="text"
-                                  name={"licenseNumber"}
+                                  name="licenseNumber"
                                   className="form-control"
                                   placeholder={t("placeholder.licenseNumber")}
                                   onKeyPress={handleKeyPress}
@@ -277,7 +277,7 @@ const CaseDetailPage: React.VFC = () => {
                                 />
                               )}
                               <ErrorMessage
-                                name={"licenseNumber"}
+                                name="licenseNumber"
                                 component="div"
                                 className="invalidMessage"
                               />
@@ -286,7 +286,7 @@ const CaseDetailPage: React.VFC = () => {
 
                           <tr
                             onClick={handleClickOwnerFullName}
-                            className={"cursor"}
+                            className="cursor"
                           >
                             <td className={css.cell1}>
                               {t("case.ownerFullName")}
@@ -298,7 +298,7 @@ const CaseDetailPage: React.VFC = () => {
                               ) : (
                                 <Field
                                   type="text"
-                                  name={"ownerFullName"}
+                                  name="ownerFullName"
                                   className="form-control"
                                   placeholder={t("placeholder.ownerFullName")}
                                   onClick={(
@@ -307,14 +307,14 @@ const CaseDetailPage: React.VFC = () => {
                                 />
                               )}
                               <ErrorMessage
-                                name={"ownerFullName"}
+                                name="ownerFullName"
                                 component="div"
                                 className="invalidMessage"
                               />
                             </td>
                           </tr>
 
-                          <tr onClick={handleClickType} className={"cursor"}>
+                          <tr onClick={handleClickType} className="cursor">
                             <td className={css.cell1}>{t("case.type")}</td>
 
                             <td className={css.cell2}>
@@ -357,7 +357,7 @@ const CaseDetailPage: React.VFC = () => {
                               ) : (
                                 <Field
                                   type="text"
-                                  name={"color"}
+                                  name="color"
                                   className="form-control"
                                   placeholder={t("placeholder.color")}
                                   onClick={(
@@ -417,7 +417,7 @@ const CaseDetailPage: React.VFC = () => {
 
                           <tr
                             onClick={handleClickDescription}
-                            className={"cursor"}
+                            className="cursor"
                           >
                             <td className={css.cell1}>
                               {t("case.description")}
@@ -430,7 +430,7 @@ const CaseDetailPage: React.VFC = () => {
                                 <Field
                                   as="textarea"
                                   className="form-control"
-                                  name={"description"}
+                                  name="description"
                                   placeholder={t("placeholder.description")}
                                   onClick={(
                                     e: React.MouseEvent<HTMLTextAreaElement>

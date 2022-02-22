@@ -6,6 +6,7 @@ import { useActionsAuth } from "src/hooks/useActions";
 import Russian from "src/assets/icons/russian.svg";
 import English from "src/assets/icons/english.svg";
 import { useTranslation } from "react-i18next";
+import classNames from "classnames";
 
 const Header: React.VFC = () => {
   const { i18n, t } = useTranslation();
@@ -17,6 +18,9 @@ const Header: React.VFC = () => {
   const { isAuthorized } = useTypedSelector(
     (state) => state.authorizationReducer
   );
+
+  const classes = classNames("btnBackground", css.a);
+
   const { logOut } = useActionsAuth();
 
   const navigate = useNavigate();
@@ -32,8 +36,8 @@ const Header: React.VFC = () => {
 
   return (
     <header>
-      <nav className={`navbar navbar-expand-lg navbar-light background`}>
-        <div className={`container-fluid navContainer`}>
+      <nav className={"navbar navbar-expand-lg navbar-light background"}>
+        <div className={"container-fluid navContainer"}>
           <Link to="/" className="navbar-brand">
             {t("header.title")}
           </Link>
@@ -77,6 +81,7 @@ const Header: React.VFC = () => {
                   </Link>
                 </li>
               )}
+
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -88,6 +93,7 @@ const Header: React.VFC = () => {
                 >
                   {t("header.navLinks.lang")}
                 </a>
+
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li className={css.li} onClick={(e) => changeLanguage("ru")}>
                     <a className="dropdown-item" href="#">
@@ -95,6 +101,7 @@ const Header: React.VFC = () => {
                       {t("header.navLinks.ru")}
                     </a>
                   </li>
+
                   <li className={css.li} onClick={(e) => changeLanguage("eng")}>
                     <a className="dropdown-item" href="#">
                       <img src={English} className={css.img} />
@@ -107,7 +114,7 @@ const Header: React.VFC = () => {
 
             <div>
               <a
-                className={`btnBackground ${css.a}`}
+                className={classes}
                 type="button"
                 onClick={
                   isAuthorized

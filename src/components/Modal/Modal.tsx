@@ -22,6 +22,7 @@ const Modal: React.FC<PropsType> = (props) => {
     onClickMainButton,
     isSecondaryButtonShown,
   } = props;
+
   return (
     <div className="modal modalShown" tabIndex={-1}>
       <div className="modal-dialog">
@@ -36,13 +37,13 @@ const Modal: React.FC<PropsType> = (props) => {
             {isSecondaryButtonShown && (
               <SecondaryButton
                 title={titleSecondaryButton}
-                type={"button"}
+                type="button"
                 onClick={onClickSecondaryButton}
               />
             )}
             <MainButton
               title={titleMainButton}
-              type={"button"}
+              type="button"
               onClick={onClickMainButton}
             />
           </div>

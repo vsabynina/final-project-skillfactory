@@ -71,12 +71,12 @@ const Authorization: React.VFC = () => {
                           type="email"
                           className="form-control"
                           id="email"
-                          name={"email"}
+                          name="email"
                           autoComplete="e-mail"
                           placeholder={t("placeholder.email")}
                         />
                         <ErrorMessage
-                          name={"email"}
+                          name="email"
                           className="invalidMessage"
                           component="div"
                         />
@@ -90,12 +90,12 @@ const Authorization: React.VFC = () => {
                           type="password"
                           className="form-control"
                           id="password"
-                          name={"password"}
+                          name="password"
                           autoComplete="on"
                           placeholder={t("placeholder.password")}
                         />
                         <ErrorMessage
-                          name={"password"}
+                          name="password"
                           className="invalidMessage"
                           component="div"
                         />
@@ -103,9 +103,9 @@ const Authorization: React.VFC = () => {
                       </div>
 
                       <MainButton
-                        title={"Войти"}
+                        title="Войти"
                         className={css.button}
-                        type={"submit"}
+                        type="submit"
                         disabled={!(formik.isValid && formik.dirty)}
                       />
                       <Link to="/auth/sign_up" className={`nav-link ${css.a}`}>

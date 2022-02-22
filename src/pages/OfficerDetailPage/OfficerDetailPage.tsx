@@ -12,6 +12,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import SecondaryButton from "src/components/SecondaryButton";
 import { OfficerEdit } from "src/store/types/officers";
 import { useTranslation } from "react-i18next";
+import classNames from "classnames";
 
 const OfficerDetailPage: React.VFC = () => {
   const { t } = useTranslation();
@@ -25,6 +26,14 @@ const OfficerDetailPage: React.VFC = () => {
   );
   const { editOfficer, getOneOfficer, handleClickMessageButton } =
     useActionsOfficer();
+
+  const classesTable = classNames("table", "table-hover", css.table);
+  const classesCursorRow = classNames(css.row, "cursor");
+  const classesSwitcher = classNames(
+    "form-check",
+    "form-switch",
+    css.formSwitch
+  );
 
   const [isClickedFirstName, setIsClickedFirstName] = useState(false);
   const [isClickedLastName, setIsClickedLastName] = useState(false);
@@ -112,16 +121,12 @@ const OfficerDetailPage: React.VFC = () => {
                   />
                 ) : (
                   <div className={css.wrapper}>
-                    <img
-                      src={officerImage}
-                      className={css.img}
-                      alt={"Officer"}
-                    />
+                    <img src={officerImage} className={css.img} alt="Officer" />
                     <Form>
-                      <table className={`table table-hover ${css.table}`}>
+                      <table className={classesTable}>
                         <tbody>
                           <tr
-                            className={`${css.row} cursor`}
+                            className={classesCursorRow}
                             onClick={handleClickFirstName}
                           >
                             <td className={css.cell1}>{t("user.firstName")}</td>
@@ -149,7 +154,7 @@ const OfficerDetailPage: React.VFC = () => {
                           </tr>
 
                           <tr
-                            className={`${css.row} cursor`}
+                            className={classesCursorRow}
                             onClick={handleClickLastName}
                           >
                             <td className={css.cell1}>{t("user.lastName")}</td>
@@ -185,7 +190,7 @@ const OfficerDetailPage: React.VFC = () => {
 
                           {!isClickedPassword && (
                             <tr
-                              className={`${css.row} cursor`}
+                              className={classesCursorRow}
                               onClick={handleClickPassword}
                             >
                               <td className={css.cell1}>
@@ -201,7 +206,7 @@ const OfficerDetailPage: React.VFC = () => {
 
                           {isClickedPassword && (
                             <tr
-                              className={`${css.row} cursor`}
+                              className={classesCursorRow}
                               onClick={handleClickPassword}
                             >
                               <td className={css.cell1}>
@@ -210,7 +215,7 @@ const OfficerDetailPage: React.VFC = () => {
                               <td className={css.cell2}>
                                 <Field
                                   type="password"
-                                  name={"newPassword"}
+                                  name="newPassword"
                                   className="form-control"
                                   placeholder={t("placeholder.newPassword")}
                                   onKeyPress={handleKeyPress}
@@ -230,7 +235,7 @@ const OfficerDetailPage: React.VFC = () => {
 
                           {isClickedPassword && (
                             <tr
-                              className={`${css.row} cursor`}
+                              className={classesCursorRow}
                               onClick={handleClickPassword}
                             >
                               <td className={css.cell1}>
@@ -239,7 +244,7 @@ const OfficerDetailPage: React.VFC = () => {
                               <td className={css.cell2}>
                                 <Field
                                   type="password"
-                                  name={"passwordConfirmation"}
+                                  name="passwordConfirmation"
                                   className="form-control"
                                   placeholder={t(
                                     "placeholder.passwordConfirmation"
@@ -266,22 +271,23 @@ const OfficerDetailPage: React.VFC = () => {
                             </td>
                           </tr>
 
-                          <tr className={`${css.row} cursor`}>
+                          <tr className={classesCursorRow}>
                             <td className={css.cell1}>{t("user.approved")}</td>
                             <td className={css.cell2}>
-                              <div
-                                className={`form-check form-switch ${css.formSwitch}`}
-                              >
+                              <div className={classesSwitcher}>
                                 <Field
-                                  className={`form-check-input checkboxInput cursor`}
+                                  className={
+                                    "form-check-input checkboxInput cursor"
+                                  }
                                   type="checkbox"
-                                  name={"approved"}
+                                  name="approved"
                                 />
                               </div>
                             </td>
                           </tr>
                         </tbody>
                       </table>
+
                       <div className={css.btnWrapper}>
                         <SecondaryButton
                           title={t("officerDetailPage.secondaryButton.title")}

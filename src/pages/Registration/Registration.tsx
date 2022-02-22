@@ -11,6 +11,7 @@ import { useTypedSelector } from "src/hooks/useTypedSelector";
 import Modal from "src/components/Modal";
 import MainButton from "src/components/MainButton";
 import { useTranslation } from "react-i18next";
+import classNames from "classnames";
 
 const Registration: React.VFC = () => {
   const { t } = useTranslation();
@@ -25,6 +26,8 @@ const Registration: React.VFC = () => {
 
   const { signUp, handleClickMessageButton } = useActionsAuth();
   const { createOfficer, handleClickModalButton } = useActionsOfficer();
+
+  const classes = classNames("row", "g-3", "needs-validation", css.form);
 
   const navigate = useNavigate();
 
@@ -85,7 +88,7 @@ const Registration: React.VFC = () => {
                   />
                 ) : (
                   <div className="wrapper">
-                    <Form className={`row g-3 needs-validation ${css.form}`}>
+                    <Form className={classes}>
                       <div className="col-md-4">
                         <label className="form-label" htmlFor="email">
                           {t("user.email")}
@@ -94,11 +97,11 @@ const Registration: React.VFC = () => {
                           type="email"
                           className="form-control"
                           id="email"
-                          name={"email"}
+                          name="email"
                           placeholder={t("placeholder.email")}
                         />
                         <ErrorMessage
-                          name={"email"}
+                          name="email"
                           className="invalidMessage"
                           component="div"
                         />
@@ -112,12 +115,12 @@ const Registration: React.VFC = () => {
                           type="password"
                           className="form-control"
                           id="password"
-                          name={"password"}
+                          name="password"
                           placeholder={t("placeholder.password")}
                           autoComplete="on"
                         />
                         <ErrorMessage
-                          name={"password"}
+                          name="password"
                           className="invalidMessage"
                           component="div"
                         />
@@ -131,11 +134,11 @@ const Registration: React.VFC = () => {
                           type="text"
                           className="form-control"
                           id="clientId"
-                          name={"clientId"}
+                          name="clientId"
                           placeholder={t("placeholder.clientId")}
                         />
                         <ErrorMessage
-                          name={"clientId"}
+                          name="clientId"
                           className="invalidMessage"
                           component="div"
                         />
@@ -149,7 +152,7 @@ const Registration: React.VFC = () => {
                           type="text"
                           className="form-control"
                           id="firstName"
-                          name={"firstName"}
+                          name="firstName"
                           placeholder={t("placeholder.firstName")}
                         />
                       </div>
@@ -162,7 +165,7 @@ const Registration: React.VFC = () => {
                           type="text"
                           className="form-control"
                           id="lastName"
-                          name={"lastName"}
+                          name="lastName"
                           placeholder={t("placeholder.lastName")}
                         />
                       </div>
@@ -172,10 +175,10 @@ const Registration: React.VFC = () => {
                           {t("user.approved")}
                         </label>
                         <Field
-                          as={"select"}
+                          as="select"
                           className="form-select"
                           id="approved"
-                          name={"approved"}
+                          name="approved"
                           disabled
                         >
                           <option value={"false"}>
@@ -188,8 +191,8 @@ const Registration: React.VFC = () => {
                         <div className="form-check">
                           <Field
                             className="form-check-input"
-                            type={"checkbox"}
-                            name={"agreement"}
+                            type="checkbox"
+                            name="agreement"
                             id="agreement"
                           />
                           <label
@@ -200,7 +203,7 @@ const Registration: React.VFC = () => {
                           </label>
                         </div>
                         <ErrorMessage
-                          name={"agreement"}
+                          name="agreement"
                           className="invalidMessage"
                           component="div"
                         />
@@ -208,7 +211,7 @@ const Registration: React.VFC = () => {
                       <div className="col-12">
                         <MainButton
                           title={t("registration.mainButton.title")}
-                          type={"submit"}
+                          type="submit"
                           disabled={!(formik.isValid && formik.dirty)}
                         />
                       </div>

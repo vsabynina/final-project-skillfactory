@@ -1,18 +1,20 @@
 import React from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import MainButton from "../../components/MainButton";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Message from "../../components/Message/Message";
 import { useNavigate } from "react-router-dom";
-import Modal from "../../components/Modal";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActionsAuth, useActionsOfficer } from "../../hooks/useActions";
 import css from "./Registration.module.css";
-import { SignUp } from "../../store/types/authorization";
-import { OfficerCreate } from "../../store/types/officers";
+import LoadingSpinner from "src/components/LoadingSpinner";
+import { useActionsAuth, useActionsOfficer } from "src/hooks/useActions";
+import { SignUp } from "src/store/types/authorization";
+import Message from "src/components/Message";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import Modal from "src/components/Modal";
+import MainButton from "src/components/MainButton";
+import { useTranslation } from "react-i18next";
 
-const Registration: React.FC = () => {
+const Registration: React.VFC = () => {
+  const { t } = useTranslation();
+
   const { isRegistered, isLoading, messageAuth } = useTypedSelector(
     (state) => state.authorizationReducer
   );
@@ -53,25 +55,16 @@ const Registration: React.FC = () => {
       }}
       validationSchema={Yup.object({
         email: Yup.string()
-          .email("Пожалуйста введите верный e-mail адрес")
-          .required("Это поле обязательно для заполнения"),
+          .email(t("errors.email"))
+          .required(t("errors.required")),
         password: Yup.string()
-          .min(3, "Пароль должен содержать менее 12 символов")
-          .max(12, "Пароль должен содержать менее 12 символов")
-          .required("Это поле обязательно для заполнения"),
-        clientId: Yup.string().required("Это поле обязательно для заполнения"),
-        firstName: Yup.string().max(
-          15,
-          "Это поле может содержать менее 15 символов"
-        ),
-        lastName: Yup.string().max(
-          20,
-          "Это поле может содержать менее 20 символов"
-        ),
-        agreement: Yup.boolean().oneOf(
-          [true],
-          "Вы должны согласиться перед регистрацией"
-        ),
+          .min(3, t("errors.passwordMin"))
+          .max(12, t("errors.passwordMax"))
+          .required(t("errors.required")),
+        clientId: Yup.string().required(t("errors.required")),
+        firstName: Yup.string().max(15, t("errors.firstName")),
+        lastName: Yup.string().max(20, t("errors.lastName")),
+        agreement: Yup.boolean().oneOf([true], t("errors.registration")),
       })}
       onSubmit={(values) => {
         signUp(values);
@@ -95,14 +88,14 @@ const Registration: React.FC = () => {
                     <Form className={`row g-3 needs-validation ${css.form}`}>
                       <div className="col-md-4">
                         <label className="form-label" htmlFor="email">
-                          E-mail
+                          {t("user.email")}
                         </label>
                         <Field
                           type="email"
                           className="form-control"
                           id="email"
                           name={"email"}
-                          placeholder="name@example.com"
+                          placeholder={t("placeholder.email")}
                         />
                         <ErrorMessage
                           name={"email"}
@@ -113,14 +106,14 @@ const Registration: React.FC = () => {
 
                       <div className="col-md-4">
                         <label htmlFor="password" className="form-label">
-                          Пароль
+                          {t("user.password")}
                         </label>
                         <Field
                           type="password"
                           className="form-control"
                           id="password"
                           name={"password"}
-                          placeholder="Пароль"
+                          placeholder={t("placeholder.password")}
                           autoComplete="on"
                         />
                         <ErrorMessage
@@ -132,14 +125,14 @@ const Registration: React.FC = () => {
 
                       <div className="col-md-4">
                         <label htmlFor="clientId" className="form-label">
-                          ID
+                          {t("case.clientId")}
                         </label>
                         <Field
                           type="text"
                           className="form-control"
                           id="clientId"
                           name={"clientId"}
-                          placeholder="ID клиента"
+                          placeholder={t("placeholder.clientId")}
                         />
                         <ErrorMessage
                           name={"clientId"}
@@ -150,33 +143,33 @@ const Registration: React.FC = () => {
 
                       <div className="col-md-4">
                         <label htmlFor="firstName" className="form-label">
-                          Ваше имя
+                          {t("user.firstName")}
                         </label>
                         <Field
                           type="text"
                           className="form-control"
                           id="firstName"
                           name={"firstName"}
-                          placeholder="Имя"
+                          placeholder={t("placeholder.firstName")}
                         />
                       </div>
 
                       <div className="col-md-5">
                         <label htmlFor="lastName" className="form-label">
-                          Ваша фамилия
+                          {t("user.lastName")}
                         </label>
                         <Field
                           type="text"
                           className="form-control"
                           id="lastName"
                           name={"lastName"}
-                          placeholder="Фамилия"
+                          placeholder={t("placeholder.lastName")}
                         />
                       </div>
 
                       <div className="col-md-3">
                         <label htmlFor="approved" className="form-label">
-                          Одобрен
+                          {t("user.approved")}
                         </label>
                         <Field
                           as={"select"}
@@ -185,7 +178,9 @@ const Registration: React.FC = () => {
                           name={"approved"}
                           disabled
                         >
-                          <option value={"false"}>Не одобрен</option>
+                          <option value={"false"}>
+                            {t("registration.notApproved")}
+                          </option>
                         </Field>
                       </div>
 
@@ -201,7 +196,7 @@ const Registration: React.FC = () => {
                             className="form-check-label"
                             htmlFor="agreement"
                           >
-                            Согласиться с условиями и правилами
+                            {t("form.agreement")}
                           </label>
                         </div>
                         <ErrorMessage
@@ -212,7 +207,7 @@ const Registration: React.FC = () => {
                       </div>
                       <div className="col-12">
                         <MainButton
-                          title={"Зарегистрироваться"}
+                          title={t("registration.mainButton.title")}
                           type={"submit"}
                           disabled={!(formik.isValid && formik.dirty)}
                         />
@@ -225,10 +220,12 @@ const Registration: React.FC = () => {
 
             {officerIsCreated && isRegistered && (
               <Modal
-                title={"Пользователь создан"}
-                paragraph={"Регистрация успешно пройдена"}
-                titleSecondaryButton={"Главная страница"}
-                titleMainButton={"Войти"}
+                title={t("registration.modal.title")}
+                paragraph={t("registration.modal.paragraph")}
+                titleSecondaryButton={t(
+                  "registration.modal.titleSecondaryButton"
+                )}
+                titleMainButton={t("registration.modal.titleMainButton")}
                 onClickSecondaryButton={handleCLickModalSecondaryButton}
                 onClickMainButton={handleCLickModalMainButton}
                 isSecondaryButtonShown={true}

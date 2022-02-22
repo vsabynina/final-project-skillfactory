@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import "./customStyle.css";
+import "src/react-i18next/i18next";
 
 ReactDOM.render(
   <React.StrictMode>

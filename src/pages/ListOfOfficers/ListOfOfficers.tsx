@@ -1,14 +1,17 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import css from "./ListOfOfficers.module.css";
-import employees from "../../assets/icons/employeesIcon.svg";
-import SecondaryButton from "../../components/SecondaryButton";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Message from "../../components/Message/Message";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActionsOfficer } from "../../hooks/useActions";
+import employees from "src/assets/icons/employeesIcon.svg";
+import LoadingSpinner from "src/components/LoadingSpinner";
+import { useActionsOfficer } from "src/hooks/useActions";
+import Message from "src/components/Message";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import SecondaryButton from "src/components/SecondaryButton";
+import { useTranslation } from "react-i18next";
 
 const ListOfOfficers: React.VFC = () => {
+  const { t } = useTranslation();
+
   const { officers, isLoading, messageOfficer } = useTypedSelector(
     (state) => state.officersReducer
   );
@@ -58,9 +61,9 @@ const ListOfOfficers: React.VFC = () => {
                     <th scope="col">
                       <img src={employees} alt={"Employee"} />
                     </th>
-                    <th>ФИО</th>
-                    <th className={css.th3}>E-mail</th>
-                    <th className={css.th4}>Одобрен</th>
+                    <th>{t("case.ownerFullName")}</th>
+                    <th className={css.th3}>{t("user.email")}</th>
+                    <th className={css.th4}>{t("user.approved")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -77,7 +80,7 @@ const ListOfOfficers: React.VFC = () => {
                           </th>
                           <td className={css.cell2}>
                             {!item.firstName && !item.lastName
-                              ? `Имя и фамилия не введены`
+                              ? t("listOfOfficers.noNameSurname")
                               : `${
                                   item.firstName && item.lastName
                                     ? `${item.firstName} ${item.lastName}`
@@ -99,7 +102,7 @@ const ListOfOfficers: React.VFC = () => {
                           </td>
                           <th className={css.cell5}>
                             <SecondaryButton
-                              title={"Удалить"}
+                              title={t("secondaryButton.title")}
                               type={"button"}
                               className="btn-sm"
                               onClick={(e) => handleButtonClick(item._id, e)}

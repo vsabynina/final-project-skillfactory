@@ -4,15 +4,18 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import css from "./CaseDetailPage.module.css";
-import bicycle from "../../assets/icons/bicycleIcon.svg";
-import SecondaryButton from "../../components/SecondaryButton";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Message from "../../components/Message/Message";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActionsCases, useActionsOfficer } from "../../hooks/useActions";
-import { CaseEdit } from "../../store/types/cases";
+import bicycle from "src/assets/icons/bicycleIcon.svg";
+import LoadingSpinner from "src/components/LoadingSpinner";
+import { useActionsCases, useActionsOfficer } from "src/hooks/useActions";
+import { CaseEdit } from "src/store/types/cases";
+import Message from "src/components/Message";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import SecondaryButton from "src/components/SecondaryButton";
+import { useTranslation, Trans } from "react-i18next";
 
-const CaseDetailPage: React.FC = () => {
+const CaseDetailPage: React.VFC = () => {
+  const { t } = useTranslation();
+
   const { id } = useParams() as { id: string };
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,6 +30,9 @@ const CaseDetailPage: React.FC = () => {
 
   const { getAllOfficers } = useActionsOfficer();
   const { editCase, getOneCase, handleClickMessageButton } = useActionsCases();
+
+  const date = someCase && new Date(someCase!.createdAt).toLocaleDateString();
+  const time = someCase && new Date(someCase!.createdAt).toLocaleTimeString();
 
   const [isClickedStatus, setIsClickedStatus] = useState(false);
   const [isClickedLicenseNumber, setIsClickedLicenseNumber] = useState(false);
@@ -108,12 +114,8 @@ const CaseDetailPage: React.FC = () => {
       }}
       validationSchema={Yup.object({
         status: Yup.string(),
-        licenseNumber: Yup.string().required(
-          "Это поле обязательно для заполнения"
-        ),
-        ownerFullName: Yup.string().required(
-          "Это поле обязательно для заполнения"
-        ),
+        licenseNumber: Yup.string().required(t("errors.required")),
+        ownerFullName: Yup.string().required(t("errors.required")),
         type: Yup.string().nullable(),
         color: Yup.string().nullable(),
         officer: Yup.string().nullable(),
@@ -122,9 +124,7 @@ const CaseDetailPage: React.FC = () => {
           .nullable()
           .when("status", {
             is: (value: string) => value === "done",
-            then: Yup.string()
-              .nullable()
-              .required("Это поле обязательно для заполнения"),
+            then: Yup.string().nullable().required(t("errors.required")),
           }),
       })}
       onSubmit={(values) => {
@@ -161,25 +161,21 @@ const CaseDetailPage: React.FC = () => {
 
                             <th colSpan={2} className={css.thTextAlign}>
                               <p className={css.p}>
-                                Сообщение было создано{" "}
-                                {new Date(
-                                  someCase.createdAt
-                                ).toLocaleDateString()}{" "}
-                                в{" "}
-                                {new Date(
-                                  someCase.createdAt
-                                ).toLocaleTimeString()}
+                                <Trans i18nKey="caseDetailPage.time.timeCreate">
+                                  Сообщение было создано {{ date }} в {{ time }}
+                                </Trans>
                               </p>
 
                               {someCase && (
                                 <p className={css.p}>
-                                  {!someCase.updatedAt
-                                    ? "Сообщение не редактировалось"
-                                    : `Сообщение было отредактировано ${new Date(
-                                        someCase.updatedAt
-                                      ).toLocaleDateString()} в ${new Date(
-                                        someCase.updatedAt
-                                      ).toLocaleTimeString()}`}
+                                  {!someCase.updatedAt ? (
+                                    t("caseDetailPage.time.noEdit")
+                                  ) : (
+                                    <Trans i18nKey="caseDetailPage.time.timeEdit">
+                                      Сообщение было отредактировано {{ date }}{" "}
+                                      в {{ time }}
+                                    </Trans>
+                                  )}
                                 </p>
                               )}
                             </th>
@@ -188,14 +184,16 @@ const CaseDetailPage: React.FC = () => {
 
                         <tbody>
                           <tr onClick={handleClickStatus} className={"cursor"}>
-                            <td className={css.cell1}>Статус</td>
+                            <td className={css.cell1}>{t("case.status")}</td>
 
                             <td className={css.cell2}>
                               {!isClickedStatus ? (
-                                (values.status === "new" && "Открыто") ||
+                                (values.status === "new" &&
+                                  t("case.statusList.new")) ||
                                 (values.status === "in_progress" &&
-                                  "В процессе") ||
-                                (values.status === "done" && "Завершено")
+                                  t("case.statusList.inProgress")) ||
+                                (values.status === "done" &&
+                                  t("case.statusList.done"))
                               ) : (
                                 <Field
                                   as="select"
@@ -206,7 +204,7 @@ const CaseDetailPage: React.FC = () => {
                                   ) => e.stopPropagation()}
                                 >
                                   <option value="DEFAULT" disabled>
-                                    Выберите...
+                                    {t("case.choose")}
                                   </option>
                                   {caseStatus &&
                                     caseStatus.map((item, index) => {
@@ -226,7 +224,9 @@ const CaseDetailPage: React.FC = () => {
                               onClick={handleClickResolution}
                               className={"cursor"}
                             >
-                              <td className={css.cell1}>Решение</td>
+                              <td className={css.cell1}>
+                                {t("case.resolution")}
+                              </td>
 
                               <td className={css.cell2}>
                                 {!isClickedResolution &&
@@ -236,7 +236,7 @@ const CaseDetailPage: React.FC = () => {
                                     as="textarea"
                                     className="form-control"
                                     name={"resolution"}
-                                    placeholder="Опишите как был решён случай"
+                                    placeholder={t("placeholder.resolution")}
                                     onClick={(
                                       e: React.MouseEvent<HTMLTextAreaElement>
                                     ) => e.stopPropagation()}
@@ -257,7 +257,9 @@ const CaseDetailPage: React.FC = () => {
                             onClick={handleClickLicenseNumber}
                             className={"cursor"}
                           >
-                            <td className={css.cell1}>Лицензионный номер</td>
+                            <td className={css.cell1}>
+                              {t("case.licenseNumber")}
+                            </td>
 
                             <td className={css.cell2}>
                               {!isClickedLicenseNumber ? (
@@ -267,7 +269,7 @@ const CaseDetailPage: React.FC = () => {
                                   type="text"
                                   name={"licenseNumber"}
                                   className="form-control"
-                                  placeholder={"Введите ицензионный номер"}
+                                  placeholder={t("placeholder.licenseNumber")}
                                   onKeyPress={handleKeyPress}
                                   onClick={(
                                     e: React.MouseEvent<HTMLInputElement>
@@ -286,7 +288,9 @@ const CaseDetailPage: React.FC = () => {
                             onClick={handleClickOwnerFullName}
                             className={"cursor"}
                           >
-                            <td className={css.cell1}>ФИО владельца</td>
+                            <td className={css.cell1}>
+                              {t("case.ownerFullName")}
+                            </td>
 
                             <td className={css.cell2}>
                               {!isClickedOwnerFullName ? (
@@ -296,7 +300,7 @@ const CaseDetailPage: React.FC = () => {
                                   type="text"
                                   name={"ownerFullName"}
                                   className="form-control"
-                                  placeholder={"Введите ФИО владельца"}
+                                  placeholder={t("placeholder.ownerFullName")}
                                   onClick={(
                                     e: React.MouseEvent<HTMLInputElement>
                                   ) => e.stopPropagation()}
@@ -311,12 +315,14 @@ const CaseDetailPage: React.FC = () => {
                           </tr>
 
                           <tr onClick={handleClickType} className={"cursor"}>
-                            <td className={css.cell1}>Тип</td>
+                            <td className={css.cell1}>{t("case.type")}</td>
 
                             <td className={css.cell2}>
                               {!isClickedType ? (
-                                (values.type === "general" && "Обычный") ||
-                                (values.type === "sport" && "Спортивный")
+                                (values.type === "general" &&
+                                  t("case.typeList.general")) ||
+                                (values.type === "sport" &&
+                                  t("case.typeList.sport"))
                               ) : (
                                 <Field
                                   as="select"
@@ -327,7 +333,7 @@ const CaseDetailPage: React.FC = () => {
                                   ) => e.stopPropagation()}
                                 >
                                   <option value="DEFAULT" disabled>
-                                    Выберите...
+                                    {t("case.choose")}
                                   </option>
                                   {bicycleType &&
                                     bicycleType.map((item, index) => {
@@ -343,7 +349,7 @@ const CaseDetailPage: React.FC = () => {
                           </tr>
 
                           <tr onClick={handleClickColor} className={"cursor"}>
-                            <td className={css.cell1}>Цвет</td>
+                            <td className={css.cell1}>{t("case.color")}</td>
 
                             <td className={css.cell2}>
                               {!isClickedColor ? (
@@ -353,7 +359,7 @@ const CaseDetailPage: React.FC = () => {
                                   type="text"
                                   name={"color"}
                                   className="form-control"
-                                  placeholder={"Напишите цвет велосипеда"}
+                                  placeholder={t("placeholder.color")}
                                   onClick={(
                                     e: React.MouseEvent<HTMLInputElement>
                                   ) => e.stopPropagation()}
@@ -363,7 +369,7 @@ const CaseDetailPage: React.FC = () => {
                           </tr>
 
                           <tr onClick={handleClickOfficer} className={"cursor"}>
-                            <td className={css.cell1}>Сотрудник</td>
+                            <td className={css.cell1}>{t("case.officer")}</td>
 
                             <td className={css.cell2}>
                               {!isClickedOfficer ? (
@@ -371,7 +377,7 @@ const CaseDetailPage: React.FC = () => {
                                 `${
                                   getCurrentOfficer(values)?.firstName
                                     ? getCurrentOfficer(values)?.firstName
-                                    : "Сотрудник"
+                                    : t("case.officer")
                                 } ${
                                   getCurrentOfficer(values)?.lastName
                                     ? getCurrentOfficer(values)?.lastName
@@ -386,7 +392,7 @@ const CaseDetailPage: React.FC = () => {
                                     e: React.MouseEvent<HTMLSelectElement>
                                   ) => e.stopPropagation()}
                                 >
-                                  <option value="">Выберите...</option>
+                                  <option value="">{t("case.choose")}</option>
                                   {officers
                                     .filter((officer) => officer.approved)
                                     .map((officer) => {
@@ -397,7 +403,9 @@ const CaseDetailPage: React.FC = () => {
                                         >
                                           {!officer.firstName ||
                                           !officer.lastName
-                                            ? `Сотрудник ${officer._id}`
+                                            ? `${t("case.officer")} ${
+                                                officer._id
+                                              }`
                                             : `${officer.firstName} ${officer.lastName}`}
                                         </option>
                                       );
@@ -411,7 +419,9 @@ const CaseDetailPage: React.FC = () => {
                             onClick={handleClickDescription}
                             className={"cursor"}
                           >
-                            <td className={css.cell1}>Описание</td>
+                            <td className={css.cell1}>
+                              {t("case.description")}
+                            </td>
 
                             <td className={css.cell2}>
                               {!isClickedDescription ? (
@@ -421,7 +431,7 @@ const CaseDetailPage: React.FC = () => {
                                   as="textarea"
                                   className="form-control"
                                   name={"description"}
-                                  placeholder="Опишите случай"
+                                  placeholder={t("placeholder.description")}
                                   onClick={(
                                     e: React.MouseEvent<HTMLTextAreaElement>
                                   ) => e.stopPropagation()}
@@ -434,7 +444,7 @@ const CaseDetailPage: React.FC = () => {
 
                       <div className={css.btnWrapper}>
                         <SecondaryButton
-                          title={"Сохранить изменения"}
+                          title={t("caseDetailPage.secondaryButton.title")}
                           type="submit"
                           className={css.btnSave}
                           disabled={!(formik.isValid && formik.dirty)}

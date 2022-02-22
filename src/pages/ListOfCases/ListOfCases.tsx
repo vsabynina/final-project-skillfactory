@@ -1,13 +1,16 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import css from "./ListOfCases.module.css";
-import SecondaryButton from "../../components/SecondaryButton";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Message from "../../components/Message/Message";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActionsCases } from "../../hooks/useActions";
+import LoadingSpinner from "src/components/LoadingSpinner";
+import Message from "src/components/Message";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { useActionsCases } from "src/hooks/useActions";
+import SecondaryButton from "src/components/SecondaryButton";
+import { useTranslation } from "react-i18next";
 
-const ListOfCases: React.FC = () => {
+const ListOfCases: React.VFC = () => {
+  const { t } = useTranslation();
+
   const { cases, isLoading, messageCase } = useTypedSelector(
     (state) => state.casesReducer
   );
@@ -55,15 +58,15 @@ const ListOfCases: React.FC = () => {
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Лицензионный номер</th>
+                    <th scope="col">{t("case.licenseNumber")}</th>
                     <th scope="col" className={css.th3}>
-                      Тип
+                      {t("case.type")}
                     </th>
                     <th scope="col" className={css.th4}>
-                      Цвет
+                      {t("case.color")}
                     </th>
                     <th scope="col" className={css.th5}>
-                      Описание
+                      {t("case.description")}
                     </th>
                   </tr>
                 </thead>
@@ -83,8 +86,10 @@ const ListOfCases: React.FC = () => {
                         <td className={css.cell2}>{item.licenseNumber}</td>
 
                         <td className={css.cell3}>
-                          {(item.type === "sport" && "Sport") ||
-                            (item.type === "general" && "General")}
+                          {(item.type === "sport" &&
+                            t("case.typeList.sport")) ||
+                            (item.type === "general" &&
+                              t("case.typeList.general"))}
                         </td>
 
                         <td className={css.cell4}>{item.color}</td>
@@ -92,7 +97,7 @@ const ListOfCases: React.FC = () => {
                         <td className={css.cell5}>{item.description}</td>
                         <th className={css.cell6}>
                           <SecondaryButton
-                            title={"Удалить"}
+                            title={t("secondaryButton.title")}
                             type={"button"}
                             className={"btn-sm"}
                             onClick={(e) => handleButtonClick(item._id, e)}

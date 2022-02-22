@@ -1,0 +1,138 @@
+{
+  "header": {
+    "title": "Find bicycle",
+    "navLinks": {
+      "thefts": "Theft",
+      "theftReport": "Report theft",
+      "officers": "Responsible officers",
+      "lang": "Language",
+      "ru": "russian",
+      "eng": "english"
+    },
+    "logIn": "Log In",
+    "logOut": "Log Out"
+  },
+  "authorization": {
+    "noAccount": "Don't have an account?",
+    "modal": {
+      "title": "Signed in",
+      "paragraph": "Authorization passed successfully",
+      "titleMainButton": "Home page"
+    }
+  },
+  "user": {
+    "email": "E-mail",
+    "password": "Password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "approved": "Approved"
+  },
+  "case": {
+    "status": "Status",
+    "statusList": {
+      "new": "New",
+      "inProgress": "In progress",
+      "done" : "Done"
+    },
+    "resolution": "Resolution",
+    "licenseNumber": "License Number",
+    "ownerFullName": "Owner Full Name",
+    "type": "Type",
+    "typeList": {
+      "general": "General",
+      "sport": "Sport"
+    },
+    "clientId": "Client ID",
+    "color": "Color",
+    "officer": "Officer",
+    "choose": "Choose...",
+    "description": "Description"
+  },
+  "form": {
+    "agreement": "Agree to terms and conditions"
+  },
+  "caseDetailPage" : {
+    "time": {
+      "timeCreate": "The post was created on {{date}} at {{time}}",
+      "timeEdit": "The post was edited on {{date}} at {{time}}",
+      "noEdit": "Post has not been edited"
+    },
+    "secondaryButton": {
+      "title":"Save changes"
+    }
+  },
+  "caseForm": {
+    "date": "Date",
+    "mainButton": {
+      "title": "Report theft"
+    },
+    "modal": {
+      "title": "Theft report created",
+      "paragraph": "Data sent successfully",
+      "titleSecondaryButton": "Home page",
+      "titleMainButton": "Theft"
+    }
+  },
+  "homePage": {
+    "title": "Lost your bike?",
+    "paragraph": "We will help you find it"
+  },
+  "listOfOfficers": {
+    "noNameSurname": "First and last name not entered"
+  },
+  "officerDetailPage": {
+    "newPassword": "New password",
+    "passwordConfirmation": "Confirm new password",
+    "secondaryButton": {
+      "title": "Save changes"
+    }
+  },
+  "registration": {
+    "notApproved": "Not approved",
+    "mainButton": {
+      "title":"Sign Up"
+    },
+    "modal": {
+      "title": "User was created",
+      "paragraph": "Registration is successfully completed",
+      "titleSecondaryButton": "Home page",
+      "titleMainButton": "Log In"
+    }
+  },
+  "footer": {
+    "title": "Find bicycle",
+    "navLinks": {
+      "email": "find.bike@gmail.com",
+      "phone": "+7 777 777 77"
+    }
+  },
+  "errors": {
+    "email": "Please write a valid e-mail address",
+    "passwordMin": "Password must be longer than 3 characters",
+    "passwordMax": "Password must be shorter than 12 characters",
+    "firstName": "First name must be shorter than 15 characters",
+    "lastName": "Last name must be shorter than 20 characters",
+    "required": "This field is required",
+    "requiredNewPassword": "New password confirmation required",
+    "requiredSamePasswords": "Passwords must be the same",
+    "agreement": "You must agree before sending a message",
+    "registration": "You must agree before registering"
+  },
+  "placeholder": {
+    "email": "name@example.com",
+    "password": "Password",
+    "resolution": "Describe how the case was resolved",
+    "licenseNumber": "Enter license number",
+    "ownerFullName": "Enter owner's name",
+    "clientId": "Enter client ID",
+    "color": "Enter the color of the bike",
+    "description": "Describe the case",
+    "firstName": "Enter your first name",
+    "lastName": "Enter your last name",
+    "newPassword": "Enter a new password",
+    "passwordConfirmation": "Re-enter your new password"
+  },
+  "secondaryButton": {
+    "title": "Delete"
+  }
+}

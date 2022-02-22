@@ -1,6 +1,6 @@
 import React from "react";
-import MainButton from "./MainButton";
-import SecondaryButton from "./SecondaryButton";
+import SecondaryButton from "src/components/SecondaryButton";
+import MainButton from "src/components/MainButton";
 
 interface PropsType {
   title?: string;

@@ -3,16 +3,19 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import css from "./OfficerDetailPage.module.css";
-import officerImage from "../../assets/images/officerImage.jpeg";
+import officerImage from "src/assets/images/officerImage.jpeg";
 import { useNavigate, useParams } from "react-router-dom";
-import SecondaryButton from "../../components/SecondaryButton";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Message from "../../components/Message/Message";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActionsOfficer } from "../../hooks/useActions";
-import { OfficerEdit } from "../../store/types/officers";
+import LoadingSpinner from "src/components/LoadingSpinner";
+import { useActionsOfficer } from "src/hooks/useActions";
+import Message from "src/components/Message";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import SecondaryButton from "src/components/SecondaryButton";
+import { OfficerEdit } from "src/store/types/officers";
+import { useTranslation } from "react-i18next";
 
-const OfficerDetailPage: React.FC = () => {
+const OfficerDetailPage: React.VFC = () => {
+  const { t } = useTranslation();
+
   const { id } = useParams() as { id: string };
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -69,28 +72,22 @@ const OfficerDetailPage: React.FC = () => {
         approved: officer ? officer.approved : false,
       }}
       validationSchema={Yup.object({
-        firstName: Yup.string().max(
-          15,
-          "Это поле может содержать менее 15 символов"
-        ),
-        lastName: Yup.string().max(
-          20,
-          "Это поле может содержать менее 20 символов"
-        ),
+        firstName: Yup.string().max(15, t("errors.firstName")),
+        lastName: Yup.string().max(20, t("errors.lastName")),
         oldPassword: Yup.string(),
         newPassword: Yup.string().when((isClickedPassword, schema) => {
           if (isClickedPassword)
             return schema
-              .min(3, "Пароль должен содержать больше 3 символов")
-              .max(12, "Пароль должен содержать меньше 12 символов")
-              .required("Это поле обязательно для заполнения");
+              .min(3, t("errors.passwordMin"))
+              .max(12, t("errors.passwordMax"))
+              .required(t("errors.required"));
         }),
         passwordConfirmation: Yup.string()
           .when("password", (isClickedPassword, schema) => {
             if (isClickedPassword)
-              return schema.required("Подтверждение нового пароля обязательно");
+              return schema.required(t("errors.requiredNewPassword"));
           })
-          .oneOf([Yup.ref(" newPassword")], "Пароли должны быть одинаковыми"),
+          .oneOf([Yup.ref(" newPassword")], t("errors.requiredSamePasswords")),
         approved: Yup.boolean(),
       })}
       onSubmit={(values) => {
@@ -127,7 +124,7 @@ const OfficerDetailPage: React.FC = () => {
                             className={`${css.row} cursor`}
                             onClick={handleClickFirstName}
                           >
-                            <td className={css.cell1}>Имя</td>
+                            <td className={css.cell1}>{t("user.firstName")}</td>
                             <td className={css.cell2}>
                               {!isClickedFirstName ? (
                                 values.firstName
@@ -136,7 +133,7 @@ const OfficerDetailPage: React.FC = () => {
                                   type="text"
                                   name="firstName"
                                   className="form-control"
-                                  placeholder={"Ваше имя"}
+                                  placeholder={t("placeholder.firstName")}
                                   onKeyPress={handleKeyPress}
                                   onClick={(
                                     e: React.MouseEvent<HTMLInputElement>
@@ -155,7 +152,7 @@ const OfficerDetailPage: React.FC = () => {
                             className={`${css.row} cursor`}
                             onClick={handleClickLastName}
                           >
-                            <td className={css.cell1}>Фамилия</td>
+                            <td className={css.cell1}>{t("user.lastName")}</td>
                             <td className={css.cell2}>
                               {!isClickedLastName ? (
                                 values.lastName
@@ -164,7 +161,7 @@ const OfficerDetailPage: React.FC = () => {
                                   type="text"
                                   name="lastName"
                                   className="form-control"
-                                  placeholder={"Ваша фамилия"}
+                                  placeholder={t("placeholder.lastName")}
                                   onKeyPress={handleKeyPress}
                                   onClick={(
                                     e: React.MouseEvent<HTMLInputElement>
@@ -180,7 +177,7 @@ const OfficerDetailPage: React.FC = () => {
                           </tr>
 
                           <tr className={css.row}>
-                            <td className={css.cell1}>E-mail</td>
+                            <td className={css.cell1}>{t("user.email")}</td>
                             <td className={css.cell2}>
                               {officer ? officer.email : ""}
                             </td>
@@ -191,7 +188,9 @@ const OfficerDetailPage: React.FC = () => {
                               className={`${css.row} cursor`}
                               onClick={handleClickPassword}
                             >
-                              <td className={css.cell1}>Пароль</td>
+                              <td className={css.cell1}>
+                                {t("user.password")}
+                              </td>
                               <td className={css.cell2}>
                                 {!values.passwordConfirmation
                                   ? values.oldPassword
@@ -205,13 +204,15 @@ const OfficerDetailPage: React.FC = () => {
                               className={`${css.row} cursor`}
                               onClick={handleClickPassword}
                             >
-                              <td className={css.cell1}>Новый пароль</td>
+                              <td className={css.cell1}>
+                                {t("officerDetailPage.newPassword")}
+                              </td>
                               <td className={css.cell2}>
                                 <Field
                                   type="password"
                                   name={"newPassword"}
                                   className="form-control"
-                                  placeholder={"Введите новый пароль"}
+                                  placeholder={t("placeholder.newPassword")}
                                   onKeyPress={handleKeyPress}
                                   autoComplete="on"
                                   onClick={(
@@ -233,14 +234,16 @@ const OfficerDetailPage: React.FC = () => {
                               onClick={handleClickPassword}
                             >
                               <td className={css.cell1}>
-                                Подтвердите новый пароль
+                                {t("officerDetailPage.passwordConfirmation")}
                               </td>
                               <td className={css.cell2}>
                                 <Field
                                   type="password"
                                   name={"passwordConfirmation"}
                                   className="form-control"
-                                  placeholder={"Повторно введите новый пароль"}
+                                  placeholder={t(
+                                    "placeholder.passwordConfirmation"
+                                  )}
                                   onKeyPress={handleKeyPress}
                                   autoComplete="on"
                                   onClick={(
@@ -257,17 +260,17 @@ const OfficerDetailPage: React.FC = () => {
                           )}
 
                           <tr className={css.row}>
-                            <td className={css.cell1}>ID</td>
+                            <td className={css.cell1}>{t("case.clientId")}</td>
                             <td className={css.cell2}>
                               {officer ? officer.clientId : ""}
                             </td>
                           </tr>
 
                           <tr className={`${css.row} cursor`}>
-                            <td className={css.cell1}>Одобрен</td>
+                            <td className={css.cell1}>{t("user.approved")}</td>
                             <td className={css.cell2}>
                               <div
-                                className={`form - check form-switch ${css.formSwitch}`}
+                                className={`form-check form-switch ${css.formSwitch}`}
                               >
                                 <Field
                                   className={`form-check-input checkboxInput cursor`}
@@ -281,7 +284,7 @@ const OfficerDetailPage: React.FC = () => {
                       </table>
                       <div className={css.btnWrapper}>
                         <SecondaryButton
-                          title={"Сохранить изменения"}
+                          title={t("officerDetailPage.secondaryButton.title")}
                           type="submit"
                           disabled={!(formik.isValid && formik.dirty)}
                         />

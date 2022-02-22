@@ -3,15 +3,18 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import css from "./Authorization.module.css";
-import MainButton from "../../components/MainButton";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Message from "../../components/Message/Message";
-import Modal from "../../components/Modal";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActionsAuth } from "../../hooks/useActions";
-import { SignIn } from "../../store/types/authorization";
+import LoadingSpinner from "src/components/LoadingSpinner";
+import Message from "src/components/Message";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { SignIn } from "src/store/types/authorization";
+import Modal from "src/components/Modal";
+import MainButton from "src/components/MainButton";
+import { useActionsAuth } from "src/hooks/useActions";
+import { useTranslation } from "react-i18next";
 
-const Authorization: React.FC = () => {
+const Authorization: React.VFC = () => {
+  const { t } = useTranslation();
+
   const { messageAuth, isLoading, isAuthorized } = useTypedSelector(
     (state) => state.authorizationReducer
   );
@@ -37,12 +40,12 @@ const Authorization: React.FC = () => {
       }}
       validationSchema={Yup.object({
         email: Yup.string()
-          .email("Пожалуйста введите верный e-mail адрес")
-          .required("Это поле обязательно для заполнения"),
+          .email(t("errors.email"))
+          .required(t("errors.required")),
         password: Yup.string()
-          .min(3, "Пароль должен содержать больше 3 символов")
-          .max(12, "Пароль должен содержать менее 12 символов")
-          .required("Это поле обязательно для заполнения"),
+          .min(3, t("errors.passwordMin"))
+          .max(12, t("errors.passwordMax"))
+          .required(t("errors.required")),
       })}
       onSubmit={(values) => {
         signIn(values);
@@ -62,7 +65,7 @@ const Authorization: React.FC = () => {
                     <Form className={css.form}>
                       <div className="mb-3">
                         <label className="form-label" htmlFor="email">
-                          E-mail
+                          {t("user.email")}
                         </label>
                         <Field
                           type="email"
@@ -70,7 +73,7 @@ const Authorization: React.FC = () => {
                           id="email"
                           name={"email"}
                           autoComplete="e-mail"
-                          placeholder="name@example.com"
+                          placeholder={t("placeholder.email")}
                         />
                         <ErrorMessage
                           name={"email"}
@@ -81,7 +84,7 @@ const Authorization: React.FC = () => {
 
                       <div className="mb-3">
                         <label className="form-label" htmlFor="password">
-                          Пароль
+                          {t("user.password")}
                         </label>
                         <Field
                           type="password"
@@ -89,7 +92,7 @@ const Authorization: React.FC = () => {
                           id="password"
                           name={"password"}
                           autoComplete="on"
-                          placeholder="Пароль"
+                          placeholder={t("placeholder.password")}
                         />
                         <ErrorMessage
                           name={"password"}
@@ -106,7 +109,7 @@ const Authorization: React.FC = () => {
                         disabled={!(formik.isValid && formik.dirty)}
                       />
                       <Link to="/auth/sign_up" className={`nav-link ${css.a}`}>
-                        У вас нет аккаунта?
+                        {t("authorization.noAccount")}
                       </Link>
                     </Form>
                   </div>
@@ -116,9 +119,9 @@ const Authorization: React.FC = () => {
 
             {isAuthorized ? (
               <Modal
-                title={"Выполнен вход в аккаунт"}
-                paragraph={"Авторизация успешно пройдена"}
-                titleMainButton={"Главная страница"}
+                title={t("authorization.modal.title")}
+                paragraph={t("authorization.modal.paragraph")}
+                titleMainButton={t("authorization.modal.titleMainButton")}
                 onClickMainButton={handleCLickModalMainButton}
                 isSecondaryButtonShown={false}
               />

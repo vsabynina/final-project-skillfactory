@@ -1,0 +1,138 @@
+{
+  "header": {
+    "title": "Найди велосипед",
+    "navLinks": {
+      "thefts": "Кражи",
+      "theftReport": "Сообщить о краже",
+      "officers": "Ответственные сотрудники",
+      "lang": "Язык",
+      "ru": "русский",
+      "eng": "английский"
+    },
+    "logIn": "Войти",
+    "logOut": "Выйти"
+  },
+  "authorization": {
+    "noAccount": "У вас нет аккаунта?",
+    "modal": {
+      "title": "Выполнен вход в аккаунт",
+      "paragraph": "Авторизация успешно пройдена",
+      "titleMainButton": "Главная страница"
+    }
+  },
+  "user": {
+    "email": "E-mail",
+    "password": "Пароль",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "approved": "Одобрен"
+  },
+  "case": {
+    "status": "Статус",
+    "statusList": {
+      "new": "Открыто",
+      "inProgress": "В процессе",
+      "done": "Завершено"
+    },
+    "licenseNumber": "Лицензионный номер",
+    "ownerFullName": "ФИО владельца",
+    "type": "Тип",
+    "typeList": {
+      "general": "Обычный",
+      "sport": "Спортивный"
+    },
+    "clientId": "ID клиента",
+    "resolution": "Решение",
+    "color": "Цвет",
+    "officer": "Сотрудник",
+    "choose": "Выберите...",
+    "description": "Описание"
+  },
+  "form": {
+    "agreement": "Согласиться с условиями и правилами"
+  },
+  "caseDetailPage": {
+    "time": {
+      "timeCreate": "Сообщение было создано {{date}} в {{time}}",
+      "timeEdit": "Сообщение было отредактировано {{date}} в {{time}}",
+      "noEdit": "Сообщение не редактировалось"
+    },
+    "secondaryButton": {
+      "title": "Сохранить изменения"
+    }
+  },
+  "caseForm": {
+    "date": "Дата",
+    "mainButton": {
+      "title": "Сообщить о краже"
+    },
+    "modal": {
+      "title": "Сообщение о краже создано",
+      "paragraph": "Данные успешно отправлены",
+      "titleSecondaryButton": "Главная страница",
+      "titleMainButton": "Кражи"
+    }
+  },
+  "homePage": {
+    "title": "Потеряли<1/>велосипед?",
+    "paragraph": "Мы поможем его найти"
+  },
+  "listOfOfficers": {
+    "noNameSurname": "Имя и фамилия не введены"
+  },
+  "officerDetailPage": {
+    "newPassword": "Новый пароль",
+    "passwordConfirmation": "Подтвердите новый пароль",
+    "secondaryButton": {
+      "title": "Сохранить изменения"
+    }
+  },
+  "registration": {
+    "notApproved": "Не одобрен",
+    "mainButton": {
+      "title":"Зарегистрироваться"
+    },
+    "modal": {
+      "title": "Пользователь создан",
+      "paragraph": "Регистрация успешно пройдена",
+      "titleSecondaryButton": "Главная страница",
+      "titleMainButton": "Войти"
+    }
+  },
+  "footer": {
+    "title": "Найди велосипед",
+    "navLinks": {
+      "email": "find.bike@gmail.com",
+      "phone": "+7 777 777 77"
+    }
+  },
+  "errors": {
+    "email": "Пожалуйста введите верный e-mail адрес",
+    "passwordMin": "Пароль должен содержать больше 3 символов",
+    "passwordMax": "Пароль должен содержать менее 12 символов",
+    "firstName": "Это поле может содержать менее 15 символов",
+    "lastName": "Это поле может содержать менее 20 символов",
+    "required": "Это поле обязательно для заполнения",
+    "requiredNewPassword": "Подтверждение нового пароля обязательно",
+    "requiredSamePasswords": "Пароли должны быть одинаковыми",
+    "agreement": "Вы должны согласиться перед отправкой сообщения",
+    "registration": "Вы должны согласиться перед регистрацией"
+  },
+  "placeholder": {
+    "email": "name@example.com",
+    "password": "Пароль",
+    "resolution": "Опишите как был решён случай",
+    "licenseNumber": "Введите лицензионный номер",
+    "ownerFullName": "Введите ФИО владельца",
+    "clientId": "Введите ID клиента",
+    "color": "Напишите цвет велосипеда",
+    "description": "Опишите случай",
+    "firstName": "Введите ваше имя",
+    "lastName": "Введите вашу фамилию",
+    "newPassword": "Введите новый пароль",
+    "passwordConfirmation": "Повторно введите новый пароль"
+  },
+  "secondaryButton": {
+    "title": "Удалить"
+  }
+}

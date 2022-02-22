@@ -2,16 +2,19 @@ import React, { useEffect } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import css from "./CaseForm.module.css";
-import MainButton from "../../components/MainButton";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Message from "../../components/Message/Message";
 import { useNavigate } from "react-router-dom";
-import Modal from "../../components/Modal";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActionsCases, useActionsOfficer } from "../../hooks/useActions";
-import { CaseCreate } from "../../store/types/cases";
+import { CaseCreate } from "src/store/types/cases";
+import LoadingSpinner from "src/components/LoadingSpinner";
+import { useActionsCases, useActionsOfficer } from "src/hooks/useActions";
+import Message from "src/components/Message";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import Modal from "src/components/Modal";
+import MainButton from "src/components/MainButton";
+import { useTranslation } from "react-i18next";
 
-const CaseForm: React.FC = () => {
+const CaseForm: React.VFC = () => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const { officers } = useTypedSelector((state) => state.officersReducer);
@@ -59,21 +62,14 @@ const CaseForm: React.FC = () => {
         agreement: false,
       }}
       validationSchema={Yup.object({
-        licenseNumber: Yup.string().required(
-          "Это поле обязательно для заполнения"
-        ),
-        ownerFullName: Yup.string().required(
-          "Это поле обязательно для заполнения"
-        ),
-        type: Yup.string().required("Это поле обязательно для заполнения"),
+        licenseNumber: Yup.string().required(t("errors.required")),
+        ownerFullName: Yup.string().required(t("errors.required")),
+        type: Yup.string().required(t("errors.required")),
         color: Yup.string(),
         date: Yup.date(),
         officer: Yup.string(),
         description: Yup.string(),
-        agreement: Yup.boolean().oneOf(
-          [true],
-          "Вы должны согласиться перед отправкой сообщения"
-        ),
+        agreement: Yup.boolean().oneOf([true], t("errors.agreement")),
       })}
       onSubmit={(values) => {
         createCase(values);
@@ -93,13 +89,13 @@ const CaseForm: React.FC = () => {
                     <Form className={`row g-3 ${css.form}`}>
                       <div className="col-md-6">
                         <label htmlFor="licenseNumber" className="form-label">
-                          Лицензионный номер
+                          {t("case.licenseNumber")}
                         </label>
                         <Field
                           type="text"
                           name={"licenseNumber"}
                           className="form-control "
-                          placeholder="Лицензионный номер"
+                          placeholder={t("placeholder.licenseNumber")}
                           id="licenseNumber"
                         />
                         <ErrorMessage
@@ -111,13 +107,13 @@ const CaseForm: React.FC = () => {
 
                       <div className="col-md-6">
                         <label htmlFor="ownerFullName" className="form-label">
-                          ФИО владельца
+                          {t("case.ownerFullName")}
                         </label>
                         <Field
                           type="text"
                           name={"ownerFullName"}
                           className="form-control "
-                          placeholder="ФИО владельца"
+                          placeholder={t("placeholder.ownerFullName")}
                           id="ownerFullName"
                         />
                         <ErrorMessage
@@ -129,7 +125,7 @@ const CaseForm: React.FC = () => {
 
                       <div className="col-md-4">
                         <label htmlFor="type" className="form-label">
-                          Тип
+                          {t("case.type")}
                         </label>
                         <Field
                           as={"select"}
@@ -138,7 +134,7 @@ const CaseForm: React.FC = () => {
                           id="type"
                         >
                           <option value="DEFAULT" disabled>
-                            Выберите...
+                            {t("case.choose")}
                           </option>
 
                           {bicycleType &&
@@ -159,20 +155,20 @@ const CaseForm: React.FC = () => {
 
                       <div className="col-md-4">
                         <label htmlFor="color" className="form-label">
-                          Цвет
+                          {t("case.color")}
                         </label>
                         <Field
                           type="text"
                           name={"color"}
                           className="form-control"
-                          placeholder="Цвет"
+                          placeholder={t("placeholder.color")}
                           id="color"
                         />
                       </div>
 
                       <div className="col-md-4">
                         <label htmlFor="date" className="form-label">
-                          Дата
+                          {t("caseForm.date")}
                         </label>
                         <Field
                           type="date"
@@ -184,7 +180,7 @@ const CaseForm: React.FC = () => {
 
                       <div className="col-md-7">
                         <label htmlFor="officer" className="form-label">
-                          Сотрудник
+                          {t("case.officer")}
                         </label>
                         <Field
                           as={"select"}
@@ -192,7 +188,7 @@ const CaseForm: React.FC = () => {
                           name={"officer"}
                           id="officer"
                         >
-                          <option value="">Выберите...</option>
+                          <option value="">{t("case.choose")}</option>
 
                           {officers
                             .filter((officer) => officer.approved)
@@ -200,7 +196,7 @@ const CaseForm: React.FC = () => {
                               return (
                                 <option key={officer._id} value={officer._id}>
                                   {!officer.firstName || !officer.lastName
-                                    ? `Сотрудник ${
+                                    ? `${t("case.officer")} ${
                                         !officer.firstName && !officer.lastName
                                           ? officer._id
                                           : officer.firstName ||
@@ -215,14 +211,14 @@ const CaseForm: React.FC = () => {
 
                       <div className="col-12">
                         <label htmlFor="description" className="form-label">
-                          Описание
+                          {t("case.description")}
                         </label>
                         <Field
                           as={"textarea"}
                           className="form-control"
                           name={"description"}
                           id="description"
-                          placeholder="Опишите велосипед"
+                          placeholder={t("placeholder.description")}
                         />
                       </div>
 
@@ -238,7 +234,7 @@ const CaseForm: React.FC = () => {
                             className="form-check-label"
                             htmlFor="agreement"
                           >
-                            Согласиться с условиями и правилами
+                            {t("form.agreement")}
                           </label>
                         </div>
                         <ErrorMessage
@@ -250,7 +246,7 @@ const CaseForm: React.FC = () => {
 
                       <div className="col-12">
                         <MainButton
-                          title={"Сообщить о краже"}
+                          title={t("caseForm.mainButton.title")}
                           type={"submit"}
                           disabled={!(formik.isValid && formik.dirty)}
                         />
@@ -262,10 +258,10 @@ const CaseForm: React.FC = () => {
             )}
             {caseIsCreated && (
               <Modal
-                title={"Сообщение о краже создано"}
-                paragraph={"Данные успешно отправлены"}
-                titleSecondaryButton={"Главная страница"}
-                titleMainButton={"Кражи"}
+                title={t("modal.title")}
+                paragraph={t("modal.paragraph")}
+                titleSecondaryButton={t("modal.titleSecondaryButton")}
+                titleMainButton={t("modal.titleMainButton")}
                 onClickSecondaryButton={handleCLickModalSecondaryButton}
                 onClickMainButton={handleCLickModalMainButton}
                 isSecondaryButtonShown={true}

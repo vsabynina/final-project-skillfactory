@@ -2,16 +2,19 @@ import React from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import css from "./CaseFormPublic.module.css";
-import MainButton from "../../components/MainButton";
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import Message from "../../components/Message/Message";
-import Modal from "../../components/Modal";
-import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActionsCases } from "../../hooks/useActions";
-import { CaseCreatePublic } from "../../store/types/cases";
+import LoadingSpinner from "src/components/LoadingSpinner";
+import { CaseCreatePublic } from "src/store/types/cases";
+import Message from "src/components/Message";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { useActionsCases } from "src/hooks/useActions";
+import Modal from "src/components/Modal";
+import MainButton from "src/components/MainButton";
+import { useTranslation } from "react-i18next";
 
-const CaseFormPublic: React.FC = () => {
+const CaseFormPublic: React.VFC = () => {
+  const { t } = useTranslation();
+
   const { bicycleType } = useTypedSelector(
     (state) => state.casesReducer.bicycle
   );
@@ -48,21 +51,14 @@ const CaseFormPublic: React.FC = () => {
         agreement: false,
       }}
       validationSchema={Yup.object({
-        licenseNumber: Yup.string().required(
-          "Это поле обязательно для заполнения"
-        ),
-        ownerFullName: Yup.string().required(
-          "Это поле обязательно для заполнения"
-        ),
-        type: Yup.string().required("Это поле обязательно для заполнения"),
-        clientId: Yup.string().required("Это поле обязательно для заполнения"),
+        licenseNumber: Yup.string().required(t("errors.required")),
+        ownerFullName: Yup.string().required(t("errors.required")),
+        type: Yup.string().required(t("errors.required")),
+        clientId: Yup.string().required(t("errors.required")),
         color: Yup.string(),
         date: Yup.date(),
         description: Yup.string(),
-        agreement: Yup.boolean().oneOf(
-          [true],
-          "Вы должны согласиться перед отправкой сообщения"
-        ),
+        agreement: Yup.boolean().oneOf([true], t("errors.agreement")),
       })}
       onSubmit={(values) => {
         createCasePublic(values);
@@ -82,13 +78,13 @@ const CaseFormPublic: React.FC = () => {
                     <Form className={`row g-3 ${css.form}`}>
                       <div className="col-md-6">
                         <label htmlFor="licenseNumber" className="form-label">
-                          Лицензионный номер
+                          {t("case.licenseNumber")}
                         </label>
                         <Field
                           type="text"
                           name={"licenseNumber"}
                           className="form-control "
-                          placeholder="Лицензионный номер"
+                          placeholder={t("placeholder.licenseNumber")}
                           id="licenseNumber"
                         />
                         <ErrorMessage
@@ -100,13 +96,13 @@ const CaseFormPublic: React.FC = () => {
 
                       <div className="col-md-6">
                         <label htmlFor="ownerFullName" className="form-label">
-                          ФИО владельца
+                          {t("case.ownerFullName")}
                         </label>
                         <Field
                           type="text"
                           name={"ownerFullName"}
                           className="form-control "
-                          placeholder="ФИО владельца"
+                          placeholder={t("placeholder.ownerFullName")}
                           id="ownerFullName"
                         />
                         <ErrorMessage
@@ -118,7 +114,7 @@ const CaseFormPublic: React.FC = () => {
 
                       <div className="col-md-4">
                         <label htmlFor="type" className="form-label">
-                          Тип
+                          {t("case.type")}
                         </label>
                         <Field
                           as={"select"}
@@ -127,7 +123,7 @@ const CaseFormPublic: React.FC = () => {
                           id="type"
                         >
                           <option value="DEFAULT" disabled>
-                            Выберите...
+                            {t("case.choose")}
                           </option>
                           {bicycleType &&
                             bicycleType.map((item, index) => {
@@ -147,13 +143,13 @@ const CaseFormPublic: React.FC = () => {
 
                       <div className="col-md-8">
                         <label htmlFor="clientId" className="form-label">
-                          ID клиента
+                          {t("case.clientId")}
                         </label>
                         <Field
                           type="text"
                           name={"clientId"}
                           className="form-control "
-                          placeholder="ID клиента"
+                          placeholder={t("placeholder.clientId")}
                           id="clientId"
                         />
                         <ErrorMessage
@@ -165,20 +161,20 @@ const CaseFormPublic: React.FC = () => {
 
                       <div className="col-md-6">
                         <label htmlFor="color" className="form-label">
-                          Цвет
+                          {t("case.color")}
                         </label>
                         <Field
                           type="text"
                           name={"color"}
                           className="form-control"
-                          placeholder="Цвет"
+                          placeholder={t("placeholder.color")}
                           id="color"
                         />
                       </div>
 
                       <div className="col-md-6">
                         <label htmlFor="date" className="form-label">
-                          Дата
+                          {t("caseForm.date")}
                         </label>
                         <Field
                           type="date"
@@ -190,14 +186,14 @@ const CaseFormPublic: React.FC = () => {
 
                       <div className="col-12">
                         <label htmlFor="description" className="form-label">
-                          Описание
+                          {t("case.description")}
                         </label>
                         <Field
                           as={"textarea"}
                           className="form-control"
                           name={"description"}
                           id="description"
-                          placeholder="Опишите велосипед"
+                          placeholder={t("placeholder.description")}
                         />
                       </div>
 
@@ -213,7 +209,7 @@ const CaseFormPublic: React.FC = () => {
                             className="form-check-label"
                             htmlFor="agreement"
                           >
-                            Согласиться с условиями и правилами
+                            {t("form.agreement")}
                           </label>
                         </div>
                         <ErrorMessage
@@ -225,7 +221,7 @@ const CaseFormPublic: React.FC = () => {
 
                       <div className="col-12">
                         <MainButton
-                          title={"Сообщить о краже"}
+                          title={t("caseForm.mainButton.title")}
                           type={"submit"}
                           disabled={!(formik.isValid && formik.dirty)}
                         />
@@ -237,9 +233,9 @@ const CaseFormPublic: React.FC = () => {
             )}
             {caseIsCreated && (
               <Modal
-                title={"Сообщение о краже создано"}
-                paragraph={"Данные успешно отправлены"}
-                titleMainButton={"Главная страница"}
+                title={t("modal.title")}
+                paragraph={t("modal.paragraph")}
+                titleMainButton={t("modal.titleSecondaryButton")}
                 onClickMainButton={handleCLickModalMainButton}
                 isSecondaryButtonShown={false}
               />

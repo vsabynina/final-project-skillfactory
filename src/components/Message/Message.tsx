@@ -1,6 +1,6 @@
 import React from "react";
 import css from "./Message.module.css";
-import SecondaryButton from "../SecondaryButton";
+import SecondaryButton from "src/components/SecondaryButton";
 
 interface PropsType {
   message?: string | null;

@@ -1,10 +1,10 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import css from "./Layout.module.css";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "src/pages/Header";
+import Footer from "src/pages/Footer";
 
-const Layout: React.FC = () => {
+const Layout: React.VFC = () => {
   return (
     <>
       <Header />

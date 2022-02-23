@@ -1,6 +1,6 @@
 import { AuthState, AuthActionTypes, AuthAction } from "../types/authorization";
 
-const user = JSON.parse(localStorage.getItem("user") || "{}");
+const user = JSON.parse(localStorage.getItem("user") || "null");
 
 const initialState: AuthState = user
   ? {
